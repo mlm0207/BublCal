@@ -1,0 +1,122 @@
+<!doctype HTML>
+<html>
+    <head>
+        <style>
+
+        body
+        {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .dailyView
+        {
+            border: 1px solid black;
+        }
+        
+        .dailyBefore
+        {
+            width: 200px;
+            border: 1px solid black;
+        }
+
+        .dailyCurrent
+        {
+            width: 400px;
+            border: 1px solid black;
+        }
+
+        .dailyAfter
+        {
+            width: 200px;
+            border: 1px solid black;
+        }
+
+        .dailyNote
+        {
+            border: 1px solid black;
+        }
+
+        .dailyNoteBefore
+        {
+            border: 1px solid black;
+        }
+
+        .dailyNoteAfter
+        {
+            border: 1px solid black;
+        }
+
+        .bubl
+        {
+            border: 1px solid black;
+            border-radius: 50px;
+            width:100px;
+            height:100px;
+            text-align: center;
+        }
+
+        </style>
+
+        <script>
+
+            function main()
+            {
+            }
+
+            main();
+            //document.onload = main();
+
+        </script>
+
+    </head>
+    
+    <body>
+        <table class="dailyView">
+            <tr>
+                <td class="dailyBefore">
+                    <p>Yesterday ({{yesterday_name}})</p>
+                    <p>
+                        {{yesterday}}
+                    </p>
+                </td>
+                <td class="dailyCurrent">
+                    <p>Today ({{today_name}})</p>
+                    <p>
+                        {{today}}
+                    </p>
+                </td>
+                <td class="dailyAfter">
+                    <p>Tomorrow ({{tomorrow_name}})</p>
+                    <p>
+                        {{tomorrow}}
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td class="dailyNoteBefore">
+                    Note
+                </td>
+                <td class="dailyNote">
+
+                    <table>
+                        <tr>
+                        5:00pm
+                        </tr>
+
+                        <tr>
+                            <p class="bubl">Do Homework</p>
+                        </tr>
+
+                        <tr>
+                            ------------
+                        </tr>
+                    </table>
+
+                </td>
+                <td class="dailyNoteAfter">
+                    Note
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

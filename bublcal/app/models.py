@@ -15,20 +15,20 @@ class user_data(models.Model):
   dob = models.DateField()
   time_zone = models.IntegerField()
   retention_date = models.DateField()
-  
- class bubl_template(models.Model):
+
+class bubl_template(models.Model):
   task_id = models.CharField(max_length=256, primary_key=True)
   email = models.ForeignKey('user_data', on_delete=models.CASCADE)
   # email = models.CharField(max_length=64) - Not sure if foreign key is working, leaving this if needed
   task_name = models.CharField(max_length=64)
   bubl_template = models.JSONField()
   
- class bubl_schedule(models.Model):
+class bubl_schedule(models.Model):
   email = models.ForeignKey('user_data', on_delete=models.CASCADE)
   # email = models.CharField(max_length=64) - Not sure if foreign key is working, leaving this if needed
   schedule = models.JSONField()
   
- class bubl_month_schedule(models.Model):
+class bubl_month_schedule(models.Model):
   email = models.ForeignKey('user_data', on_delete=models.CASCADE)
   # email = models.CharField(max_length=64) - Not sure if foreign key is working, leaving this if needed
   month = models.IntegerField
