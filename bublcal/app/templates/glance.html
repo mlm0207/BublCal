@@ -1,0 +1,88 @@
+{% load static %}
+<!doctype HTML>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+        <script src="{% static 'script.js' %}"></script>
+    </head>
+    <body>
+        <table class="dailyView">
+            
+            <!-- Header -->
+            <tr>
+                <td class="dailyCurrent">
+                    <center>
+                    <h1>Today ({{today_name}})</h1>
+                    <h3>{{today}}</h3>
+                    </center>
+                </td>
+                <td class="dailyAfter">
+                    <center>
+                    <h2>Tomorrow ({{tomorrow_name}})</h2>
+                    <h3>{{tomorrow}}</h3>
+                </center>
+                </td>
+                <td class="dailyAfter">
+                    <center>
+                    <h2>Overmorrow ({{overmorrow_name}})</h2>
+                    <h3>{{overmorrow}}</h3>
+                </center>
+                </td>
+            </tr>
+
+            <!-- Notes / Sidenotes -->
+            <tr>
+                <!-- Active day -->
+                <td class="dailyNote">
+                    <div class="bubHolder">
+                        <span>5:00PM------------------------</span>
+                        <button onclick="createBubble(this);">Create Bubble</button>
+                        <button id="bubt" class="bub" onclick="killme(this);">Do homework</button>
+                    </div>
+
+                    <div class="bubHolder">
+                        <span>5:30PM------------------------</span>
+                        <button onclick="createBubble(this);">Create Bubble</button>
+                        <button id="bubt" class="bub" onclick="killme(this);">CS Game</button>
+                    </div>
+
+                    <div class="bubHolder">
+                        <span>6:00PM------------------------</span>
+                        <button onclick="createBubble(this);">Create Bubble</button>
+                        <button id="bubt" class="bub" onclick="killme(this);">CS Game</button>
+                    </div>
+                </td>
+
+                <!-- Tomorrow -->
+                <td class="dailyNoteAfter">
+                    <center>
+                    <div class="sidebub"></div>
+                    <div class="sidebub"></div>
+                    <div class="sidebub"></div>
+                    </center>
+                </td>
+
+                <!-- Overmorrow -->
+                <td class="dailyNoteAfter">
+                    <center>
+                    <div class="sidebub"></div>
+                    <div class="sidebub"></div>
+                    <div class="sidebub"></div>
+                    <div class="sidebub"></div>
+                    </center>
+                </td>
+            </tr>
+        </table>
+        <!-- OLD
+        <div class="bubHolder">
+            <div>5:00PM------------------------</div>
+            <button id="bubt" class="bub" onclick="killme(this);">Do homework</button>
+        </div>
+        
+        <div class="bubHolder">
+            <div>6:00PM------------------------</div>
+            <button id="bubt" class="bub" onclick="killme(this);">CS Game</button>
+        </div>
+        -->
+    </body>
+</html>

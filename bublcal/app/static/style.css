@@ -1,0 +1,104 @@
+ /* Default/base style */
+ body
+ {
+     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+ }
+
+ /* TODO: Compile this mess */
+ .dailyView
+ {
+     border: 1px solid black;
+ }
+ 
+ .dailyCurrent
+ {
+     width: 400px;
+     border: 1px solid black;
+ }
+
+ .dailyAfter
+ {
+     width: 200px;
+     border: 1px solid black;
+ }
+
+ .dailyNote
+ {
+     border: 1px solid black;
+ }
+
+ .dailyNoteAfter
+ {
+     border: 1px solid black;
+ }
+/* END TODO */
+
+ /* Holds the Bubbles */
+ .bubHolder
+ {
+     width   : 80%;
+     height  : 30%;
+ }
+
+ /* Actual Bubble */
+ .bub
+ {
+     border          : 1px solid black;
+     border-radius   : 50%;
+     text-align      : center;
+     width           : 100px;
+     height          : 100px;
+     transform       : translateY(100%);
+     transition      : 1s;
+     animation       : bubble-up 1s ease-in forwards;
+ }
+
+ /* .bub:focus { } */
+ 
+ /* enables the POP animation */
+ .bubPopAnimate
+ {
+     animation: bubble-pop 100ms ease-in forwards;
+ }
+
+ /* bubble moving up animation */
+ @keyframes bubble-up
+ {
+     0%
+     {
+         opacity: 0%;
+     }
+
+     100%
+     {
+         transform: translateY(0%);
+         opacity: 100%;
+     }
+ }
+
+ /* POPing animation */
+ @keyframes bubble-pop
+ {
+     0%
+     {
+         transform: translateY(0%);
+     }
+
+     100%
+     {
+         transform: translateY(0%);
+         opacity: 0%;
+         /*
+         width: 11%;
+         height: 11%;
+         */
+     }
+ }
+
+ .sidebub
+ {
+     border: 1px solid black;
+     border-radius: 50%;
+     width: 10px;
+     height: 10px;
+ }

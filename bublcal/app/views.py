@@ -28,7 +28,7 @@ def daily(request):
 
     return render(
                     request, 
-                    "daily.html", 
+                    "glance.html", 
                     {
                         "today": today,
                         "yesterday": yesterday,
