@@ -1,14 +1,19 @@
+# Imports
 import calendar
-
+import datetime
 from django.shortcuts import render
 from calendar import HTMLCalendar
-import datetime
 
-DAYS_NAME = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-DAYS_NAME_SHORT = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-
-
-# Create your views here.
+# Names of the days 
+DAY_NAMES = [
+                [ "Monday",     "Mon" ], 
+                [ "Tuesday",    "Tue" ], 
+                [ "Wednesday",  "Wed" ], 
+                [ "Thursday",   "Thu" ], 
+                [ "Friday",     "Fri" ], 
+                [ "Saturday",   "Sat" ], 
+                [ "Sunday",     "Sun" ], 
+            ];
 
 def home(request):
     name = "ubaldo"
@@ -25,25 +30,24 @@ def home(request):
                       "month": current_month,
                   })
 
-
+# Daily/"At a glance" view
 def daily(request):
-    today = datetime.date.today()
-    yesterday = datetime.date.today() - datetime.timedelta(1)
-    tomorrow = datetime.date.today() + datetime.timedelta(1)
+    today       = datetime.date.today();
+    tomorrow    = datetime.date.today() + datetime.timedelta(1);
+    overmorrow  = datetime.date.today() + datetime.timedelta(2);
+    
+    todayName      = DAY_NAMES[today.weekday()][0];
+    tomorrowName   = DAY_NAMES[tomorrow.weekday()][1];
+    overmorrowName = DAY_NAMES[overmorrow.weekday()][1];
 
-    today_name = DAYS_NAME[today.weekday()]
-    yesterday_name = DAYS_NAME_SHORT[yesterday.weekday()]
-    tomorrow_name = DAYS_NAME_SHORT[tomorrow.weekday()]
+    args = {
+                "today"     : today,
+                "tomorrow"  : tomorrow,
+                "overmorrow": overmorrow,
+                
+                "today_name"        : todayName,
+                "tomorrow_name"     : tomorrowName,
+                "overmorrow_name"   : overmorrowName,
+            };
 
-    return render(
-                    request, 
-                    "glance.html", 
-                    {
-                        "today": today,
-                        "yesterday": yesterday,
-                        "tomorrow": tomorrow,
-                        
-                        "today_name" : todayName,
-                        "yesterday_name" : yesterdayName,
-                        "tomorrow_name" : tomorrowName,
-                    });
+    return render(request, "glance.html", args);
