@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weekly Schedule</title>
+</head>
+<body>
+    <h1> {{ month_year }}</h1>
+    <h3>Week of the {{ day }}th</h3>
+
+    <table class="week">
+        <tr class="weekdays">
+            <td>{{ day_names }}</td>
+        </tr>
+
+        <tr class="week-dates">
+            <td>{{ dates }}</td>
+        </tr>
+    </table>
+</body>
+</html>
