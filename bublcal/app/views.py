@@ -15,19 +15,6 @@ DAY_NAMES = [
                 [ "Sunday",     "Sun" ], 
             ];
 
-
-def home(request):
-    current_date = datetime.date.today()
-    current_year = current_date.year
-    current_month = current_date.month
-    htcal = HTMLCalendar().formatmonth(current_year, current_month)
-
-    return render(request, "home.html", {
-        "htcal": htcal,
-        "year": current_year,
-        "month": current_month,
-    })
-
 def weekly(request):
     current_date = datetime.date.today()
     year, week_num, day_of_week = current_date.isocalendar()
@@ -74,3 +61,36 @@ def daily(request):
             };
 
     return render(request, "glance.html", args);
+
+# Main Page View
+def index(request):
+    args = {};
+
+    return render(request, "index.html", args);
+
+
+# Login page
+def login(request):
+    args = {};
+
+    return render(request, "login.html", args);
+
+
+# Signup Page
+def signup(request):
+    args = {};
+
+    return render(request, "signup.html", args);
+
+## NOT USED. KEEPING FOR REFERENCE CURRENTLY. TO BE REMOVED AT SOME POINT - Cesar Carrillo
+#def home(request):
+#    current_date = datetime.date.today()
+#    current_year = current_date.year
+#    current_month = current_date.month
+#    htcal = HTMLCalendar().formatmonth(current_year, current_month)#
+#
+#    return render(request, "home.html", {
+#        "htcal": htcal,
+#        "year": current_year,
+#        "month": current_month,
+#    })

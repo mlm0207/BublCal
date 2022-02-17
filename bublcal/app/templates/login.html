@@ -1,0 +1,99 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<title>Login Page</title>
+
+<head>
+<style>
+.loginBox {
+  margin: 1% auto 10% auto;
+  width: 50%; 
+}
+
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  
+}
+.lastText {
+  padding: 2px;
+}
+
+button {
+  background-color: #F0F8FF;
+  color: black;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 50%;
+}
+
+img{
+  width: 15%;
+}
+
+.signupp{
+  position: absolute;
+  right: 325px;
+}
+a.signup{
+  right: 80px;
+  position: absolute;
+  background-color: #04AA6D;
+  color: white;
+  padding: 10px 15px; 
+}
+</style>
+</head>
+
+
+<body>
+<div class="image">
+      <a href="../"><img src="{% static 'logo.jpg' %}" alt="LOGO"></a>
+	  <a class="signup" href="../signup" > Sign up </a>
+    </div>
+
+<form class="loginBox">
+
+    <div>
+      <label><b>Username/email</b></label>
+      <input type="text" placeholder="Enter Username or email" required>
+      <a href="LinkToResetUsername">Forgot username?</a><br><br>
+	  
+      <label><b>Password</b></label>
+      <input type="password" placeholder="Enter Password" id="myPassword" required>
+	  <input type="checkbox" onclick="myFunction()">Show Password &nbsp;&nbsp;&nbsp;
+      <a href="LinkToResetPassword">Forgot password?</a><br>
+		
+      <button type="submit"style="font-size:2vw"><b>Login</b></button>
+      <label>
+        <input type="checkbox" name="remember"> Remember me
+      </label>
+    </div>
+    <br><br>
+    <div class="lastText">
+      <a class="cancelbtn" href= "../">Cancel</a>
+      <label class="signupp">You don't have an account please <a href= "../signup" style="font-size:2vw"><b>sign up now</b></a>
+    </div>
+
+</form>
+
+<script>
+function myFunction() {
+  var x = document.getElementById("myPassword");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+}
+</script>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<title>Signup Page</title>
+
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+
+<style>
+
+.loginBox {
+  margin: 1% auto 10% auto;
+  width: 50%; 
+}
+
+
+input[type=text], input[type=password], input[type=date] {
+  width: 45%;
+  padding: 12px 20px;
+  margin: 3px 0;
+  display: inline-block;
+}<!--
+-->
+
+.button {
+  background-color: #F0F8FF;
+  color: black;
+  padding: 5px 10px;
+  margin: 3px 0; 
+  width: 50%;
+  border: none;
+}
+
+img{
+  width: 13%;
+}
+a.login{
+  right: 80px;
+  position: absolute;
+  background-color: #04AA6D;
+  color: white;
+  padding: 10px 15px;
+}
+.login{
+  position: absolute;
+  right: 450px;
+}
+.lastText {
+  padding: 1px;
+}
+
+
+</style>
+</head>
+
+
+<body>
+<div class="image">
+      <a href="../"><img src="{% static 'logo.jpg' %}" alt="LOGO"></a>
+	  <a class="login" href="../login" > login </a> 
+    </div>
+	
+
+<form class="loginBox">
+
+    <div>
+      <label><b>First name</b></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <input type="text" placeholder="Enter first name" required><br>
+      <label><b>Last name</b></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <input type="text" placeholder="Enter last name" required> <br>
+	  
+	  <label for="birthday"><b>Date of birth</b></label>&nbsp;&nbsp;
+      <input type="date" id="birthday" name="birthday" required><br>	        
+	  
+	  <label><b>Email</b></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <input type="text" placeholder="Enter email address" required><br>
+	  
+      <label><b>Password</b></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <input type="password" name="password" autocomplete="current-password" placeholder="Enter Password" id="id_password" required>
+
+       <i class="far fa-eye" id="togglePassword" style="margin-left: -30px; cursor: pointer;"></i>	  
+	  <!--<label> <b>Confirm Password</b> </label> <input type = "password" placeholder="Confirm Password" id = "pswd2"> -->
+       
+      
+      <button class="button" type="submit" onclick="matchPassword()" style="font-size:2vw"><b>sign up</b></button>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type = "reset" value = "Reset" >Reset</button>
+	  
+    </div>
+    <br><br>
+    <div class="lastText">
+      <a class="cancelbtn" href= "../">Cancel</a>
+      <label class="login">Already have account please <a href="../login" style="font-size:1.5vw"><b>login</b></a></label>
+    </div>
+
+</form>
+
+</body>
+
+<script>
+const togglePassword = document.querySelector('#togglePassword');
+  const password = document.querySelector('#id_password');
+ 
+  togglePassword.addEventListener('click', function (e) {
+    
+    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+    password.setAttribute('type', type);
+    
+    this.classList.toggle('fa-eye-slash');
+});
+</script>
+
+</html>
