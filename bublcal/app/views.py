@@ -15,20 +15,43 @@ DAY_NAMES = [
                 [ "Sunday",     "Sun" ], 
             ];
 
+
 def home(request):
-    name = "ubaldo"
     current_date = datetime.date.today()
     current_year = current_date.year
     current_month = current_date.month
     htcal = HTMLCalendar().formatmonth(current_year, current_month)
 
-    return render(request,
-                  "home.html", {
-                      "name": name,
-                      "htcal": htcal,
-                      "year": current_year,
-                      "month": current_month,
-                  })
+    return render(request, "home.html", {
+        "htcal": htcal,
+        "year": current_year,
+        "month": current_month,
+    })
+
+def weekly(request):
+    current_date = datetime.date.today()
+    year, week_num, day_of_week = current_date.isocalendar()
+    month_year = current_date.strftime("%B") + " " + str(year)
+    day_names = calendar.weekheader(3)
+    day = current_date.day
+
+    # dates in the current week
+    weeks_list = []
+    for weeks in calendar.monthcalendar(year, current_date.month):
+        weeks_list.append(weeks)
+
+    dates = ''
+    for w in weeks_list:
+        if day in w:
+            dates = "  ".join(str(d) for d in w)
+
+    return render(request, "weekly.html", {
+        "day": day,
+        "day_names": day_names,
+        "month_year": month_year,
+        "dates": dates,
+    })
+
 
 # Daily/"At a glance" view
 def daily(request):
