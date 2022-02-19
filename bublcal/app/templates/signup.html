@@ -65,21 +65,21 @@ a.login{
 
     <div>
       <label><b>First name</b></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <input type="text" placeholder="Enter first name" required><br>
+      <input name="firstName" type="text" placeholder="Enter first name" required><br>
       <label><b>Last name</b></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <input type="text" placeholder="Enter last name" required> <br>
+      <input name="lastName" type="text" placeholder="Enter last name" required> <br>
 	  
 	  <label for="birthday"><b>Date of birth</b></label>&nbsp;&nbsp;
       <input type="date" id="birthday" name="birthday" required><br>	        
 	  
 	  <label><b>Email</b></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <input type="text" placeholder="Enter email address" required><br>
+      <input name="mail" type="text" placeholder="Enter email address" required><br>
 	  
       <label><b>Password</b></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <input type="password" name="password" autocomplete="current-password" placeholder="Enter Password" id="id_password" required>
 
        <i class="far fa-eye" id="togglePassword" style="margin-left: -30px; cursor: pointer;"></i>	  
-	  <!--<label> <b>Confirm Password</b> </label> <input type = "password" placeholder="Confirm Password" id = "pswd2"> -->
+	  <!--<label> <b>Confirm Password</b> </label> <input name="pswd2" type = "password" placeholder="Confirm Password" id = "pswd2"> -->
        
       
       <button class="button" type="submit" onclick="matchPassword()" style="font-size:2vw"><b>sign up</b></button>
