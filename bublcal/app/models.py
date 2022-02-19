@@ -14,8 +14,8 @@ class UserData(models.Model):
     first_name = models.CharField(max_length=32)
     last_name = models.CharField(max_length=32)
     dob = models.DateField()
-    time_zone = models.IntegerField()
-    retention_date = models.DateField()
+    #Not needed atm - time_zone = models.IntegerField()
+    #Not needed atm - retention_date = models.DateField()
 
 
 class BublTemplate(models.Model):
