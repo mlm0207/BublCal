@@ -4,7 +4,7 @@ import datetime
 from django.shortcuts import render
 from calendar import HTMLCalendar
 
-# Names of the days 
+# Names of the days
 DAY_NAMES = [
                 [ "Monday",     "Mon" ], 
                 [ "Tuesday",    "Tue" ], 
@@ -16,17 +16,17 @@ DAY_NAMES = [
             ];
 
 
-def home(request):
+def main(request):
     current_date = datetime.date.today()
     current_year = current_date.year
     current_month = current_date.month
     htcal = HTMLCalendar().formatmonth(current_year, current_month)
 
-    return render(request, "home.html", {
+    return render(request, "main.html", {
         "htcal": htcal,
         "year": current_year,
-        "month": current_month,
     })
+
 
 def weekly(request):
     current_date = datetime.date.today()
