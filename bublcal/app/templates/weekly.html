@@ -1,21 +1,35 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Weekly Schedule</title>
+    <link rel = "stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'weekly.css' %}">
 </head>
 <body>
-    <h1> {{ month_year }}</h1>
-    <h3>Week of the {{ day }}th</h3>
+    <h1 class="text-center"> {{ month_year }}</h1>
+    <h3 class="text-center">Week of {{ day_of_week }}, the {{ day }}th</h3>
 
-    <table class="week">
-        <tr class="weekdays">
-            <td>{{ day_names }}</td>
-        </tr>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <tr class="weekdays">
+                {% for name, date in days.items %}
+                    <th class="text-center"> {{ name }} {{date}}</th>
+                {% endfor %}
+            </tr>
 
-        <tr class="week-dates">
-            <td>{{ dates }}</td>
-        </tr>
-    </table>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+    </div>
 </body>
 </html>
