@@ -1,18 +1,20 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Weekly Schedule</title>
-    <link rel = "stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="{% static 'weekly.css' %}">
-</head>
-<body>
-    <h1 class="text-center"> {{ month_year }}</h1>
-    <h3 class="text-center">Week of {{ day_of_week }}, the {{ day }}th</h3>
+<title>{% block title %}Weekly Schedule{% endblock %}</title>
 
-    <div class="table-responsive">
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'weekly.css' %}">
+{% endblock styles %}
+
+{% block header %}
+    <div class="container pt-4 pb-2">
+        <h2 class="text-center">{{ month_year }}</h2>
+        <h4 class="text-center">Week of {{ day_of_week }}, the {{ day }}th</h4>
+    </div>
+{% endblock header %}
+
+{% block table %}
+    <div class="container table-responsive">
         <table class="table table-bordered">
             <tr class="weekdays">
                 {% for name, date in days.items %}
@@ -31,5 +33,4 @@
             </tr>
         </table>
     </div>
-</body>
-</html>
+ {% endblock table %}
