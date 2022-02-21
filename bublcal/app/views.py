@@ -3,6 +3,9 @@ import calendar
 import datetime
 from django.shortcuts import render
 from calendar import HTMLCalendar
+import cgi
+from django.db import models
+from app.models import UserData, UserLogin
 
 # Names of the days
 DAY_NAMES = [
@@ -94,6 +97,19 @@ def login(request):
 
 # Signup Page
 def signup(request):
+    form = cgi.FieldStorage()
+
+    fname = form.getvalue('firstName')
+    lname = form.getvalue('lastName')
+    bday = form.getvalue('birthday')
+    mail = form.getvalue('mail')
+    pswd = form.getvalue('password')
+    
+    mailSplit = str(mail).split('@', 1)
+
+    ud = UserData(email=mail, first_name=fname, last_name=lname, dob=bday)
+    ul = UserLogin(user_name=mailSplit[0], email=mail, password=pswd)
+  
     args = {};
 
     return render(request, "signup.html", args);
