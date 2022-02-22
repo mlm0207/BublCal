@@ -1,42 +1,7 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Welcome</title>
-    <link rel = "stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="{% static 'main.css' %}">
-</head>
-<body>
-<h1>Welcome</h1>
-<div class="container">
-    <br>
-    <!-- Nav tabs -->
-    <ul class="nav nav-tabs" role="tablist">
-        <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="/app/main">Home</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="/app/daily/">Day at a Glance</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="/app/weekly">This Week</a>
-        </li>
-    </ul>
-</div>
+{% extends "base.html" %}
 
-<!-- Tab panes -->
-<div class="tab-content">
-    <div id="home" class="container tab-pane active"><br>
-        <p class="calendar">{{ htcal|safe }}</p>
+{% block calendar %}
+    <div class="container pt-4 d-flex align-items-center justify-content-center">
+        {{ htcal|safe }}
     </div>
-    <div id="daily" class="container tab-pane fade"><br>
-        <h3>Day at a Glance</h3>
-    </div>
-    <div id="weekly" class="container tab-pane fade"><br>
-        <h3>This Week</h3>
-    </div>
-</div>
-
-</body>
-</html>
+{% endblock calendar %}
