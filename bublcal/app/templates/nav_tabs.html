@@ -1,0 +1,30 @@
+<!--instead of writing navbar code multiple times, create  1 template
+and use block tags with 'include' in files where nav.html is needed-->
+{% block nav_tabs %}
+    <div class="container">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs nav-justified" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="/app/main">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="/app/daily">Day at a Glance</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="/app/weekly">This Week</a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div id="home" class="container tab-pane active"><br>
+        </div>
+        <div id="daily" class="container tab-pane fade"><br>
+            <h3>Day at a Glance</h3>
+        </div>
+        <div id="weekly" class="container tab-pane fade"><br>
+            <h3>This Week</h3>
+        </div>
+    </div>
+{% endblock nav_tabs%}
