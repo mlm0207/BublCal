@@ -1,11 +1,16 @@
+{% extends "base.html" %}
 {% load static %}
-<!doctype HTML>
-<html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
-        <script src="{% static 'script.js' %}"></script>
-    </head>
-    <body>
+
+{% block title%}Day at a Glance{% endblock title%}
+
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+{% endblock styles%}
+
+{% block scripts%}<script src="{% static 'script.js' %}"></script>{% endblock scripts%}
+
+{% block daily %}
+    <div class="container d-flex align-items-center justify-content-center">
         <table class="dailyView">
             
             <!-- Header -->
@@ -73,6 +78,7 @@
                 </td>
             </tr>
         </table>
+    </div>
         <!-- OLD
         <div class="bubHolder">
             <div>5:00PM------------------------</div>
@@ -84,5 +90,4 @@
             <button id="bubt" class="bub" onclick="killme(this);">CS Game</button>
         </div>
         -->
-    </body>
-</html>
+{% endblock daily %}
