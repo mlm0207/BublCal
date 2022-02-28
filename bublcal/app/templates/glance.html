@@ -4,10 +4,12 @@
 {% block title%}Day at a Glance{% endblock title%}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'glance/style.css' %}">
 {% endblock styles%}
 
-{% block scripts%}<script src="{% static 'script.js' %}"></script>{% endblock scripts%}
+{% block scripts%}
+    <script src="{% static 'glance/script.js' %}"></script>
+{% endblock scripts%}
 
 {% block daily %}
     <div class="container d-flex align-items-center justify-content-center">
@@ -79,15 +81,4 @@
             </tr>
         </table>
     </div>
-        <!-- OLD
-        <div class="bubHolder">
-            <div>5:00PM------------------------</div>
-            <button id="bubt" class="bub" onclick="killme(this);">Do homework</button>
-        </div>
-        
-        <div class="bubHolder">
-            <div>6:00PM------------------------</div>
-            <button id="bubt" class="bub" onclick="killme(this);">CS Game</button>
-        </div>
-        -->
 {% endblock daily %}

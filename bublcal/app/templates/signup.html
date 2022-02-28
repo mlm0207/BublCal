@@ -56,12 +56,12 @@ a.login{
 
 <body>
 <div class="image">
-      <a href="../"><img src="{% static 'logo.jpg' %}" alt="LOGO"></a>
+      <a href="../"><img src="{% static 'img/logo.jpg' %}" alt="LOGO"></a>
 	  <a class="login" href="../login" > login </a> 
     </div>
 	
 
-<form class="loginBox" method="post" {% csrf_token %}>
+<form class="loginBox" method="post">{% csrf_token %}
 
     <div>
       <label><b>First name</b></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

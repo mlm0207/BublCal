@@ -112,7 +112,6 @@ def signup(request):
         ud = UserData(email=mail, first_name=fname, last_name=lname, dob=bday)
         ul = UserLogin(user_name=mailSplit[0], email=mail, password=pswd)
 
-        form.save()
   
     args = {};
 
