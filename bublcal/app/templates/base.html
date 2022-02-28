@@ -12,11 +12,33 @@
     <script src=”https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js” integrity=”sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/” crossorigin=”anonymous”></script>
     {% block styles %}{% endblock styles %}
     {% block scripts %}{% endblock %}
+    
+<style>
+
+a.signup,
+a.login {
+  background-color: #04AA6D;
+  color: white;
+  padding: 10px 15px;
+  
+}
+a.signup{
+  right: 12px;
+  position: absolute;
+}
+a.login{
+  right: 108px;
+  position: absolute;
+}
+
+</style>
 </head>
 <body>
     <!-- logo takes you to the main page -->
     <div class="container pb-4">
         <a href="../main"><img src="{% static 'img/logo.jpg' %}" width="150" height="auto" alt="logo"></a>
+        <a class="login" href="login" > login </a> 
+        <a class="signup" href="signup" > Sign up </a>
     </div>
 
     <!--'include' allows multiple files to use content from nav.html-->
