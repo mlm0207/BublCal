@@ -18,24 +18,22 @@ DAY_NAMES = [
                 [ "Sunday",     "Sun" ], 
             ];
 
+current_date = datetime.date.today()
+year, week_num, day_of_week = current_date.isocalendar()
+month_year = current_date.strftime("%B") + " " + str(year)
+day_of_week = calendar.day_name[day_of_week - 1]
+
 
 def main(request):
-    current_date = datetime.date.today()
-    current_year = current_date.year
-    current_month = current_date.month
-    htcal = HTMLCalendar().formatmonth(current_year, current_month)
+    htcal = HTMLCalendar().formatmonth(current_date.year, current_date.month)
 
     return render(request, "main.html", {
         "htcal": htcal,
-        "year": current_year,
+        "month_year": month_year,
     })
 
 
 def weekly(request):
-    current_date = datetime.date.today()
-    year, week_num, day_of_week = current_date.isocalendar()
-    month_year = current_date.strftime("%B") + " " + str(year)
-    day_of_week = calendar.day_name[day_of_week-1]
     day = current_date.day
     day_names = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat","Sun" ]
 
