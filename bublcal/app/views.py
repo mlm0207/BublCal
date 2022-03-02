@@ -32,7 +32,6 @@ def main(request):
         "month_year": month_year,
     })
 
-
 def weekly(request):
     day = current_date.day
     day_names = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat","Sun" ]
@@ -49,9 +48,21 @@ def weekly(request):
 
     days = dict(zip(day_names, dates))
 
+    # add suffix to date
+    def suffix(day):
+        if 4 <= day <= 20 or 24 <= day <= 30:
+            day = str(day) + "th"
+        elif day == 1 or day == 21 or day == 31:
+            day = str(day) + "st"
+        elif day == 2 or day == 22:
+            day = str(day) + "nd"
+        elif day == 3 or day == 23:
+            day = str(day) + "rd"
+        return day
+
     return render(request, "weekly.html", {
         "day_of_week": day_of_week,
-        "day": day,
+        "day": suffix(day),
         "month_year": month_year,
         "days": days,
     })
