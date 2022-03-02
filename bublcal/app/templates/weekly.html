@@ -9,7 +9,7 @@
 {% block header %}
     <div class="container pt-4 pb-2">
         <h2 class="text-center">{{ month_year }}</h2>
-        <h4 class="text-center">Week of {{ day_of_week }}, the {{ day }}th</h4>
+        <h4 class="text-center">Week of {{ day_of_week }}, the {{ day }}</h4>
     </div>
 {% endblock header %}
 
@@ -18,11 +18,11 @@
         <table class="table table-bordered">
             <tr class="weekdays">
                 {% for name, date in days.items %}
-                    <th class="text-center"> {{ name }} {{date}}</th>
+                    <th class="text-center"> {{ name }} {{ date }}</th>
                 {% endfor %}
             </tr>
 
-            <tr>
+            <tr class="vh-100">
                 <td></td>
                 <td></td>
                 <td></td>
