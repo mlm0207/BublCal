@@ -4,7 +4,7 @@ import datetime
 from django.shortcuts import render
 from calendar import HTMLCalendar
 from django.db import models
-from app.models import UserData, UserLogin
+from app.models import UserData
 from django.http import HttpResponseRedirect
 from django import forms
 
