@@ -3,9 +3,10 @@ import calendar
 import datetime
 from django.shortcuts import render
 from calendar import HTMLCalendar
-import cgi
 from django.db import models
 from app.models import UserData, UserLogin
+from django.http import HttpResponseRedirect
+from django import forms
 
 # Names of the days
 DAY_NAMES = [
@@ -106,20 +107,26 @@ def login(request):
 
 # Signup Page
 def signup(request):
-    form = cgi.FieldStorage()
 
     if request.method == "POST":
-        fname = form.getvalue('firstName')
-        lname = form.getvalue('lastName')
-        bday = form.getvalue('birthday')
-        mail = form.getvalue('mail')
-        pswd = form.getvalue('password')
+        
+        fname = forms.CharField(label='firstName')
+        lname = forms.CharField(label='lastName')
+        bday = forms.DateField(label='birthday')
+        mail = forms.CharField(label='mail')
+        pswd = forms.CharField(label='password')
 
     
         mailSplit = str(mail).split('@', 1)
 
-        ud = UserData(email=mail, first_name=fname, last_name=lname, dob=bday)
-        ul = UserLogin(user_name=mailSplit[0], email=mail, password=pswd)
+        ud = UserData(email=mail, first_name=fname, last_name=lname, dob='2021-1-24') #Placeholder dob
+        ud.save()
+        #ul = UserLogin(user_name=mailSplit[0], email=mail, password=pswd)
+        #ul.save()
+        # UserLogin foreign key required a UserData instance of 'mail' so this has been left out
+        # may be best to condense UserLogin and UserData in the database
+
+        return HttpResponseRedirect('/app/login/')
 
   
     args = {};
