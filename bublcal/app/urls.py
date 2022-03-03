@@ -8,4 +8,5 @@ urlpatterns = [
     path('main/', views.main, name="main"),
     path('daily/', views.daily, name="daily-view"),
     path('weekly/', views.weekly, name="weekly-view"),
+    path("success/", views.signup_success, name="signup-success"),
 ];

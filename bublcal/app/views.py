@@ -104,45 +104,47 @@ def login(request):
 
     return render(request, "login.html", args);
 
+def signup_success(request):
+    firstName   = request.POST["firstName"];
+    lastName    = request.POST["lastName"];
+    birthday    = request.POST["birthday"];
+    mail        = request.POST["mail"];
+    password    = request.POST["password"];
+
+    mailSplit = str(mail).split('@', 1);
+
+    userData = UserData(email=mail, first_name=firstName, last_name=lastName, dob=birthday, user_name=mailSplit[0], password=password);
+    userData.save();
+    
+    args = {};
+
+    return render(request, "signup_success.html", args);
+
 
 # Signup Page
 def signup(request):
 
-    if request.method == "POST":
-        
-        fname = forms.CharField(label='firstName')
-        lname = forms.CharField(label='lastName')
-        bday = forms.DateField(label='birthday')
-        mail = forms.CharField(label='mail')
-        pswd = forms.CharField(label='password')
+#    if request.method == "POST":
+#        
+#        fname = forms.CharField(label='firstName')
+#        lname = forms.CharField(label='lastName')
+#        bday = forms.DateField(label='birthday')
+#        mail = forms.CharField(label='mail')
+#        pswd = forms.CharField(label='password')
+#
+#    
+#        mailSplit = str(mail).split('@', 1)
+#
+#        ud = UserData(email=mail, first_name=fname, last_name=lname, dob='2021-1-24') #Placeholder dob
+#        ud.save()
+#        #ul = UserLogin(user_name=mailSplit[0], email=mail, password=pswd)
+#        #ul.save()
+#        # UserLogin foreign key required a UserData instance of 'mail' so this has been left out
+#        # may be best to condense UserLogin and UserData in the database
 
-    
-        mailSplit = str(mail).split('@', 1)
-
-        ud = UserData(email=mail, first_name=fname, last_name=lname, dob='2021-1-24') #Placeholder dob
-        ud.save()
-        #ul = UserLogin(user_name=mailSplit[0], email=mail, password=pswd)
-        #ul.save()
-        # UserLogin foreign key required a UserData instance of 'mail' so this has been left out
-        # may be best to condense UserLogin and UserData in the database
-
-        return HttpResponseRedirect('/app/login/')
+#        return HttpResponseRedirect('/app/login/')
 
   
     args = {};
 
     return render(request, "signup.html", args);
-
-## NOT USED. KEEPING FOR REFERENCE CURRENTLY. TO BE REMOVED AT SOME POINT - Cesar Carrillo
-#def home(request):
-#    current_date = datetime.date.today()
-#    current_year = current_date.year
-#    current_month = current_date.month
-#    htcal = HTMLCalendar().formatmonth(current_year, current_month)#
-#
-#    return render(request, "home.html", {
-#        "htcal": htcal,
-#        "year": current_year,
-#        "month": current_month,
-#    })
-
