@@ -8,15 +8,10 @@ class UserData(models.Model):
     first_name = models.CharField(max_length=32)
     last_name = models.CharField(max_length=32)
     dob = models.DateField()
+    user_name = models.CharField(max_length=64, default='None')
+    password = models.CharField(max_length=64, default='None')
     #Not needed atm - time_zone = models.IntegerField()
     #Not needed atm - retention_date = models.DateField()
-
-
-class UserLogin(models.Model):
-    user_name = models.CharField(max_length=64, primary_key=True)
-    email = models.ForeignKey(UserData, on_delete=models.CASCADE)
-    # email = models.CharField(max_length=64) - Not sure if foreign key is working, leaving this if needed
-    password = models.CharField(max_length=64)
 
 
 class BublTemplate(models.Model):
