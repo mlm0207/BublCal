@@ -56,15 +56,15 @@ a.signup{
 	  <a class="signup" href="../signup" > Sign up </a>
     </div>
 
-<form class="loginBox">
+<form class="loginBox" method="post" action="/app/login/">{% csrf_token %}
 
     <div>
       <label><b>Username/email</b></label>
-      <input type="text" placeholder="Enter Username or email" required>
+      <input name="mail" type="text" placeholder="Enter Username or email" required>
       <a href="LinkToResetUsername">Forgot username?</a><br><br>
 	  
       <label><b>Password</b></label>
-      <input type="password" placeholder="Enter Password" id="myPassword" required>
+      <input name="password" type="password" placeholder="Enter Password" id="myPassword" required>
 	  <input type="checkbox" onclick="myFunction()">Show Password &nbsp;&nbsp;&nbsp;
       <a href="LinkToResetPassword">Forgot password?</a><br>
 		

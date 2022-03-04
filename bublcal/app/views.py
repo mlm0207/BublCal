@@ -1,6 +1,7 @@
 # Imports
 import calendar
 import datetime
+import re
 from django.shortcuts import render
 from calendar import HTMLCalendar
 from django.db import models
@@ -97,12 +98,37 @@ def index(request):
 
     return render(request, "index.html", args);
 
-
 # Login page
 def login(request):
-    args = {};
+    # If user submitted username/password
+    if(request.method == "POST"):
+        email    = request.POST["mail"];
+        password = request.POST["password"];
 
-    return render(request, "login.html", args);
+        # Verification flags
+        emailValid  = False;
+        passValid   = False;
+
+        # Check if username & password are valid
+        for user in UserData.objects.all():
+            if(user.email == email):
+                emailValid = True;
+                if(user.password == password):
+                    passValid = True;
+                    break;
+        
+        # Verification output
+        args = {    "emailValid":   emailValid,
+                    "passValid":    passValid   };
+
+        # If authed then go to user home page
+        if(emailValid and passValid):
+            return render(request, "glance.html", args);
+        else: # Show invalid username/password error
+            return render(request, "login.html", args);
+
+    # Default render page
+    return render(request, "login.html");
 
 def signup_success(request):
     firstName   = request.POST["firstName"];
@@ -123,28 +149,48 @@ def signup_success(request):
 
 # Signup Page
 def signup(request):
+    if(request.method == "POST"):
+        firstName   = request.POST["firstName"];
+        lastName    = request.POST["lastName"];
+        birthday    = request.POST["birthday"];
+        mail        = request.POST["mail"];
+        password    = request.POST["password"];
+        
+        mailSplit = str(mail).split('@', 1);
 
-#    if request.method == "POST":
-#        
-#        fname = forms.CharField(label='firstName')
-#        lname = forms.CharField(label='lastName')
-#        bday = forms.DateField(label='birthday')
-#        mail = forms.CharField(label='mail')
-#        pswd = forms.CharField(label='password')
-#
-#    
-#        mailSplit = str(mail).split('@', 1)
-#
-#        ud = UserData(email=mail, first_name=fname, last_name=lname, dob='2021-1-24') #Placeholder dob
-#        ud.save()
-#        #ul = UserLogin(user_name=mailSplit[0], email=mail, password=pswd)
-#        #ul.save()
-#        # UserLogin foreign key required a UserData instance of 'mail' so this has been left out
-#        # may be best to condense UserLogin and UserData in the database
+        # Check if user is 13 or older
+        userBirth = datetime.datetime.strptime(birthday, "%Y-%m-%d").date();
+        activeDay = datetime.date.today();
 
-#        return HttpResponseRedirect('/app/login/')
+        userAge = (activeDay - userBirth).days / 365.25;
 
-  
+        # Regex for valid email
+        emailReg = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)";
+
+        # Check if email is in use
+        emailNotUsed = True;
+        for user in UserData.objects.all():
+            if(user.email == mail):
+                emailNotUsed = False;
+                break;
+
+        # account creation flags
+        oldEnough = (userAge >= 13);
+        validEmail = emailNotUsed and re.search(emailReg, mail);
+
+        if(oldEnough and validEmail):
+            userData = UserData(email=mail, first_name=firstName, last_name=lastName, dob=birthday, user_name=mailSplit[0], password=password);
+            userData.save();
+
+            args = {};
+
+            return render(request, "signup_success.html", args);
+        else:
+            
+            args = { "ageFail": oldEnough, "emailFail": validEmail };
+
+            return render(request, "signup.html", args);
+
     args = {};
 
     return render(request, "signup.html", args);

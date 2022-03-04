@@ -1,4 +1,6 @@
 {% load static %}
+{{ emailFail }}
+{{ ageFail }}
 <!DOCTYPE html>
 <html>
 <title>Signup Page</title>
@@ -61,7 +63,7 @@ a.login{
     </div>
 	
 
-<form class="loginBox" method="post" action="/app/success/">{% csrf_token %}
+<form class="loginBox" method="post" action="/app/signup/">{% csrf_token %}
 
     <div>
       <label><b>First name</b></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
