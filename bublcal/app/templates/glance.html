@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title%}Day at a Glance{% endblock title%}
+{% block title %}Day at a Glance{% endblock title %}
 
 {% block styles %}
     <link rel="stylesheet" type="text/css" href="{% static 'glance/style.css' %}">
 {% endblock styles%}
 
-{% block scripts%}
+{% block scripts %}
     <script src="{% static 'glance/script.js' %}"></script>
-{% endblock scripts%}
+{% endblock scripts %}
 
-{% block daily %}
-    <div class="container d-flex align-items-center justify-content-center">
+{% block content %}
+    <div class="container d-flex align-items-center justify-content-center pt-4">
         <table class="dailyView">
             
             <!-- Header -->
@@ -81,4 +81,4 @@
             </tr>
         </table>
     </div>
-{% endblock daily %}
+{% endblock content %}
