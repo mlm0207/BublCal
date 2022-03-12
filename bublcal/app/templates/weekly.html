@@ -6,15 +6,13 @@
     <link rel="stylesheet" type="text/css" href="{% static 'weekly/weekly.css' %}">
 {% endblock styles %}
 
-{% block header %}
+{% block content %}
     <div class="container pt-4 pb-2">
         <h2 class="text-center">{{ month_year }}</h2>
         <h4 class="text-center">Week of {{ day_of_week }}, the {{ day }}</h4>
-    </div>
-{% endblock header %}
 
-{% block table %}
-    <div class="container table-responsive">
+
+    <div id="week_table" class="container table-responsive">
         <table class="table table-bordered">
             <tr class="weekdays">
                 {% for name, date in days.items %}
@@ -22,6 +20,7 @@
                 {% endfor %}
             </tr>
 
+            <!--Weekly Bubls will go here -->
             <tr class="vh-100">
                 <td></td>
                 <td></td>
@@ -33,4 +32,5 @@
             </tr>
         </table>
     </div>
- {% endblock table %}
+    </div>
+{% endblock content %}
