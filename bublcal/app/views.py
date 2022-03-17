@@ -90,6 +90,14 @@ def createBubl(request):
             
     return render(request, "bubl_create.html");
 
+def logout(request):
+    if(bublcal_lib.checkUserLogged(request)):
+        user = bublcal_lib.getLoggedUser(request);
+        request.session["loggedIn"] = False;
+
+    return redirect("index");
+
+
 # Daily/"At a glance" view
 def daily(request):
 
@@ -103,22 +111,49 @@ def daily(request):
     tomorrowName   = DAY_NAMES[tomorrow.weekday()][1];
     overmorrowName = DAY_NAMES[overmorrow.weekday()][1];
 
+    # Get current time
     currentTime = datetime.datetime.today().time()
     currentHour = currentTime.hour;
 
+    # This array will hold the time slots for the current day up to 12:00PM
+    # the array starts at the current hour the user is viewing the page
+    # each array item holds two things, the hour in 24 base and the formatted time
+    # i.e. [4, "4:00 PM"]
     timeSlots = [[currentHour, currentTime.replace(minute=0).strftime("%I:%M %p")]];
     
+    # Get the bubbls that the user has 
+    # currently testing all bubls TODO: make it day speific
     bubls = bublcal_lib.getUserBubbles(bublcal_lib.getLoggedUser(request));
 
-    for bubl in bubls:
-        print("\n\n", bubl.date, "\n\n");
+    # If we have bubbles then we will print the list for DEBUG TODO: REMOVE THIS 
+    if(bubls != None):
+        for bubl in bubls:
+            pass;
+            print("\n");
+            print(bubl.name);
+            print("@ ", bubl.date);
+            print("\n");
 
-    for i in range(currentHour, 24):
-        newT = datetime.datetime.today() + datetime.timedelta(hours=i - 1);
-        newT = newT.replace(minute=0);
-        timeSlots.append([newT.hour, newT.strftime("%I:%M %p")]);
+    todayTime = datetime.datetime.today();
 
+    # Create the rest of the timeslots for the array
+    for i in range(currentHour + 1, 24):
+        newT = todayTime;
+        newT = newT.replace(hour=i, minute=0);
+        timeSlots.append([i, newT.strftime("%I:%M %p")]);
+
+    print(timeSlots);
+
+    # Check if user is logged in
+    loggedIn = False;
+
+    if(bublcal_lib.checkUserLogged(request)):
+        bublcal_lib.getLoggedUser(request);
+        loggedIn = True;
+
+    # Arguments to pass
     args = {
+                "loggedIn"  : loggedIn,
                 "today"     : today,
                 "tomorrow"  : tomorrow,
                 "overmorrow": overmorrow,
@@ -131,6 +166,7 @@ def daily(request):
                 "bubls" : bubls,
             };
 
+    # Render the page
     return render(request, "glance.html", args);
 
 # Main Page View
@@ -159,7 +195,7 @@ def login(request):
                 request.session["user"] = email;
                 request.session["loggedIn"] = True;
 
-                return render(request, "glance.html");
+                return redirect("daily-view");
             else:
                 args = { "siFailType": loginCheck[1] };
 

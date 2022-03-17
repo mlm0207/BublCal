@@ -78,7 +78,7 @@ def createuser(email, password, firstName, lastName, birthday):
     return [True, -1];
 
 def deleteUser(email):
-    print("WARNING: FUNCTION deleteUser NOT CREATED\nUSER: \"", email, "\" WILL  NOT DELETED!!!!");
+    print("\nWARNING: FUNCTION deleteUser NOT CREATED\nUSER: \"", email, "\" WILL  NOT DELETED!!!!\n");
 
 # Sign-in fail types
 SI_FAIL_EMAIL       = 0;
@@ -133,10 +133,10 @@ def getUserBubbles(email):
     return userbubls;
 
 def getBubblesByUserDate(email, year, month, day):
-    print("");
+    print("\nWARNING: FUNCTION getBubblesByUserDate NOT CREATED\n");
 
 def deleteBubble():
-    print("");
+    print("\nWARNING: FUNCTION deleteBubble NOT CREATED\n");
 
 def modifyBubble():
-    print("");
+    print("\nWARNING: FUNCTION modifyBubble NOT CREATED\n");
