@@ -1,0 +1,73 @@
+{% load static %}
+{{ emailFail }}
+{{ ageFail }}
+<!DOCTYPE html>
+<html>
+<title>Signup Page</title>
+
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+
+<style>
+
+.loginBox {
+  margin: 1% auto 10% auto;
+  width: 50%; 
+}
+
+
+input[type=text], input[type=password], input[type=date] {
+  width: 45%;
+  padding: 12px 20px;
+  margin: 3px 0;
+  display: inline-block;
+}<!--
+-->
+
+.button {
+  background-color: #F0F8FF;
+  color: black;
+  padding: 5px 10px;
+  margin: 3px 0; 
+  width: 50%;
+  border: none;
+}
+
+img{
+  width: 13%;
+}
+a.login{
+  right: 80px;
+  position: absolute;
+  background-color: #04AA6D;
+  color: white;
+  padding: 10px 15px;
+}
+.login{
+  position: absolute;
+  right: 450px;
+}
+.lastText {
+  padding: 1px;
+}
+</style>
+</head>
+<body>
+<div class="image">
+      <a href="../main"><img src="{% static 'img/logo.jpg' %}" alt="LOGO"></a>
+	  <a class="login" href="../login" > login </a> 
+    </div>
+<form class="loginBox" method="post" action="/app/bublcreate/">{% csrf_token %}
+    <div>
+      <input name="name" type="text" placeholder="Bubble Name" required>
+      <input name="note" type="text" placeholder="Extra Note">
+      <input type="datetime-local" name="datetime" required><br>
+      <input name="length" type="number" placeholder="Length">
+      
+      <button class="button" type="submit" style="font-size:2vw"><b>sign up</b></button>
+    
+    </div>
+    <br><br>
+</form>
+</body>
+</html>
