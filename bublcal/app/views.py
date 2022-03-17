@@ -1,12 +1,14 @@
 # Imports
 import calendar
 import datetime
-import re
+from os import times
+from . import bublcal_lib
 from django.shortcuts import render
 from calendar import HTMLCalendar
 from django.db import models
 from app.models import UserData
 from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 from django import forms
 
 # Names of the days
@@ -69,16 +71,52 @@ def weekly(request):
         "days": days,
     })
 
+def createBubl(request):
+    if(request.method == "POST"):
+
+        # Grab user data
+        email   = bublcal_lib.getLoggedUser(request);
+        name    = request.POST["name"];
+        note    = request.POST["note"];
+        date    = request.POST["datetime"];
+        length  = request.POST["length"];
+
+        result = bublcal_lib.createBubble(email, name, note, date, length);
+
+        if(result[0]):
+            return render(request, "bubl_create.html");
+        else:
+            return render(request, "bubl_create.html");
+            
+    return render(request, "bubl_create.html");
 
 # Daily/"At a glance" view
 def daily(request):
+
+    # Grab active day
     today       = datetime.date.today();
     tomorrow    = datetime.date.today() + datetime.timedelta(1);
     overmorrow  = datetime.date.today() + datetime.timedelta(2);
     
+    # Grab active days names
     todayName      = DAY_NAMES[today.weekday()][0];
     tomorrowName   = DAY_NAMES[tomorrow.weekday()][1];
     overmorrowName = DAY_NAMES[overmorrow.weekday()][1];
+
+    currentTime = datetime.datetime.today().time()
+    currentHour = currentTime.hour;
+
+    timeSlots = [[currentHour, currentTime.replace(minute=0).strftime("%I:%M %p")]];
+    
+    bubls = bublcal_lib.getUserBubbles(bublcal_lib.getLoggedUser(request));
+
+    for bubl in bubls:
+        print("\n\n", bubl.date, "\n\n");
+
+    for i in range(currentHour, 24):
+        newT = datetime.datetime.today() + datetime.timedelta(hours=i - 1);
+        newT = newT.replace(minute=0);
+        timeSlots.append([newT.hour, newT.strftime("%I:%M %p")]);
 
     args = {
                 "today"     : today,
@@ -88,6 +126,9 @@ def daily(request):
                 "today_name"        : todayName,
                 "tomorrow_name"     : tomorrowName,
                 "overmorrow_name"   : overmorrowName,
+
+                "timeSlots" : timeSlots,
+                "bubls" : bubls,
             };
 
     return render(request, "glance.html", args);
@@ -100,97 +141,63 @@ def index(request):
 
 # Login page
 def login(request):
-    # If user submitted username/password
-    if(request.method == "POST"):
-        email    = request.POST["mail"];
-        password = request.POST["password"];
 
-        # Verification flags
-        emailValid  = False;
-        passValid   = False;
+    # Make sure user is not logged in    
+    if(bublcal_lib.checkUserLogged(request) == False):
 
-        # Check if username & password are valid
-        for user in UserData.objects.all():
-            if(user.email == email):
-                emailValid = True;
-                if(user.password == password):
-                    passValid = True;
-                    break;
-        
-        # Verification output
-        args = {    "emailValid":   emailValid,
-                    "passValid":    passValid   };
+        # If user submitted username/password
+        if(request.method == "POST"):
+            email    = request.POST["mail"];
+            password = request.POST["password"];
 
-        # If authed then go to user home page
-        if(emailValid and passValid):
-            return render(request, "glance.html", args);
-        else: # Show invalid username/password error
-            return render(request, "login.html", args);
+            # Check if username & password are valid
+            loginCheck = bublcal_lib.userLoginCheck(email, password);
 
-    # Default render page
-    return render(request, "login.html");
+            if(loginCheck[0]):
 
-def signup_success(request):
-    firstName   = request.POST["firstName"];
-    lastName    = request.POST["lastName"];
-    birthday    = request.POST["birthday"];
-    mail        = request.POST["mail"];
-    password    = request.POST["password"];
+                # Save the session
+                request.session["user"] = email;
+                request.session["loggedIn"] = True;
 
-    mailSplit = str(mail).split('@', 1);
+                return render(request, "glance.html");
+            else:
+                args = { "siFailType": loginCheck[1] };
 
-    userData = UserData(email=mail, first_name=firstName, last_name=lastName, dob=birthday, user_name=mailSplit[0], password=password);
-    userData.save();
-    
-    args = {};
+                return render(request, "login.html", args);
 
-    return render(request, "signup_success.html", args);
+        # Default render page
+        return render(request, "login.html");
 
+    else:
+        return redirect("main"); # Redirect to home page if logged in
 
 # Signup Page
 def signup(request):
-    if(request.method == "POST"):
-        firstName   = request.POST["firstName"];
-        lastName    = request.POST["lastName"];
-        birthday    = request.POST["birthday"];
-        mail        = request.POST["mail"];
-        password    = request.POST["password"];
-        
-        mailSplit = str(mail).split('@', 1);
 
-        # Check if user is 13 or older
-        userBirth = datetime.datetime.strptime(birthday, "%Y-%m-%d").date();
-        activeDay = datetime.date.today();
+    # Make user a user is not logged in
+    if(bublcal_lib.checkUserLogged(request) == False):
 
-        userAge = (activeDay - userBirth).days / 365.25;
+        # If user is submitting data
+        if(request.method == "POST"):
 
-        # Regex for valid email
-        emailReg = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)";
+            # Grab user data
+            email       = request.POST["email"];
+            password    = request.POST["password"];
+            firstName   = request.POST["firstName"];
+            lastName    = request.POST["lastName"];
+            birthday    = request.POST["birthday"];
 
-        # Check if email is in use
-        emailNotUsed = True;
-        for user in UserData.objects.all():
-            if(user.email == mail):
-                emailNotUsed = False;
-                break;
+            # Try to create the user
+            result = bublcal_lib.createuser(email, password, firstName, lastName, birthday);
 
-        # account creation flags
-        oldEnough = (userAge >= 13);
-        validEmail = emailNotUsed and re.search(emailReg, mail);
+            if(result[0]):
+                return render(request, "signup_success.html"); # If success
+            else:
+                args = { "acFailType": result[1] };
 
-        if(oldEnough and validEmail):
-            userData = UserData(email=mail, first_name=firstName, last_name=lastName, dob=birthday, user_name=mailSplit[0], password=password);
-            userData.save();
+                return render(request, "signup.html", args); # If fail
 
-            args = {};
+        return render(request, "signup.html");
 
-            return render(request, "signup_success.html", args);
-        else:
-            
-            args = { "ageFail": oldEnough, "emailFail": validEmail };
-
-            return render(request, "signup.html", args);
-
-    args = {};
-
-    return render(request, "signup.html", args);
+    else:
+        return redirect("main"); # Redirect to home page if logged in

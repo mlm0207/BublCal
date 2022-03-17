@@ -41,23 +41,20 @@
             <tr>
                 <!-- Active day -->
                 <td class="dailyNote">
-                    <div class="bubHolder">
-                        <span>5:00PM------------------------</span>
-                        <button onclick="createBubble(this);">Create Bubble</button>
-                        <button id="bubt" class="bub" onclick="killme(this);">Do homework</button>
-                    </div>
-
-                    <div class="bubHolder">
-                        <span>5:30PM------------------------</span>
-                        <button onclick="createBubble(this);">Create Bubble</button>
-                        <button id="bubt" class="bub" onclick="killme(this);">CS Game</button>
-                    </div>
-
-                    <div class="bubHolder">
-                        <span>6:00PM------------------------</span>
-                        <button onclick="createBubble(this);">Create Bubble</button>
-                        <button id="bubt" class="bub" onclick="killme(this);">CS Game</button>
-                    </div>
+                    <button onclick="createBubble(this);">Create Bubble</button>
+                    {% for slot in timeSlots %}
+                        <div class="bubHolder">
+                            <span>{{slot.1}}------------------------</span>
+                            {% for bubl in bubls %}
+                                {% if bubl.date.hour == slot.0 %}
+                                    <h3>{{bubl.date}}</h3>
+                                    <span>{{bubl.date.hour}}</span>
+                                {% endif %}
+                            {% endfor %}
+                            <!--<button id="bubt" class="bub" onclick="killme(this);">Do homework</button>
+                            -->
+                        </div>
+                    {% endfor %}
                 </td>
 
                 <!-- Tomorrow -->

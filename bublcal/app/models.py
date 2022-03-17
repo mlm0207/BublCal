@@ -4,30 +4,36 @@ from django.db import models
 # Create your models here.
 
 class UserData(models.Model):
-    email = models.CharField(max_length=64, primary_key=True)
-    first_name = models.CharField(max_length=32)
-    last_name = models.CharField(max_length=32)
-    dob = models.DateField()
-    user_name = models.CharField(max_length=64, default='None')
-    password = models.CharField(max_length=64, default='None')
+    email       = models.CharField(max_length=64, primary_key=True)
+    password    = models.CharField(max_length=64, default='None')
+    firstName  = models.CharField(max_length=32)
+    lastName   = models.CharField(max_length=32)
+    birthday    = models.DateField()
     #Not needed atm - time_zone = models.IntegerField()
     #Not needed atm - retention_date = models.DateField()
 
+class Bubl(models.Model):
+    email = models.ForeignKey(UserData, on_delete=models.CASCADE);
+    name = models.CharField(max_length=32);
+    note = models.CharField(max_length=32);
+    date = models.DateTimeField();
+    length = models.IntegerField();
 
-class BublTemplate(models.Model):
-    task_id = models.CharField(max_length=256, primary_key=True)
-    email = models.ForeignKey(UserData, on_delete=models.CASCADE)
-    task_name = models.CharField(max_length=64)
-    bubl_template = models.JSONField()
-
-
-class BublSchedule(models.Model):
-    email = models.ForeignKey(UserData, on_delete=models.CASCADE)
-    schedule = models.JSONField()
-
-
-class BublMonthSchedule(models.Model):
-    email = models.ForeignKey(UserData, on_delete=models.CASCADE)
-    month = models.IntegerField
-    week_bubl = models.JSONField()
-    month_bubl = models.JSONField()
+#class BublTemplate(models.Model):
+#    task_id = models.CharField(max_length=256, primary_key=True)
+#    email = models.ForeignKey(UserData, on_delete=models.CASCADE)
+#    task_name = models.CharField(max_length=64)
+#    bubl_template = models.JSONField()
+#
+#
+#class BublSchedule(models.Model):
+#    email = models.ForeignKey(UserData, on_delete=models.CASCADE)
+#    schedule = models.JSONField()
+#
+#
+#class BublMonthSchedule(models.Model):
+#    email = models.ForeignKey(UserData, on_delete=models.CASCADE)
+#    month = models.IntegerField
+#    week_bubl = models.JSONField()
+#    month_bubl = models.JSONField()
+#

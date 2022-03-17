@@ -64,6 +64,17 @@ a.login{
 	
 
 <form class="loginBox" method="post" action="/app/signup/">{% csrf_token %}
+  {% if acFailType == 0 %}
+  <h1>Not Old Enough</h1>
+  {% endif %}
+  
+  {% if acFailType == 1 %}
+  <h1>Email not properly formatted</h1>
+  {% endif %}
+  
+  {% if acFailType == 2 %}
+  <h1>Email in use</h1>
+  {% endif %}
 
     <div>
       <label><b>First name</b></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -75,7 +86,7 @@ a.login{
       <input type="date" id="birthday" name="birthday" required><br>	        
 	  
 	  <label><b>Email</b></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <input name="mail" type="text" placeholder="Enter email address" required><br>
+      <input name="email" type="text" placeholder="Enter email address" required><br>
 	  
       <label><b>Password</b></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <input type="password" name="password" autocomplete="current-password" placeholder="Enter Password" id="id_password" required>

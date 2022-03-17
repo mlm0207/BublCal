@@ -55,7 +55,12 @@ a.signup{
       <a href="../main"><img src="{% static 'img/logo.jpg' %}" alt="LOGO"></a>
 	  <a class="signup" href="../signup" > Sign up </a>
     </div>
-
+{% if siFailType == 0 %}
+<h1>Wrong Email</h1>
+{% endif %}
+{% if siFailType == 1 %}
+<h1>Wrong password</h1>
+{% endif %}
 <form class="loginBox" method="post" action="/app/login/">{% csrf_token %}
 
     <div>
