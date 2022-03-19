@@ -19,20 +19,20 @@
             <tr>
                 <td class="dailyCurrent">
                     <center>
-                    <h1>Today ({{today_name}})</h1>
+                    <h1>{{today_name}}</h1>
                     <h3>{{today}}</h3>
                     </center>
                 </td>
                 <td class="dailyAfter">
                     <center>
-                    <h2>Tomorrow ({{tomorrow_name}})</h2>
-                    <h3>{{tomorrow}}</h3>
+                    <h2>{{tomorrow_name}}</h2>
+                    <h4>{{tomorrow}}</h4>
                 </center>
                 </td>
                 <td class="dailyAfter">
                     <center>
-                    <h2>Overmorrow ({{overmorrow_name}})</h2>
-                    <h3>{{overmorrow}}</h3>
+                    <h2>{{overmorrow_name}}</h2>
+                    <h4>{{overmorrow}}</h4>
                 </center>
                 </td>
             </tr>
@@ -41,14 +41,24 @@
             <tr>
                 <!-- Active day -->
                 <td class="dailyNote">
-                    <button onclick="createBubble(this);">Create Bubble</button>
+                    <!--<button onclick="createBubble(this);">Create Bubble</button>-->
+                    <a href="/app/bublcreate"><button>Create bubble</button></a>
                     {% for slot in timeSlots %}
                         <div class="bubHolder">
                             <span>{{slot.1}}------------------------</span>
                             {% for bubl in bubls %}
-                                {% if bubl.date.hour == slot.0 %}
-                                    <h3>{{bubl.date}}</h3>
+                                {% if bubl.time.hour == slot.0 %}
+                                <button class="bub">
+                                    <span>{{bubl.name}}</span>
+                                    <br>
+                                    <span>{{bubl.time}}</span>
+
+                                    <!--
+                                    <h4>{{bubl.note}}</h4>
+                                    <h5>{{bubl.length}} minutes</h5>
                                     <span>{{bubl.date.hour}}</span>
+                                    -->
+                                </button>
                                 {% endif %}
                             {% endfor %}
                             <!--<button id="bubt" class="bub" onclick="killme(this);">Do homework</button>
@@ -60,19 +70,18 @@
                 <!-- Tomorrow -->
                 <td class="dailyNoteAfter">
                     <center>
-                    <div class="sidebub"></div>
-                    <div class="sidebub"></div>
-                    <div class="sidebub"></div>
+                    {% for i in tomorrowTasks %}
+                        <div class="sidebub"></div>
+                    {% endfor %}
                     </center>
                 </td>
 
                 <!-- Overmorrow -->
                 <td class="dailyNoteAfter">
                     <center>
-                    <div class="sidebub"></div>
-                    <div class="sidebub"></div>
-                    <div class="sidebub"></div>
-                    <div class="sidebub"></div>
+                    {% for i in overmorrowTasks %}
+                        <div class="sidebub"></div>
+                    {% endfor %}
                     </center>
                 </td>
             </tr>

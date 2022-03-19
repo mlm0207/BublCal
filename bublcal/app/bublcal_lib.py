@@ -30,6 +30,8 @@ def checkUserLogged(request):
     if("loggedIn" in session):
         return session["loggedIn"];
 
+    return False;
+
 # Return the user that is logged in / None = no user logged in
 def getLoggedUser(request):
 
@@ -102,7 +104,7 @@ BC_FAIL_INVALID_DATE    = 1;
 BC_FAIL_INVALID_LENGTH  = 2;
 
 # Create a bubble
-def createBubble(email, name, note, date, length):
+def createBubble(email, name, note, date, time, length):
     
     # Find the owner of the bubble
     owner = getUserObject(email);
@@ -113,7 +115,7 @@ def createBubble(email, name, note, date, length):
 
     # TODO: add datetime check, name check, length check
 
-    bubl = Bubl(email=owner, name=name, note=note, date=date, length=length);
+    bubl = Bubl(email=owner, name=name, note=note, date=date, time=time, length=length);
     bubl.save();
 
     return [True, -1];

@@ -76,12 +76,16 @@ def createBubl(request):
 
         # Grab user data
         email   = bublcal_lib.getLoggedUser(request);
+        
+        print(request.POST);
+
         name    = request.POST["name"];
         note    = request.POST["note"];
-        date    = request.POST["datetime"];
+        date    = request.POST["date"];
+        time    = request.POST["time"];
         length  = request.POST["length"];
 
-        result = bublcal_lib.createBubble(email, name, note, date, length);
+        result = bublcal_lib.createBubble(email, name, note, date, time, length);
 
         if(result[0]):
             return render(request, "bubl_create.html");
@@ -125,14 +129,28 @@ def daily(request):
     # currently testing all bubls TODO: make it day speific
     bubls = bublcal_lib.getUserBubbles(bublcal_lib.getLoggedUser(request));
 
-    # If we have bubbles then we will print the list for DEBUG TODO: REMOVE THIS 
+    # Number of tasks for tomorrow and overmorrow
+    tomorrowTasks = 0;
+    overmorrowTasks = 0;
+
+    # Go through users bubls to check what to do to them
     if(bubls != None):
         for bubl in bubls:
-            pass;
-            print("\n");
-            print(bubl.name);
-            print("@ ", bubl.date);
-            print("\n");
+
+            # Get the day the bubl lands on
+            day = bubl.date.day;
+
+            # Check if the tasks lands tomorrow
+            if(day == tomorrow.day):
+                tomorrowTasks += 1;
+
+            # Check if the tasks lands overmorrow
+            if(day == overmorrow.day):
+                overmorrowTasks += 1;
+
+            # Remove bubbls that do not fall under the active day
+            if(day != today.day): 
+                bubls.remove(bubl);
 
     todayTime = datetime.datetime.today();
 
@@ -164,6 +182,8 @@ def daily(request):
 
                 "timeSlots" : timeSlots,
                 "bubls" : bubls,
+                "tomorrowTasks" : range(tomorrowTasks),
+                "overmorrowTasks" : range(overmorrowTasks),
             };
 
     # Render the page
@@ -212,7 +232,6 @@ def signup(request):
 
     # Make user a user is not logged in
     if(bublcal_lib.checkUserLogged(request) == False):
-
         # If user is submitting data
         if(request.method == "POST"):
 

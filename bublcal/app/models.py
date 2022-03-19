@@ -1,6 +1,5 @@
 from django.db import models
 
-
 # Create your models here.
 
 class UserData(models.Model):
@@ -16,24 +15,6 @@ class Bubl(models.Model):
     email = models.ForeignKey(UserData, on_delete=models.CASCADE);
     name = models.CharField(max_length=32);
     note = models.CharField(max_length=32);
-    date = models.DateTimeField();
+    date = models.DateField();
+    time = models.TimeField(auto_now=False, auto_now_add=False);
     length = models.IntegerField();
-
-#class BublTemplate(models.Model):
-#    task_id = models.CharField(max_length=256, primary_key=True)
-#    email = models.ForeignKey(UserData, on_delete=models.CASCADE)
-#    task_name = models.CharField(max_length=64)
-#    bubl_template = models.JSONField()
-#
-#
-#class BublSchedule(models.Model):
-#    email = models.ForeignKey(UserData, on_delete=models.CASCADE)
-#    schedule = models.JSONField()
-#
-#
-#class BublMonthSchedule(models.Model):
-#    email = models.ForeignKey(UserData, on_delete=models.CASCADE)
-#    month = models.IntegerField
-#    week_bubl = models.JSONField()
-#    month_bubl = models.JSONField()
-#
