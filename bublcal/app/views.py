@@ -186,7 +186,7 @@ def daily(request):
             };
 
     # Render the page
-    return render(request, "glance2.html", args);
+    return render(request, "glance.html", args);
 
 # Main Page View
 def index(request):

@@ -4,87 +4,132 @@
 {% block title %}Day at a Glance{% endblock title %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{% static 'glance/style.css' %}">
+    <style>
+        .container-glance
+        {
+            border: 1px solid black;
+            border-radius: 10px;
+        }
+
+        .timeslot
+        {
+            border-bottom: 1px solid black;
+        }
+
+        .bubble
+        {
+            color: black;
+            background-image: linear-gradient(to bottom right,
+                                            rgba(207, 241, 255, 1), 
+                                            rgba(120, 217, 255, 1));
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            text-align: center;
+
+            width: 100px;
+            height: 100px;
+
+            margin-top: 5%;
+            margin-bottom: 5%;
+        }
+
+        .sideBubble
+        {
+            background-image: linear-gradient(to bottom right,
+                                            rgba(207, 241, 255, 1), 
+                                            rgba(120, 217, 255, 1));
+
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            margin-top: 10%;
+            margin-bottom: 10%;
+        }
+    </style>
 {% endblock styles%}
 
-{% block scripts %}
-    <script src="{% static 'glance/script.js' %}"></script>
-{% endblock scripts %}
-
 {% block content %}
-    <div class="container d-flex align-items-center justify-content-center pt-4">
-        <table class="dailyView">
-            
-            <!-- Header -->
-            <tr>
-                <td class="dailyCurrent">
-                    <center>
-                    <h1>{{today_name}}</h1>
-                    <h3>{{today}}</h3>
-                    </center>
-                </td>
-                <td class="dailyAfter">
-                    <center>
-                    <h2>{{tomorrow_name}}</h2>
-                    <h4>{{tomorrow}}</h4>
-                </center>
-                </td>
-                <td class="dailyAfter">
-                    <center>
-                    <h2>{{overmorrow_name}}</h2>
-                    <h4>{{overmorrow}}</h4>
-                </center>
-                </td>
-            </tr>
+    <div class="container container-glance">
+        <!-- Label Row -->
+        <div class="row">
+            <div class="col-6">
+                {{ today_name }}
+            </div>
+            <div class="col">
+                {{ tomorrow_name }}
+            </div>
+            <div class="col">
+                {{ overmorrow_name}}
+            </div>
+        </div>
 
-            <!-- Notes / Sidenotes -->
-            <tr>
-                <!-- Active day -->
-                <td class="dailyNote">
-                    <!--<button onclick="createBubble(this);">Create Bubble</button>-->
-                    <a href="/app/bublcreate"><button>Create bubble</button></a>
-                    {% for slot in timeSlots %}
-                        <div class="bubHolder">
-                            <span>{{slot.1}}------------------------</span>
-                            {% for bubl in bubls %}
-                                {% if bubl.time.hour == slot.0 %}
-                                <button class="bub">
-                                    <span>{{bubl.name}}</span>
-                                    <br>
-                                    <span>{{bubl.time}}</span>
+        <!-- Bubble Row -->
+        <div class="row">
+            <div class="col-6">
 
-                                    <!--
-                                    <h4>{{bubl.note}}</h4>
-                                    <h5>{{bubl.length}} minutes</h5>
-                                    <span>{{bubl.date.hour}}</span>
-                                    -->
-                                </button>
-                                {% endif %}
-                            {% endfor %}
-                            <!--<button id="bubt" class="bub" onclick="killme(this);">Do homework</button>
-                            -->
+                <a href="/app/bublcreate"><button>Create bubble</button></a>
+                {% for slot in timeSlots %}
+
+                <div class="timeslot">{{slot.1}}</div>
+                {% for bubl in bubls %}
+                    {% if bubl.time.hour == slot.0 %}
+
+                    <div style="color: black">
+                        <button class="btn btn-primary bubble" 
+                                type="button" 
+                                data-bs-toggle="offcanvas" 
+                                data-bs-target="#offcanvasBottom" 
+                                aria-controls="offcanvasBottom"
+                        >{{ bubl.name }}</button>
+
+                        <!-- BUBBLE EDIT -->
+                        <div    class="offcanvas offcanvas-bottom" 
+                                tabindex="-1" 
+                                id="offcanvasBottom" 
+                                aria-labelledby="offcanvasBottomLabel">
+                            <div class="offcanvas-header">
+                                <h5 class="offcanvas-title" 
+                                    id="offcanvasBottomLabel"
+                                >{{ bubl.name }} @ {{ bubl.time }} {{ bubl.date }}</h5>
+
+                                <!-- Close popup-->
+                                <button type="button" 
+                                class="btn-close text-reset" 
+                                data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                            </div>
+                            <div class="offcanvas-body small">
+                                <h5>{{ bubl.note }}</h5>
+                                <a href="/app/delete/{{bubl.id}}"><button>deleteBubble</button></a>
+                            </div>
                         </div>
-                    {% endfor %}
-                </td>
+                    </div>
 
-                <!-- Tomorrow -->
-                <td class="dailyNoteAfter">
-                    <center>
+                    {% endif %}
+                {% endfor %}
+                
+                {% endfor %}
+
+                <br>
+            </div>
+
+            <div class="col">
+                <center>
                     {% for i in tomorrowTasks %}
-                        <div class="sidebub"></div>
+                        <div class="sideBubble"></div>
                     {% endfor %}
-                    </center>
-                </td>
+                </center>
+            </div>
 
-                <!-- Overmorrow -->
-                <td class="dailyNoteAfter">
-                    <center>
+            <div class="col">
+                <center>
                     {% for i in overmorrowTasks %}
-                        <div class="sidebub"></div>
+                        div class="sideBubble"></div>
                     {% endfor %}
-                    </center>
-                </td>
-            </tr>
-        </table>
+                </center>
+            </div>
+
+        </div>
     </div>
 {% endblock content %}
