@@ -101,32 +101,35 @@ def logout(request):
 
     return redirect("index");
 
+def deleteBubl(request, id):
+    bublcal_lib.deleteBubble(request, id);
+    return redirect("daily-view");
 
 # Daily/"At a glance" view
 def daily(request):
 
-    # Grab active day
+    # Grab the active day and the two days after
     today       = datetime.date.today();
     tomorrow    = datetime.date.today() + datetime.timedelta(1);
     overmorrow  = datetime.date.today() + datetime.timedelta(2);
     
-    # Grab active days names
-    todayName      = DAY_NAMES[today.weekday()][0];
-    tomorrowName   = DAY_NAMES[tomorrow.weekday()][1];
-    overmorrowName = DAY_NAMES[overmorrow.weekday()][1];
+    # Grab the names for the days above
+    todayName      = DAY_NAMES[today.weekday()][0];         # Long name
+    tomorrowName   = DAY_NAMES[tomorrow.weekday()][1];      # Short name
+    overmorrowName = DAY_NAMES[overmorrow.weekday()][1];    # Short name
 
     # Get current time
-    currentTime = datetime.datetime.today().time()
+    currentTime = datetime.datetime.today().time();
     currentHour = currentTime.hour;
 
     # This array will hold the time slots for the current day up to 12:00PM
     # the array starts at the current hour the user is viewing the page
     # each array item holds two things, the hour in 24 base and the formatted time
-    # i.e. [4, "4:00 PM"]
+    # i.e.  [4, "4:00 PM"]
+    #       [20, "10:00 PM"]
     timeSlots = [[currentHour, currentTime.replace(minute=0).strftime("%I:%M %p")]];
     
-    # Get the bubbls that the user has 
-    # currently testing all bubls TODO: make it day speific
+    # Grab the users bubls
     bubls = bublcal_lib.getUserBubbles(bublcal_lib.getLoggedUser(request));
 
     # Number of tasks for tomorrow and overmorrow
@@ -140,6 +143,8 @@ def daily(request):
             # Get the day the bubl lands on
             day = bubl.date.day;
 
+            print("\n\n", bubl.id);
+
             # Check if the tasks lands tomorrow
             if(day == tomorrow.day):
                 tomorrowTasks += 1;
@@ -149,7 +154,7 @@ def daily(request):
                 overmorrowTasks += 1;
 
             # Remove bubbls that do not fall under the active day
-            if(day != today.day): 
+            if(day != today.day):
                 bubls.remove(bubl);
 
     todayTime = datetime.datetime.today();
@@ -160,15 +165,9 @@ def daily(request):
         newT = newT.replace(hour=i, minute=0);
         timeSlots.append([i, newT.strftime("%I:%M %p")]);
 
-    print(timeSlots);
-
     # Check if user is logged in
-    loggedIn = False;
-
-    if(bublcal_lib.checkUserLogged(request)):
-        bublcal_lib.getLoggedUser(request);
-        loggedIn = True;
-
+    loggedIn = bublcal_lib.checkUserLogged(request);
+    
     # Arguments to pass
     args = {
                 "loggedIn"  : loggedIn,
@@ -187,7 +186,7 @@ def daily(request):
             };
 
     # Render the page
-    return render(request, "glance.html", args);
+    return render(request, "glance2.html", args);
 
 # Main Page View
 def index(request):

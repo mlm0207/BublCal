@@ -10,4 +10,5 @@ urlpatterns = [
     path('weekly/', views.weekly, name="weekly-view"),
     path('bublcreate/', views.createBubl, name="createbubl"),
     path('logout/', views.logout, name="logout"),
+    path('delete/<int:id>/', views.deleteBubl)
 ];

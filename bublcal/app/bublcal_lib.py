@@ -137,8 +137,16 @@ def getUserBubbles(email):
 def getBubblesByUserDate(email, year, month, day):
     print("\nWARNING: FUNCTION getBubblesByUserDate NOT CREATED\n");
 
-def deleteBubble():
-    print("\nWARNING: FUNCTION deleteBubble NOT CREATED\n");
+def deleteBubble(request, id):
+    user = getLoggedUser(request);
+
+    if(user != None):
+        bubls = getUserBubbles(user);
+
+        if(bubls != None):
+            for bubl in bubls:
+                if(bubl.id == id):
+                    bubl.delete();
 
 def modifyBubble():
     print("\nWARNING: FUNCTION modifyBubble NOT CREATED\n");
