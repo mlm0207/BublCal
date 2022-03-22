@@ -105,6 +105,48 @@ def deleteBubl(request, id):
     bublcal_lib.deleteBubble(request, id);
     return redirect("daily-view");
 
+def modifyBubl(request, id):
+
+    if(request.method == "POST"):
+
+        name    = request.POST["name"];
+        note    = request.POST["note"];
+        date    = request.POST["date"];
+        time    = request.POST["time"];
+        length  = request.POST["length"];
+
+        bubl = bublcal_lib.getBubbleById(id);
+
+        bubl.name = request.POST["name"];
+        bubl.note = request.POST["note"];
+        bubl.date = request.POST["date"];
+        bubl.time = request.POST["time"];
+        bubl.length = request.POST["length"];
+
+        bubl.save();
+
+        return render(request, "modify_bubl.html");
+
+    else:
+        bubl = bublcal_lib.getBubbleById(id);
+
+        bDate = str(bubl.date.year) + '-' + str(bubl.date.month).zfill(2) + '-' + str(bubl.date.day).zfill(2);
+        bTime = str(bubl.time.hour).zfill(2) + ':' + str(bubl.time.minute).zfill(2) + ":00";
+
+        args = {
+                    "bName": bubl.name,
+                    "bNote": bubl.note,
+                    "bDate": bDate,
+                    "bTime": bTime,
+                    "bLength": bubl.length,
+                    "bID":  bubl.id,
+                };
+
+        print(bublcal_lib.getBubbleById(id).date.month);
+
+        return render(request, "modify_bubl.html", args);
+
+
 # Daily/"At a glance" view
 def daily(request):
 

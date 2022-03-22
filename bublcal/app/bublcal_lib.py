@@ -134,8 +134,10 @@ def getUserBubbles(email):
 
     return userbubls;
 
-def getBubblesByUserDate(email, year, month, day):
-    print("\nWARNING: FUNCTION getBubblesByUserDate NOT CREATED\n");
+def getBubbleById(id):
+    for bubl in Bubl.objects.all():
+        if(bubl.id == id):
+            return bubl;
 
 def deleteBubble(request, id):
     user = getLoggedUser(request);
