@@ -2,14 +2,14 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.index, name="index"),
-    path('login/', views.login, name="login"),
-    path('signup/', views.signup, name="signup"),
-    path('main/', views.main, name="main"),
-    path('daily/', views.daily, name="daily-view"),
-    path('weekly/', views.weekly, name="weekly-view"),
-    path('bublcreate/', views.createBubl, name="createbubl"),
-    path('logout/', views.logout, name="logout"),
-    path('delete/<int:id>/', views.deleteBubl),
-    path('modify/<int:id>/', views.modifyBubl),
+    path('',                    views.index,        name="index"),
+    path('login/',              views.login,        name="login"),
+    path('signup/',             views.signup,       name="signup"),
+    path('logout/',             views.logout,       name="logout"),
+    path('main/',               views.main,         name="main"),
+    path('glance/',             views.glance,       name="glance-view"),
+    path('weekly/',             views.weekly,       name="weekly-view"),
+    path('bublcreate/',         views.createBubl,   name="create-bubl"),
+    path('delete/<int:id>/',    views.deleteBubl,   name="delete-bubl"),
+    path('modify/<int:id>/',    views.modifyBubl,   name="modify-bubl"),
 ];

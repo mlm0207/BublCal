@@ -71,52 +71,91 @@ def weekly(request):
         "days": days,
     })
 
+# Create a bubble
 def createBubl(request):
+    # Make sure user is logged in
+    result = bublcal_lib.verifyLogin(request);
+
+    if(not result[0]):
+        return redirect("index");
+    
+    user = result[1];
+
+    # If data is being submitted
     if(request.method == "POST"):
 
-        # Grab user data
-        email   = bublcal_lib.getLoggedUser(request);
-        
-        print(request.POST);
-
+        # Grab bubble data
         name    = request.POST["name"];
         note    = request.POST["note"];
         date    = request.POST["date"];
         time    = request.POST["time"];
         length  = request.POST["length"];
 
-        result = bublcal_lib.createBubble(email, name, note, date, time, length);
+        result = bublcal_lib.createBubble(user, name, note, date, time, length);
 
         if(result[0]):
-            return render(request, "bubl_create.html");
+            return redirect("glance-view");
         else:
             return render(request, "bubl_create.html");
             
     return render(request, "bubl_create.html");
 
+# Logout a user
 def logout(request):
-    if(bublcal_lib.checkUserLogged(request)):
-        user = bublcal_lib.getLoggedUser(request);
-        request.session["loggedIn"] = False;
+    # Make sure user is logged in
+    result = bublcal_lib.verifyLogin(request);
 
-    return redirect("index");
+    if(not result[0]):
+        return redirect("index");
 
+    bublcal_lib.logoutUser(request);
+
+    return render(request, "logged_out.html");
+
+# Delete a bubble
 def deleteBubl(request, id):
+    # Make sure a user is logged in
+    result = bublcal_lib.verifyLogin(request);
+    
+    if(not result[0]):
+        return redirect("index");
+    
+    user = result[1];
+    bubl = bublcal_lib.getBubbleObject(id);
+
+    # Make sure bubble exists
+    if(bubl == None):
+        return redirect("glance-view");
+
+    # Make sure user owns bubble
+    if(bubl.email.email != user):
+        return redirect("glance-view");
+    
     bublcal_lib.deleteBubble(request, id);
-    return redirect("daily-view");
 
+    return redirect("glance-view");
+
+# Modify a bubble
 def modifyBubl(request, id):
+    # Make sure a user is logged in
+    result = bublcal_lib.verifyLogin(request);
+    
+    if(not result[0]):
+        return redirect("index");
+    
+    user = result[1];
+    bubl = bublcal_lib.getBubbleObject(id);
 
+    # Make sure bubble exists
+    if(bubl == None):
+        return redirect("glance-view");
+
+    # Make sure user owns bubble
+    if(bubl.email.email != user):
+        return redirect("glance-view");
+
+    # Make sure user is not updating info
     if(request.method == "POST"):
-
-        name    = request.POST["name"];
-        note    = request.POST["note"];
-        date    = request.POST["date"];
-        time    = request.POST["time"];
-        length  = request.POST["length"];
-
-        bubl = bublcal_lib.getBubbleById(id);
-
         bubl.name = request.POST["name"];
         bubl.note = request.POST["note"];
         bubl.date = request.POST["date"];
@@ -125,11 +164,11 @@ def modifyBubl(request, id):
 
         bubl.save();
 
-        return render(request, "modify_bubl.html");
+        return redirect("glance-view");
 
-    else:
-        bubl = bublcal_lib.getBubbleById(id);
+    else: # If first time viewing
 
+        # Get correct format
         bDate = str(bubl.date.year) + '-' + str(bubl.date.month).zfill(2) + '-' + str(bubl.date.day).zfill(2);
         bTime = str(bubl.time.hour).zfill(2) + ':' + str(bubl.time.minute).zfill(2) + ":00";
 
@@ -142,13 +181,18 @@ def modifyBubl(request, id):
                     "bID":  bubl.id,
                 };
 
-        print(bublcal_lib.getBubbleById(id).date.month);
-
-        return render(request, "modify_bubl.html", args);
-
+        return render(request, "bubl_modify.html", args);
 
 # Daily/"At a glance" view
-def daily(request):
+def glance(request):
+    
+    # Make sure a user is logged in
+    result = bublcal_lib.verifyLogin(request);
+
+    if(not result[0]):
+        return redirect("index");
+    
+    user = result[1];
 
     # Grab the active day and the two days after
     today       = datetime.date.today();
@@ -172,7 +216,7 @@ def daily(request):
     timeSlots = [[currentHour, currentTime.replace(minute=0).strftime("%I:%M %p")]];
     
     # Grab the users bubls
-    bubls = bublcal_lib.getUserBubbles(bublcal_lib.getLoggedUser(request));
+    bubls = bublcal_lib.getUserBubbles(user);
 
     # Number of tasks for tomorrow and overmorrow
     tomorrowTasks = 0;
@@ -184,8 +228,6 @@ def daily(request):
 
             # Get the day the bubl lands on
             day = bubl.date.day;
-
-            print("\n\n", bubl.id);
 
             # Check if the tasks lands tomorrow
             if(day == tomorrow.day):
@@ -207,12 +249,9 @@ def daily(request):
         newT = newT.replace(hour=i, minute=0);
         timeSlots.append([i, newT.strftime("%I:%M %p")]);
 
-    # Check if user is logged in
-    loggedIn = bublcal_lib.checkUserLogged(request);
-    
     # Arguments to pass
     args = {
-                "loggedIn"  : loggedIn,
+                "loggedIn"  : True,
                 "today"     : today,
                 "tomorrow"  : tomorrow,
                 "overmorrow": overmorrow,
@@ -238,62 +277,60 @@ def index(request):
 
 # Login page
 def login(request):
+    result = bublcal_lib.verifyLogin(request);
 
-    # Make sure user is not logged in    
-    if(bublcal_lib.checkUserLogged(request) == False):
+    # Make sure user is not logged in
+    if(result[0]):
+        return redirect("glance-view");
 
-        # If user submitted username/password
-        if(request.method == "POST"):
-            email    = request.POST["mail"];
-            password = request.POST["password"];
+    # If user submitted username/password
+    if(request.method == "POST"):
+        email    = request.POST["mail"];
+        password = request.POST["password"];
 
-            # Check if username & password are valid
-            loginCheck = bublcal_lib.userLoginCheck(email, password);
+        # Check if username & password are valid
+        loginCheck = bublcal_lib.userLoginCheck(email, password);
 
-            if(loginCheck[0]):
+        if(loginCheck[0]):
 
-                # Save the session
-                request.session["user"] = email;
-                request.session["loggedIn"] = True;
+            # Save the session
+            bublcal_lib.loginUser(request, email);
 
-                return redirect("daily-view");
-            else:
-                args = { "siFailType": loginCheck[1] };
+            return redirect("glance-view");
+        else:
+            args = { "siFailType": loginCheck[1] };
 
-                return render(request, "login.html", args);
+            return render(request, "login.html", args);
 
-        # Default render page
-        return render(request, "login.html");
-
-    else:
-        return redirect("main"); # Redirect to home page if logged in
+    # Default render page
+    return render(request, "login.html");
 
 # Signup Page
 def signup(request):
+    result = bublcal_lib.verifyLogin(request);
 
     # Make user a user is not logged in
-    if(bublcal_lib.checkUserLogged(request) == False):
-        # If user is submitting data
-        if(request.method == "POST"):
+    if(result[0]):
+        return redirect("glance-view");
 
-            # Grab user data
-            email       = request.POST["email"];
-            password    = request.POST["password"];
-            firstName   = request.POST["firstName"];
-            lastName    = request.POST["lastName"];
-            birthday    = request.POST["birthday"];
+    # If user is submitting data
+    if(request.method == "POST"):
 
-            # Try to create the user
-            result = bublcal_lib.createuser(email, password, firstName, lastName, birthday);
+        # Grab user data
+        email       = request.POST["email"];
+        password    = request.POST["password"];
+        firstName   = request.POST["firstName"];
+        lastName    = request.POST["lastName"];
+        birthday    = request.POST["birthday"];
 
-            if(result[0]):
-                return render(request, "signup_success.html"); # If success
-            else:
-                args = { "acFailType": result[1] };
+        # Try to create the user
+        result = bublcal_lib.createuser(email, password, firstName, lastName, birthday);
 
-                return render(request, "signup.html", args); # If fail
+        if(result[0]):
+            return render(request, "signup_success.html"); # If success
+        else:
+            args = { "acFailType": result[1] };
 
-        return render(request, "signup.html");
+            return render(request, "signup.html", args); # If fail
 
-    else:
-        return redirect("main"); # Redirect to home page if logged in
+    return render(request, "signup.html");
