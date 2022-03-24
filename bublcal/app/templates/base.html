@@ -92,10 +92,19 @@
 	
 	<div id="calendar-popup" >
   
-  <form id="event-form">
+  <form class="loginBox" method="post" action="/app/bublcreate/" id="event-form">{% csrf_token %}
      <div class='calander_popup_title'></i>
      <center>Add Event</center></div>
-    
+			<input name="name" type="text" placeholder="Bubble Name" required>
+			<input name="note" type="text" placeholder="Extra Note">
+
+			<input type="date" name="date" required><br>
+			<input type="time" name="time" required><br>
+
+			<input name="length" type="number" placeholder="Length (minutes)">
+			
+        <!--
+			<button class="button" type="submit" style="font-size:2vw"><b>create</b></button>
       
         <label for="event-start"></i> <b>From</b></label>
         <input id="event-start"  type="datetime-local"/>
@@ -107,7 +116,7 @@
         <input id="event-title"   type="text" />
      
         <label for="event-details"><b>Description</b></label>
-        <textarea id="event-details"  rows="3" class='form-control' ></textarea>
+        <textarea id="event-details"  rows="3" class='form-control' ></textarea>-->
       <br>
       <center><div class="button"> <input type="submit" /> </div></center>
     
