@@ -28,10 +28,10 @@ month_year = current_date.strftime("%B") + " " + str(year)
 day_of_week = calendar.day_name[day_of_week - 1]
 
 
-def main(request):
+def monthly(request):
     htcal = HTMLCalendar().formatmonth(current_date.year, current_date.month)
 
-    return render(request, "main.html", {
+    return render(request, "monthly.html", {
         "htcal": htcal,
         "month_year": month_year,
     })
