@@ -1,6 +1,7 @@
 {% load static %}
 {{ emailFail }}
 {{ ageFail }}
+
 <!DOCTYPE html>
 <html>
 	<head>
@@ -46,7 +47,7 @@
 	</head>
 	<body>
 		<div class="image">
-			<a href="../main"><img src="{% static 'img/logo.jpg' %}" alt="LOGO"></a>
+			<a href="../glance"><img src="{% static 'img/logo.jpg' %}" alt="LOGO"></a>
 		</div>
 		<form class="loginBox" method="post" action="/app/bublcreate/">{% csrf_token %}
 			<input name="name" type="text" placeholder="Bubble Name" required>
