@@ -51,6 +51,7 @@
 {% endblock styles%}
 
 {% block content %}
+    <span class="container pt-4"></span>
     <div class="container container-glance">
         <!-- Label Row -->
         <div class="row">
@@ -69,7 +70,7 @@
         <div class="row">
             <div class="col-6">
 
-                <a href="/app/bublcreate"><button>Create bubble</button></a>
+                <a href="/app/bublcreate"><button>Create Bubl</button></a>
                 {% for slot in timeSlots %}
 
                 <div class="timeslot">{{slot.1}}</div>
