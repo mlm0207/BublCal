@@ -4,6 +4,26 @@
 
 {% block styles %}
     <link rel="stylesheet" type="text/css" href="{% static 'weekly/weekly.css' %}">
+    <style>
+        .bubble
+        {
+            color: black;
+            background-image: linear-gradient(to bottom right,
+                                            rgba(207, 241, 255, 1), 
+                                            rgba(120, 217, 255, 1));
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            text-align: center;
+
+            width: 80px;
+            height: 80px;
+
+            margin-top: 5%;
+            margin-bottom: 5%;
+        }
+    </style>
 {% endblock styles %}
 
 {% block content %}
@@ -11,6 +31,7 @@
         <h2 class="text-center">{{ month_year }}</h2>
         <h4 class="text-center">Week of {{ day_of_week }}, the {{ day }}</h4>
 
+        <center><a href="/app/bublcreate"><button>Create Bubl</button></a></center>
 
     <div id="week_table" class="container table-responsive">
         <table class="table table-bordered">
@@ -22,13 +43,15 @@
 
             <!--Weekly Bubls will go here -->
             <tr class="vh-100">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                {% for name, date in days.items %}
+                    <td>
+                        {% for bubl in bubls %}
+                            {% if bubl.date.day == date %}
+                                <div class="bubble">{{bubl.name}}</div>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                {% endfor %}
             </tr>
         </table>
     </div>

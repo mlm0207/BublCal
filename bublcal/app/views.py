@@ -27,16 +27,37 @@ year, week_num, day_of_week = current_date.isocalendar()
 month_year = current_date.strftime("%B") + " " + str(year)
 day_of_week = calendar.day_name[day_of_week - 1]
 
-
+# Monthly view
 def monthly(request):
+        
+    # Make sure a user is logged in
+    result = bublcal_lib.verifyLogin(request);
+
+    if(not result[0]):
+        return redirect("index");
+    
     htcal = HTMLCalendar().formatmonth(current_date.year, current_date.month)
 
     return render(request, "monthly.html", {
+        "loggedIn"  : True,
         "htcal": htcal,
         "month_year": month_year,
     })
 
+# Weekly view
 def weekly(request):
+        
+    # Make sure a user is logged in
+    result = bublcal_lib.verifyLogin(request);
+
+    if(not result[0]):
+        return redirect("index");
+    
+    user = result[1];
+
+    # Grab the users bubls
+    bubls = bublcal_lib.getUserBubbles(user);
+
     day = current_date.day
     day_names = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat","Sun" ]
 
@@ -65,6 +86,8 @@ def weekly(request):
         return day
 
     return render(request, "weekly.html", {
+        "loggedIn"  : True,
+        "bubls": bubls,
         "day_of_week": day_of_week,
         "day": suffix(day),
         "month_year": month_year,
@@ -218,6 +241,9 @@ def glance(request):
     # Grab the users bubls
     bubls = bublcal_lib.getUserBubbles(user);
 
+    # Todays bubbles
+    todaysBubls = [];
+
     # Number of tasks for tomorrow and overmorrow
     tomorrowTasks = 0;
     overmorrowTasks = 0;
@@ -237,9 +263,9 @@ def glance(request):
             if(day == overmorrow.day):
                 overmorrowTasks += 1;
 
-            # Remove bubbls that do not fall under the active day
-            if(day != today.day):
-                bubls.remove(bubl);
+            # Add bubbls that do fall under the active day
+            if(day == today.day):
+                todaysBubls.append(bubl);
 
     todayTime = datetime.datetime.today();
 
@@ -261,7 +287,7 @@ def glance(request):
                 "overmorrow_name"   : overmorrowName,
 
                 "timeSlots" : timeSlots,
-                "bubls" : bubls,
+                "bubls" : todaysBubls,
                 "tomorrowTasks" : range(tomorrowTasks),
                 "overmorrowTasks" : range(overmorrowTasks),
             };
