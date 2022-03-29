@@ -1,13 +1,9 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block styles %}
-    <link rel="stylesheet" type="text/css" href="{% static 'main/main.css' %}">
-{% endblock styles%}
-
 {% block content %}
     <div class="container pt-4 d-flex align-items-center justify-content-center">
-            <table cellpadding="30" cellspacing="30" class="month">
+            <table cellpadding="30" cellspacing="30" class="monthly-table">
                 <tbody>
                     <tr><th colspan="7" class="currentMonth">{{month_year}}</th></tr>
                 <tr class="weekRow">
