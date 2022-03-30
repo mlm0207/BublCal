@@ -206,6 +206,102 @@ def modifyBubl(request, id):
 
         return render(request, "bubl_modify.html", args);
 
+# View a certain day
+def daily(request, month, day, year):
+    
+    # Make sure a user is logged in
+    result = bublcal_lib.verifyLogin(request);
+
+    if(not result[0]):
+        return redirect("index");
+
+    user = result[1];
+
+    # Make sure a valid date passed is valid
+    dayToView = None;
+    
+    try:
+        dayToView = datetime.date(year=year, month=month, day=day);
+    except ValueError:
+        dayToView = None;
+
+    if(dayToView == None):
+        args = { "validDate": False };
+
+        return render(request, "day.html", args);
+    
+    # Grab date objects for yesterday, today, and tomorrow
+    today       = dayToView;
+    yesterday   = dayToView - datetime.timedelta(1);
+    tomorrow    = dayToView + datetime.timedelta(1);
+    
+    # Grab the names for the days above
+    todayName       = DAY_NAMES[today.weekday()][0];         # Long name
+    yesterdayName   = DAY_NAMES[yesterday.weekday()][1];     # Short name
+    tomorrowName    = DAY_NAMES[tomorrow.weekday()][1];      # Short name
+
+    # Grab the users bubls
+    bubls = bublcal_lib.getUserBubbles(user);
+
+    # This will holds todays bubls
+    todaysBubls = [];
+
+    # Number of tasks for yesterday and tomorrow
+    yesterdayTasks = 0;
+    tomorrowTasks = 0;
+
+    # Go through users bubls to check what to do to them
+    if(bubls != None):
+        for bubl in bubls:
+
+            # Get the day the bubl lands on
+            day = bubl.date.day;
+
+            # Check if the tasks lands yesterday
+            if(day == yesterday.day):
+                yesterdayTasks += 1;
+
+            # Check if the tasks lands tomorrow
+            if(day == tomorrow.day):
+                tomorrowTasks += 1;
+
+            # Add bubbls that do fall under the active day
+            if(day == today.day):
+                todaysBubls.append(bubl);
+    
+    # Time slots for the day, in this instantce we will be viewing all 24 hours
+    timeSlots = [];
+
+    for i in range(24):
+        newT = datetime.datetime.now();
+        newT = newT.replace(hour=i, minute=0);
+        timeSlots.append([i, newT.strftime("%I:%M %p")]);
+
+    previousDayLink = yesterday.strftime("%m/%d/%Y/");
+    nextDayLink = tomorrow.strftime("%m/%d/%Y/")
+
+    # Arguments to pass
+    args = {
+                "loggedIn"  : True,
+                "today"     : today,
+                "yesterday"  : yesterday,
+                "tomorrow": tomorrow,
+                
+                "today_name"        : todayName,
+                "yesterday_name"     : yesterdayName,
+                "tomorrow_name"   : tomorrowName,
+
+                "timeSlots" : timeSlots,
+                "bubls" : todaysBubls,
+                "yesterdayTasks" : range(yesterdayTasks),
+                "tomorrowTasks" : range(tomorrowTasks),
+                "validDate": True,
+                "previousDayLink": previousDayLink,
+                "nextDayLink": nextDayLink,
+            };
+
+    return render(request, "day.html", args);
+
 # Daily/"At a glance" view
 def glance(request):
     

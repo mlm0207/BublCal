@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Daily View{% endblock title %}
+
+{% block content %}
+    <span class="container pt-4"></span>
+    
+    <center>
+        <a class="btn btn-primary" href="/app/daily/{{previousDayLink}}" role="button">Previous Day</a>
+        <a class="btn btn-primary" href="/app/daily/{{nextDayLink}}" role="button">Next Day</a>        
+    </center>
+    
+    <div class="container container-glance">
+
+        {% if validDate == True %}
+
+            {# Label Row #}
+            <div class="row">
+                <div class="col">
+                
+                    <center><h3>{{ yesterday_name }}</h3></center>
+                    
+                    {# Side-bubbles for yesterday #}
+                    <div class="col">
+                        <center>
+                            {% for i in yesterdayTasks %}
+                                <div class="sideBubble"></div>
+                            {% endfor %}
+                        </center>
+                    </div>
+
+                </div>
+
+                <div class="col-6">
+                    <center><h2>{{ today_name }}</h2></center>
+                    {# Bubble Row #}
+                    <div class="row">
+                        <div class="col-6">
+
+                            {# Display all timeslots available for the day #}
+                            {% for slot in timeSlots %}
+                                <div class="timeslot">{{slot.1}}</div>
+
+                                {# Display bubbles that fall under the time slot #}
+                                {% for bubl in bubls %}
+                                    {% if bubl.time.hour == slot.0 %}
+                                        <div style="color: black">
+                                            <button class="btn btn-primary bubble" 
+                                                    type="button" 
+                                                    data-bs-toggle="offcanvas" 
+                                                    data-bs-target="#offcanvasBottom" 
+                                                    aria-controls="offcanvasBottom"
+                                            >{{ bubl.name }}</button>
+
+                                            <!-- BUBBLE EDIT -->
+                                            <div    class="offcanvas offcanvas-bottom" 
+                                                    tabindex="-1" 
+                                                    id="offcanvasBottom" 
+                                                    aria-labelledby="offcanvasBottomLabel">
+                                                <div class="offcanvas-header">
+                                                    <h5 class="offcanvas-title" 
+                                                        id="offcanvasBottomLabel"
+                                                    >{{ bubl.name }} @ {{ bubl.time }} {{ bubl.date }}</h5>
+
+                                                    <!-- Close popup-->
+                                                    <button type="button" 
+                                                    class="btn-close text-reset" 
+                                                    data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                                                </div>
+                                                <div class="offcanvas-body small">
+                                                    <h5>{{ bubl.note }}</h5>
+                                                    <a href="/app/modify/{{bubl.id}}"><button>Modify</button></a>
+                                                    <a href="/app/delete/{{bubl.id}}"><button>Delete</button></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                            <br>
+                        </div>    
+                    </div>
+                </div>
+
+                
+                <div class="col">
+                    <center><h4>{{ tomorrow_name }}</h4></center>
+
+                    {# Side-bubbles for tomorrow #}
+                    <div class="col">
+                        <center>
+                            {% for i in tomorrowTasks %}
+                                <div class="sideBubble"></div>
+                            {% endfor %}
+                        </center>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <center>
+                <h1>Invalid date</h1>
+            </center>
+        {% endif %}
+    </div>
+{% endblock content %}
