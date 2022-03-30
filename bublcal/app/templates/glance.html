@@ -43,7 +43,7 @@
                                             {{ bubl.note }}
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Delete</button>
+                                            <a class="btn btn-danger" href="/app/delete/{{bubl.id}}" role="button">Delete</a>
                                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bubl-{{ bubl.id }}-edit">Edit</button>
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                         </div>
