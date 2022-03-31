@@ -12,4 +12,6 @@ urlpatterns = [
     path('bublcreate/',         views.createBubl,   name="create-bubl"),
     path('delete/<int:id>/',    views.deleteBubl,   name="delete-bubl"),
     path('modify/<int:id>/',    views.modifyBubl,   name="modify-bubl"),
+    
+    path('daily/<int:month>/<int:day>/<int:year>/',  views.daily,       name="daily-view"),
 ];

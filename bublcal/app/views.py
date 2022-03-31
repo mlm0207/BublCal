@@ -206,6 +206,124 @@ def modifyBubl(request, id):
 
         return render(request, "bubl_modify.html", args);
 
+# View a certain day
+def daily(request, month, day, year):
+    
+    # Make sure a user is logged in
+    result = bublcal_lib.verifyLogin(request);
+
+    if(not result[0]):
+        return redirect("index");
+
+    user = result[1];
+
+    # Make sure a valid date passed is valid
+    dayToView = None;
+    
+    try:
+        dayToView = datetime.date(year=year, month=month, day=day);
+    except ValueError:
+        dayToView = None;
+
+    if(dayToView == None):
+        args = { "validDate": False };
+
+        return render(request, "day.html", args);
+    
+    # Grab date objects for yesterday, today, and tomorrow
+    today       = dayToView;
+    yesterday   = dayToView - datetime.timedelta(1);
+    tomorrow    = dayToView + datetime.timedelta(1);
+    
+    # Grab the names for the days above
+    todayName       = DAY_NAMES[today.weekday()][0];         # Long name
+    yesterdayName   = DAY_NAMES[yesterday.weekday()][1];     # Short name
+    tomorrowName    = DAY_NAMES[tomorrow.weekday()][1];      # Short name
+    
+    # Time slots for the day, in this instantce we will be viewing all 24 hours
+    timeSlots = [];
+
+    for i in range(24):
+        newT = datetime.datetime.now();
+        newT = newT.replace(hour=i, minute=0);
+        timeSlots.append([i, newT.strftime("%I:%M %p"), []]);
+
+    # Grab the users bubls
+    bubls = bublcal_lib.getUserBubbles(user);
+
+    # Number of tasks for yesterday and tomorrow
+    yesterdayTasks = 0;
+    tomorrowTasks = 0;
+
+    # Go through users bubls to check what to do to them
+    if(bubls != None):
+        for bubl in bubls:
+
+            # Get the day the bubl lands on
+            day = bubl.date.day;
+
+            # Check if the tasks lands yesterday
+            if(day == yesterday.day):
+                yesterdayTasks += 1;
+
+            # Check if the tasks lands tomorrow
+            if(day == tomorrow.day):
+                tomorrowTasks += 1;
+
+            # Add bubbls that do fall under the active day
+            if(day == today.day):
+
+                # Go through each time slot for sorting
+                for time in timeSlots:
+
+                    # If the bubl and timeslot share the same hour
+                    if(time[0] == bubl.time.hour):
+
+                        # If array is empty then just insert into the first spot
+                        if len(time[2]) == 0:
+                            time[2].append(bubl);
+                        else:
+                            # Search for a spot within the bubls
+                            foundSpot = False;
+
+                            # Go through each bubl in timeslot
+                            for i in range(len(time[2])):
+                                tbubl = time[2][i];
+
+                                # Match found
+                                if(bubl.time.minute < tbubl.time.minute):
+                                    time[2].insert(i, bubl);
+                                    foundSpot = True;
+                                    break;
+
+                            # If no spot was found then append it to the end
+                            if(not foundSpot):
+                                time[2].append(bubl);
+
+    previousDayLink = yesterday.strftime("%m/%d/%Y/");
+    nextDayLink = tomorrow.strftime("%m/%d/%Y/")
+
+    # Arguments to pass
+    args = {
+                "loggedIn"  : True,
+                "today"     : today,
+                "yesterday" : yesterday,
+                "tomorrow"  : tomorrow,
+                
+                "today_name"        : todayName,
+                "yesterday_name"    : yesterdayName,
+                "tomorrow_name"     : tomorrowName,
+
+                "timeSlots"         : timeSlots,
+                "yesterdayTasks"    : range(yesterdayTasks),
+                "tomorrowTasks"     : range(tomorrowTasks),
+                "previousDayLink"   : previousDayLink,
+                "nextDayLink"       : nextDayLink,
+                "validDate"         : True,
+            };
+
+    return render(request, "day.html", args);
+
 # Daily/"At a glance" view
 def glance(request):
     
@@ -236,7 +354,15 @@ def glance(request):
     # each array item holds two things, the hour in 24 base and the formatted time
     # i.e.  [4, "4:00 PM"]
     #       [20, "10:00 PM"]
-    timeSlots = [[currentHour, currentTime.replace(minute=0).strftime("%I:%M %p")]];
+    timeSlots = [[currentHour, currentTime.replace(minute=0).strftime("%I:%M %p"), []]];
+
+    todayTime = datetime.datetime.today();
+
+    # Create the rest of the timeslots for the array
+    for i in range(currentHour + 1, 24):
+        newT = todayTime;
+        newT = newT.replace(hour=i, minute=0);
+        timeSlots.append([i, newT.strftime("%I:%M %p"), []]);
     
     # Grab the users bubls
     bubls = bublcal_lib.getUserBubbles(user);
@@ -265,15 +391,33 @@ def glance(request):
 
             # Add bubbls that do fall under the active day
             if(day == today.day):
-                todaysBubls.append(bubl);
 
-    todayTime = datetime.datetime.today();
+                # Go through each time slot for sorting
+                for time in timeSlots:
 
-    # Create the rest of the timeslots for the array
-    for i in range(currentHour + 1, 24):
-        newT = todayTime;
-        newT = newT.replace(hour=i, minute=0);
-        timeSlots.append([i, newT.strftime("%I:%M %p")]);
+                    # If the bubl and timeslot share the same hour
+                    if(time[0] == bubl.time.hour):
+
+                        # If array is empty then just insert into the first spot
+                        if len(time[2]) == 0:
+                            time[2].append(bubl);
+                        else:
+                            # Search for a spot within the bubls
+                            foundSpot = False;
+
+                            # Go through each bubl in timeslot
+                            for i in range(len(time[2])):
+                                tbubl = time[2][i];
+
+                                # Match found
+                                if(bubl.time.minute < tbubl.time.minute):
+                                    time[2].insert(i, bubl);
+                                    foundSpot = True;
+                                    break;
+
+                            # If no spot was found then append it to the end
+                            if(not foundSpot):
+                                time[2].append(bubl);
 
     # Arguments to pass
     args = {
@@ -286,10 +430,9 @@ def glance(request):
                 "tomorrow_name"     : tomorrowName,
                 "overmorrow_name"   : overmorrowName,
 
-                "timeSlots" : timeSlots,
-                "bubls" : todaysBubls,
-                "tomorrowTasks" : range(tomorrowTasks),
-                "overmorrowTasks" : range(overmorrowTasks),
+                "timeSlots"         : timeSlots,
+                "tomorrowTasks"     : range(tomorrowTasks),
+                "overmorrowTasks"   : range(overmorrowTasks),
             };
 
     # Render the page

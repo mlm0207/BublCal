@@ -2,30 +2,6 @@
 {% load static %}
 <title>{% block title %}Weekly Schedule{% endblock %}</title>
 
-{% block styles %}
-    <link rel="stylesheet" type="text/css" href="{% static 'weekly/weekly.css' %}">
-    <style>
-        .bubble
-        {
-            color: black;
-            background-image: linear-gradient(to bottom right,
-                                            rgba(207, 241, 255, 1), 
-                                            rgba(120, 217, 255, 1));
-            border-radius: 50%;
-
-            display: flex;
-            align-items: center;
-            text-align: center;
-
-            width: 80px;
-            height: 80px;
-
-            margin-top: 5%;
-            margin-bottom: 5%;
-        }
-    </style>
-{% endblock styles %}
-
 {% block content %}
     <div class="container pt-4 pb-2">
         <h2 class="text-center">{{ month_year }}</h2>
@@ -34,14 +10,14 @@
         <table class="table table-bordered">
             <tr class="weekdays">
                 {% for name, date in days.items %}
-                    <th class="text-center"> {{ name }} {{ date }}</th>
+                    <th class="weekly-th text-center"> {{ name }} {{ date }}</th>
                 {% endfor %}
             </tr>
 
             <!--Weekly Bubls will go here -->
             <tr class="vh-100">
                 {% for name, date in days.items %}
-                    <td>
+                    <td class="weekly-td">
                         {% for bubl in bubls %}
                             {% if bubl.date.day == date %}
                                 <div class="bubble">{{bubl.name}}</div>
