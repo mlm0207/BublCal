@@ -2,69 +2,109 @@
 {% load static %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{% static 'main/main.css' %}">
-{% endblock styles%}
-
+<link rel="stylesheet" type="text/css" href="{% static 'main/monthly.css' %}">
+{% endblock styles %}
 {% block content %}
-    <div class="container pt-4 d-flex align-items-center justify-content-center">
-            <table cellpadding="30" cellspacing="30" class="month">
-                <tbody>
-                    <tr><th colspan="7" class="currentMonth">{{month_year}}</th></tr>
-                <tr class="weekRow">
-                    <th class="weekCol">Mon</th>
-                    <th class="weekCol">Tue</th>
-                    <th class="weekCol">Wed</th>
-                    <th class="weekCol">Thu</th>
-                    <th class="weekCol">Fri</th>
-                    <th class="weekCol">Sat</th>
-                    <th class="weekCol">Sun</th>
-                </tr>
-                <tr>
-                    <td class="noday">&nbsp;</td>
-                    <td class="tue">1</td>
-                    <td class="wed">2</td>
-                    <td class="thu">3</td>
-                    <td class="fri">4</td>
-                    <td class="sat">5</td>
-                    <td class="sun">6</td>
-                </tr>
-                <tr>
-                    <td class="mon">7</td>
-                    <td class="tue">8</td>
-                    <td class="wed">9</td>
-                    <td class="thu">10</td>
-                    <td class="fri">11</td>
-                    <td class="sat">12</td>
-                    <td class="sun">13</td>
-                </tr>
-                <tr>
-                    <td class="mon">14</td>
-                    <td class="tue">15</td>
-                    <td class="wed">16</td>
-                    <td class="thu">17</td>
-                    <td class="fri">18</td>
-                    <td class="sat">19</td>
-                    <td class="sun">20</td>
-                </tr>
-                <tr>
-                    <td class="mon">21</td>
-                    <td class="tue">22</td>
-                    <td class="wed">23</td>
-                    <td class="thu">24</td>
-                    <td class="fri">25</td>
-                    <td class="sat">26</td>
-                    <td class="sun">27</td>
-                </tr>
-                <tr>
-                    <td class="mon">28</td>
-                    <td class="noday">&nbsp;</td>
-                    <td class="noday">&nbsp;</td>
-                    <td class="noday">&nbsp;</td>
-                    <td class="noday">&nbsp;</td>
-                    <td class="noday">&nbsp;</td>
-                    <td class="noday">&nbsp;</td>
-                </tr>
-                </tbody>
-            </table>
+<body onload="calander()">
+    <div class="main-body">
+        <h1 class="month">
+                <ul>
+                    <li class='month-title'>
+                        <span style="font-size:50px" class="month-name"></span>
+                        <li class="prev">&#10094;</li>
+                        <li class="next">&#10095;</li>
+                        <p id="dateDisplay"></p>
+                        <span class='year' style="font-size:30px"></span>
+                    </li>
+                </ul>
+        </h1>
+            <div class="cal-data">
+                <ul class="weekdays">
+                    <li>Mo</li>
+                    <li>Tu</li>
+                    <li>We</li>
+                    <li>Th</li>
+                    <li>Fr</li>
+                    <li>Sa</li>
+                    <li>Su</li>
+                </ul>
+                <ul class="days">
+                </ul>
+            </div>
+ 
     </div>
-{% endblock content %}
+
+    <script>
+    let daylist = document.querySelector('.days')
+    let monthName = document.querySelector('.month-name')
+    let yearName = document.querySelector('.year')
+    let prev = document.querySelector('.prev')
+    let next = document.querySelector('.next')
+    let dateDisplay = document.querySelector('#dateDisplay')
+    
+    
+    let monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'july', 'August', 'September', 'October', 'November', 'December']
+    var dt = new Date();
+    var month = dt.getMonth() + 1;
+    var year = dt.getFullYear();
+    var currentDay = dt.getDate();
+    
+    prev.addEventListener('click', event => {
+        if (month === 1) {
+            month = 12;
+            year -= 1
+        } else {
+            month = month - 1;
+        }
+        calander();
+    })
+    next.addEventListener('click', event => {
+        if (month === 12) {
+            month = 1;
+            year += 1
+        } else {
+            month = month + 1;
+    
+        }
+        calander()
+    })
+    
+    const calander = () => {
+        daylist.innerHTML = ''
+        daysInMonth = new Date(year, month, 0).getDate();
+        dayNumber = new Date(year, month - 1, 1).getDay();
+    
+        console.log(year, month, monthName, dayNumber)
+    
+        monthName.innerHTML = monthNames[month - 1]
+        yearName.innerHTML = year;
+        dateDisplay.textContent = currentDay
+    
+        let gaps;
+        if (dayNumber === 0) {
+            gaps = 6
+            console.log(gaps)
+        } else {
+            gaps = dayNumber - 1
+        }
+    
+        for (var day = -gaps + 1; day <= daysInMonth; day++) {
+            const days = document.createElement('li')
+    
+            if (day <= 0) {
+                days.innerHTML = "";
+                daylist.appendChild(days);
+            } else if (day === currentDay && month === dt.getMonth() + 1 && year === dt.getFullYear()) {
+                days.setAttribute('class', 'active');
+                days.innerHTML = day;
+                daylist.appendChild(days);
+            } else {
+                days.innerHTML = day;
+                daylist.appendChild(days);
+            }
+        }
+    }
+
+</script>   
+</body>
+{% endblock %}
