@@ -1,36 +1,39 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
-<title> Home page </title>
-<head>
-<style>
-
-a.signup,
-a.login {
-  background-color: #04AA6D;
-  color: white;
-  padding: 10px 15px;
-  
-}
-a.signup{
-  right: 12px;
-  position: absolute;
-}
-a.login{
-  right: 108px;
-  position: absolute;
-}
-img{
-  width: 10%;
-}
-</style>
-</head>
-<body>
-<div>
-    <a href="/app/glance"><img src="{% static 'img/logo.jpg' %}" alt="LOGO"></a>
-    <a class="login" href="login" > login </a> 
-    <a class="signup" href="signup" > Sign up </a>
-</div>
-<p>A calendar</p>
-</body>
+  <head>
+    <title> Home page </title>
+    <style>
+		a.signup, a.login
+		{
+			background-color: #04AA6D;
+			color: white;
+			padding: 10px 15px;
+		}
+		a.signup
+		{
+			right: 12px;
+			position: absolute;
+		}
+		a.login
+		{
+			right: 108px;
+			position: absolute;
+		}
+		img
+		{
+			width: 10%;
+		}
+    </style>
+  </head>
+  <body>
+	<div>
+		<a href="/app/glance">
+			<img src="{% static 'img/logo1.jpg' %}" alt="LOGO">
+		</a>
+		<a class="login" href="login" >login</a> 
+		<a class="signup" href="signup" >Sign up</a>
+	</div>
+	<p>A calendar app</p>
+  </body>
 </html>
