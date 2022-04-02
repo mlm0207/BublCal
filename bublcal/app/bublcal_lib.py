@@ -151,3 +151,28 @@ def deleteBubble(request, id):
                     return True; # item was deleted
     
     return False; # item was not deleted
+
+
+# Check for bubl past due and move them back to schedule
+def timeCheck(email):
+    user = getUserObject(email)
+    if(user == None):
+        return False
+
+    for bubl in Bubl.objects.all():
+        if bubl.email.email == email:
+
+            # If date is today then check time
+            if bubl.date == datetime.date.today():
+                if bubl.time <= datetime.datetime.now().time():
+                    # bubl.date = datetime.date.today() + timedelta(1)
+                    bubl.time = (datetime.datetime.now() + timedelta(hours=2)).time()
+                    bubl.save()
+                    # Moves event 2 hours ahead of current time
+
+            # If date is earlier, able to skip bubl.time check
+            if bubl.date < datetime.date.today():
+                bubl.date = datetime.date.today() + timedelta(1)
+                bubl.save()
+                # Moves event to same time tomorrow
+                
