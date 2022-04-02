@@ -36,6 +36,11 @@ def monthly(request):
     if(not result[0]):
         return redirect("index");
     
+    user = result[1];
+    
+    # Checks that no bubls are over due
+    bublcal_lib.timeCheck(user)
+    
     htcal = HTMLCalendar().formatmonth(current_date.year, current_date.month)
 
     return render(request, "monthly.html", {
@@ -54,6 +59,9 @@ def weekly(request):
         return redirect("index");
     
     user = result[1];
+    
+    # Checks that no bubls are over due
+    bublcal_lib.timeCheck(user)
 
     # Grab the users bubls
     bubls = bublcal_lib.getUserBubbles(user);
@@ -334,6 +342,9 @@ def glance(request):
         return redirect("index");
     
     user = result[1];
+    
+    # Checks that no bubls are over due
+    bublcal_lib.timeCheck(user)
 
     # Grab the active day and the two days after
     today       = datetime.date.today();
