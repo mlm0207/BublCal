@@ -166,13 +166,13 @@ def timeCheck(email):
             if bubl.date == datetime.date.today():
                 if bubl.time <= datetime.datetime.now().time():
                     # bubl.date = datetime.date.today() + timedelta(1)
-                    bubl.time = (datetime.datetime.now() + timedelta(hours=2)).time()
+                    bubl.time = (datetime.datetime.now() + datetime.timedelta(hours=2)).time()
                     bubl.save()
                     # Moves event 2 hours ahead of current time
 
             # If date is earlier, able to skip bubl.time check
             if bubl.date < datetime.date.today():
-                bubl.date = datetime.date.today() + timedelta(1)
+                bubl.date = datetime.date.today() + datetime.timedelta(1)
                 bubl.save()
                 # Moves event to same time tomorrow
                 
