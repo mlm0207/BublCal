@@ -9,14 +9,14 @@
     <div id="week_table" class="container table-responsive">
         <table class="table table-bordered">
             <tr class="weekdays">
-                {% for name, date in days.items %}
+                {% for name, date in week.items %}
                     <th class="weekly-th text-center"> {{ name }} {{ date }}</th>
                 {% endfor %}
             </tr>
 
             <!--Weekly Bubls will go here -->
             <tr class="vh-100">
-                {% for name, date in days.items %}
+                {% for name, date in week.items %}
                     <td class="weekly-td">
                         {% for bubl in bubls %}
                             {% if bubl.date.day == date %}
