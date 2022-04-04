@@ -1,6 +1,7 @@
 # Imports
 import calendar
 import datetime
+import time
 from os import times
 from . import bublcal_lib
 from django.shortcuts import render
@@ -66,20 +67,20 @@ def weekly(request):
     # Grab the users bubls
     bubls = bublcal_lib.getUserBubbles(user);
 
-    day = current_date.day
+    # Get dates of the current week
+    today_name = current_date.day
     day_names = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat","Sun" ]
 
-    weeks_list = []
-    for weeks in calendar.monthcalendar(year, current_date.month):
-        weeks_list.append(weeks)
+    start_date = time.asctime(time.strptime('2022 %d 1' % week_num, '%Y %W %w'))
+    start_date = datetime.datetime.strptime(start_date, '%a %b %d %H:%M:%S %Y')
+    dates = [int(start_date.strftime('%d').lstrip('0'))]
 
-    dates = []
-    for w in weeks_list:
-        if day in w:
-            for date in w:
-                dates.append(date)
+    for i in range(1, 7):
+        day = start_date + datetime.timedelta(days=i)
+        date = day.strftime('%d').lstrip('0')
+        dates.append(int(date))
 
-    days = dict(zip(day_names, dates))
+    week = dict(zip(day_names, dates))
 
     # add suffix to date
     def suffix(day):
@@ -97,9 +98,9 @@ def weekly(request):
         "loggedIn"  : True,
         "bubls": bubls,
         "day_of_week": day_of_week,
-        "day": suffix(day),
+        "day": suffix(today_name),
+        "week": week,
         "month_year": month_year,
-        "days": days,
     })
 
 # Create a bubble
