@@ -160,12 +160,15 @@ def timeCheck(email):
         return False
 
     for bubl in Bubl.objects.all():
-        if bubl.email.email == email:
+        if bubl.email.email == email: #and bubl.deleted == False
 
             # If date is today then check time
             if bubl.date == datetime.date.today():
                 if bubl.time <= datetime.datetime.now().time():
                     bubl.time = (datetime.datetime.now() + datetime.timedelta(hours=1)).time()
+                    # bubl.moved = bubl.moved + 1
+                    # if bubl.moved == 3:
+                        # bubl.deleted = True
                     bubl.save()    # Moves event 1 hour ahead of current time if time available
                     for b2 in Bubl.objects.all():
                         if b2.email.email == email:
@@ -176,6 +179,9 @@ def timeCheck(email):
             # If date is earlier, able to skip bubl.time check
             if bubl.date < datetime.date.today():
                 bubl.date = datetime.date.today() # Moves event to same time today if time is not taken.
+                # bubl.moved = bubl.moved + 1
+                    # if bubl.moved == 3:
+                        # bubl.deleted = True
                 bubl.save()
                 for b2 in Bubl.objects.all():
                     if b2.email.email == email:
