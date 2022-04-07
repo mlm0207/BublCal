@@ -1,2 +1,2 @@
-py manage.py makemigrations
+py manage.py makemigrations app
 pause

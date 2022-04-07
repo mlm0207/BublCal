@@ -1,2 +1,2 @@
-py manage.py migrate
+py manage.py migrate --run-syncdb
 pause
