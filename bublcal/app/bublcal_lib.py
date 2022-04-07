@@ -173,7 +173,7 @@ def timeCheck(email):
                     for b2 in Bubl.objects.all():
                         if b2.email.email == email:
                             if b2.time == bubl.time:
-                                bubl.time = bubl.time + (datetime.timedelta(hours=1)).time()
+                                bubl.time = (datetime.datetime.now() + datetime.timedelta(hours=2)).time()
                                 bubl.save()   # Moves bubl another hour ahead if time slot taken
 
             # If date is earlier, able to skip bubl.time check
