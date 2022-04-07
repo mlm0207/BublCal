@@ -165,14 +165,25 @@ def timeCheck(email):
             # If date is today then check time
             if bubl.date == datetime.date.today():
                 if bubl.time <= datetime.datetime.now().time():
-                    # bubl.date = datetime.date.today() + timedelta(1)
-                    bubl.time = (datetime.datetime.now() + datetime.timedelta(hours=2)).time()
-                    bubl.save()
-                    # Moves event 2 hours ahead of current time
+                    bubl.time = (datetime.datetime.now() + datetime.timedelta(hours=1)).time()
+                    bubl.save()    # Moves event 1 hour ahead of current time if time available
+                    for b2 in Bubl.objects.all():
+                        if b2.email.email == email:
+                            if b2.time == bubl.time:
+                                bubl.time = bubl.time + (datetime.timedelta(hours=1)).time()
+                                bubl.save()   # Moves bubl another hour ahead if time slot taken
 
             # If date is earlier, able to skip bubl.time check
             if bubl.date < datetime.date.today():
-                bubl.date = datetime.date.today() + datetime.timedelta(1)
+                bubl.date = datetime.date.today() # Moves event to same time today if time is not taken.
                 bubl.save()
+                for b2 in Bubl.objects.all():
+                    if b2.email.email == email:
+                        if b2.date == datetime.date.today():
+                            if bubl.time == b2.time:
+                                bubl.date = datetime.date.today() + datetime.timedelta(1) # If time slot is taken, move to tomorrow.
+                                bubl.save()
                 # Moves event to same time tomorrow
+                
+
                 
