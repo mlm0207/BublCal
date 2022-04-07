@@ -12,8 +12,6 @@ body {
     font-family: Verdana, sans-serif;
 }
 .main-body {
-    display: flex;
-    flex-direction: row-reverse;
     border-color: black;
     border-width: 2px;
     border-style: solid;
