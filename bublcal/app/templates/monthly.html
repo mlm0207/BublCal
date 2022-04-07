@@ -6,18 +6,18 @@
 {% endblock styles %}
 {% block content %}
 <body onload="calander()">
-<div class="container pt-5">
+<div class="container pt-4">
     <div class="main-body">
         <h1 class="month">
-                <ul>
-                    <li class='month-title'>
+                <div>
+                    <p class='month-title'>
                         <span style="font-size:50px" class="month-name"></span>
-                        <li class="prev">&#10094;</li>
-                        <li class="next">&#10095;</li>
+                        <p class="prev">&#10094;</p>
+                        <p class="next">&#10095;</p>
                         <p id="dateDisplay"></p>
                         <span class='year' style="font-size:30px"></span>
-                    </li>
-                </ul>
+                    </p>
+                </div>
         </h1>
             <div class="cal-data">
                 <ul class="weekdays">
