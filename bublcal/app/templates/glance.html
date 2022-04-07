@@ -2,15 +2,18 @@
 {% load static %}
 
 {% block title %}Day at a Glance{% endblock title %}
-
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'main/glance.css' %}">
+{% endblock styles %}
 {% block content %}
+<body>
     <span class="container pt-4"></span>
-    <div class="container container-glance">
+    <div class="daily-table">
         {# Label Row #}
         <div class="row">
             <div class="col-6 d-flex justify-content-center fw-bold">{{ today_name }}</div>
-            <div class="col d-flex justify-content-center fw-bold">{{ tomorrow_name }}</div>
-            <div class="col d-flex justify-content-center fw-bold">{{ overmorrow_name }}</div>
+            <div class="col d-flex justify-content-center fw-bold" id="first-row">{{ tomorrow_name }}</div>
+            <div class="col d-flex justify-content-center fw-bold" id="second-row">{{ overmorrow_name }}</div>
         </div>
 
         {# Bubble Row #}
@@ -117,4 +120,5 @@
 
         </div>
     </div>
+</body>
 {% endblock content %}

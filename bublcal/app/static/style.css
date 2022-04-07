@@ -52,7 +52,31 @@
         GLANCE CSS
 ********************************/
 
-/* Box Outline */
+.daily-table
+{
+    border: 2px solid black;
+    margin: auto;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.3), 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+    background-color: lightgray;
+    background-image: linear-gradient(to bottom right,lightgoldenrodyellow, powderblue );
+}
+
+.col-6
+{
+    border: 1px solid black;
+    margin-left: 10px;
+}
+
+#first-row
+{
+    border: 1px solid black;
+}
+
+#second-row
+{
+    border: 1px solid black;
+}
+
 .container-glance
 {
     border: 1px solid black;
