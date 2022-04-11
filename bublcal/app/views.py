@@ -28,6 +28,12 @@ year, week_num, day_of_week = current_date.isocalendar()
 month_year = current_date.strftime("%B") + " " + str(year)
 day_of_week = calendar.day_name[day_of_week - 1]
 
+def profile(request):
+    result = bublcal_lib.verifyLogin(request)
+    if(not result[0]):
+        return redirect("index")
+    return render(request, "profile.html")
+
 # Monthly view
 def monthly(request):
         
@@ -129,7 +135,7 @@ def createBubl(request):
             return redirect("glance-view");
         else:
             return render(request, "bubl_create.html");
-            
+
     return render(request, "bubl_create.html");
 
 # Logout a user
