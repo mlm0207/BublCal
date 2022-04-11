@@ -124,7 +124,7 @@ def getUserBubbles(email):
     bubls = [];
 
     for bubl in Bubl.objects.all():
-        if(bubl.email.email == email):
+        if(bubl.email.email == email and bubl.deleted == False): # Can be changed - this 2nd if removed 'deleted' bubls from view
             bubls.append(bubl);
 
     return bubls;
