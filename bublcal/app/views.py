@@ -480,6 +480,7 @@ def deadview(request):
 
     return render(request, "deadview.html", args);
 
+# Kill a bubl
 def killbubl(request, id):
     # Make sure a user is logged in
     result = bublcal_lib.verifyLogin(request);
@@ -502,6 +503,7 @@ def killbubl(request, id):
 
     return redirect("glance-view");
 
+# Restore a bubl
 def restorebubl(request, id):
     # Make sure a user is logged in
     result = bublcal_lib.verifyLogin(request);
@@ -523,7 +525,6 @@ def restorebubl(request, id):
     bublcal_lib.restoreBubl(request, id);
 
     return redirect("dead-view");
-
 
 # Login page
 def login(request):

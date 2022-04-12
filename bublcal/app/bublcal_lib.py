@@ -216,9 +216,16 @@ def restoreBubl(request, id):
             print(bubls);
             for bubl in bubls:
                 if(bubl.id == id):
+                    if(request.method == "POST"):
+                            bubl.name = request.POST["name"];
+                            bubl.note = request.POST["note"];
+                            bubl.date = request.POST["date"];
+                            bubl.time = request.POST["time"];
+                            bubl.length = request.POST["length"];
+                            bubl.dead = False;
+                            bubl.save();
 
-                    bubl.dead = False;
-                    bubl.save();
+                            bubl.save();
                     return True;
 
     return False;
