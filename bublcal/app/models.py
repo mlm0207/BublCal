@@ -18,5 +18,5 @@ class Bubl(models.Model):
     date = models.DateField();
     time = models.TimeField(auto_now=False, auto_now_add=False);
     length = models.IntegerField();
-    moved   = models.IntegerField(default=0);
-    deleted = models.BooleanField(default=False);
+    moved = models.IntegerField(default=0);
+    dead = models.BooleanField(default=False);

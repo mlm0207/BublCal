@@ -1,8 +1,63 @@
 # Imports
 import datetime
 import re
+import calendar
 from app.models import UserData
 from app.models import Bubl
+
+# Get the week from a given day
+def getWeekFromDay(day):
+
+    # The name of the game is find monday
+    # if the day given is not a monday, then we will go back 1 day until we find monday
+    # once monday is found we return a list of datetime objects mon-sun
+
+    dayName = day.strftime("%A");
+
+    if(dayName == "Monday"): # Found!
+
+        days = [];
+
+        day = day - datetime.timedelta(1);
+
+        # Append days in week
+        for i in range(7):
+            day = day + datetime.timedelta(1);
+            days.append(day);
+
+        return days;
+    else:
+        return getWeekFromDay(day - datetime.timedelta(1)); # Go back 1 day
+
+# Get all weeks associated with this month
+def getMonthWeeks(year, month):
+    firstDay    = datetime.datetime(year=2022, month=4, day=1);
+    lastDay     = calendar.monthrange(year, month)[1];
+
+    # Week list to return
+    weeks = [];
+
+    # First week
+    weeks.append(getWeekFromDay(firstDay));
+
+    # Flag for when last week is found
+    lastWeekFound = False;
+
+    # Add remaining weeks
+    while not lastWeekFound:
+        # Get the last week in the list and check if that is the last week
+        weekLastDay = weeks[len(weeks) - 1][6];
+
+        if(weekLastDay.month == month): # Same Month
+            if(weekLastDay.day != lastDay): # Not Last Mont Day
+                nextDay = weekLastDay + datetime.timedelta(1);
+                weeks.append(getWeekFromDay(nextDay)); # Add the next week
+            else:
+                lastWeekFound = True;
+        else:
+            lastWeekFound = True;
+
+    return weeks; # Return results
 
 # Verify if a user is logged in
 def verifyLogin(request):
@@ -124,7 +179,7 @@ def getUserBubbles(email):
     bubls = [];
 
     for bubl in Bubl.objects.all():
-        if(bubl.email.email == email and bubl.deleted == False): # Can be changed - this 2nd if removed 'deleted' bubls from view
+        if(bubl.email.email == email and bubl.dead == False): # Can be changed - this 2nd if removed 'deleted' bubls from view
             bubls.append(bubl);
 
     return bubls;
@@ -139,7 +194,7 @@ def getUserDeadBubls(email):
     bubls = [];
 
     for bubl in Bubl.objects.all():
-        if(bubl.email.email == email and bubl.deleted == True):
+        if(bubl.email.email == email and bubl.dead == True):
             bubls.append(bubl);
 
     return bubls; 
@@ -150,6 +205,42 @@ def getBubbleObject(id):
         if(bubl.id == id):
             return bubl;
 
+def restoreBubl(request, id):
+    result = verifyLogin(request);
+
+    if(result[0]):
+        user = getUserObject(result[1]);
+        bubls = getUserDeadBubls(user.email);
+
+        if(bubls != None):
+            print(bubls);
+            for bubl in bubls:
+                if(bubl.id == id):
+
+                    bubl.dead = False;
+                    bubl.save();
+                    return True;
+
+    return False;
+
+
+# Kill a bubble via DB ID
+def killBubble(request, id):
+    result = verifyLogin(request);
+
+    if(result[0]):
+        user = getUserObject(result[1]);
+        bubls = getUserBubbles(user.email);
+
+        if(bubls != None):
+            for bubl in bubls:
+                if(bubl.id == id):
+                    bubl.dead = True;
+                    bubl.save();
+                    return True;
+
+    return False;
+
 # Delete a bubble via DB ID
 def deleteBubble(request, id):
     result = verifyLogin(request);
@@ -157,8 +248,8 @@ def deleteBubble(request, id):
     # Grab user
     if(result[0]):
         user = getUserObject(result[1]);
-        bubls = getUserBubbles(user.email);
-        
+        bubls = getUserDeadBubls(user.email);
+
         if(bubls != None):
             for bubl in bubls:
                 if(bubl.id == id):
@@ -167,7 +258,6 @@ def deleteBubble(request, id):
     
     return False; # item was not deleted
 
-
 # Check for bubl past due and move them back to schedule
 def timeCheck(email):
     user = getUserObject(email)
@@ -175,7 +265,7 @@ def timeCheck(email):
         return False
 
     for bubl in Bubl.objects.all():
-        if bubl.email.email == email and bubl.deleted == False:
+        if bubl.email.email == email and bubl.dead == False:
 
             # If date is today then check time
             if bubl.date == datetime.date.today():
@@ -183,7 +273,7 @@ def timeCheck(email):
                     bubl.time = (datetime.datetime.now() + datetime.timedelta(hours=1)).time()
                     bubl.moved = bubl.moved + 1
                     if bubl.moved == 3:
-                        bubl.deleted = True
+                        bubl.dead = True
                     bubl.save()    # Moves event 1 hour ahead of current time if time available
                     for b2 in Bubl.objects.all():
                         if b2.email.email == email:
@@ -196,7 +286,7 @@ def timeCheck(email):
                 bubl.date = datetime.date.today() # Moves event to same time today if time is not taken.
                 bubl.moved = bubl.moved + 1
                 if bubl.moved == 3:
-                    bubl.deleted = True
+                    bubl.dead = True
                 bubl.save()
                 for b2 in Bubl.objects.all():
                     if b2.email.email == email:
@@ -205,6 +295,3 @@ def timeCheck(email):
                                 bubl.date = datetime.date.today() + datetime.timedelta(1) # If time slot is taken, move to tomorrow.
                                 bubl.save()
                 # Moves event to same time tomorrow
-                
-
-                

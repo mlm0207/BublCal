@@ -73,20 +73,18 @@ def weekly(request):
     # Grab the users bubls
     bubls = bublcal_lib.getUserBubbles(user);
 
-    # Get dates of the current week
-    today_name = current_date.day
-    day_names = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat","Sun" ]
+    # Get today
+    today = datetime.datetime.now();
+    today_name = today.strftime("%A");
 
-    start_date = time.asctime(time.strptime('2022 %d 1' % week_num, '%Y %W %w'))
-    start_date = datetime.datetime.strptime(start_date, '%a %b %d %H:%M:%S %Y')
-    dates = [int(start_date.strftime('%d').lstrip('0'))]
+    # Get the week
+    weeks = bublcal_lib.getWeekFromDay(today);
 
-    for i in range(1, 7):
-        day = start_date + datetime.timedelta(days=i)
-        date = day.strftime('%d').lstrip('0')
-        dates.append(int(date))
+    week = {};
 
-    week = dict(zip(day_names, dates))
+    # Format the week
+    for day in weeks:
+        week[day.strftime("%a")] = day.day;
 
     # add suffix to date
     def suffix(day):
@@ -104,7 +102,7 @@ def weekly(request):
         "loggedIn"  : True,
         "bubls": bubls,
         "day_of_week": day_of_week,
-        "day": suffix(today_name),
+        "day": suffix(today.day),
         "week": week,
         "month_year": month_year,
     })
@@ -169,6 +167,8 @@ def deleteBubl(request, id):
     if(bubl.email.email != user):
         return redirect("glance-view");
     
+    print("deleted:D\n\n");
+
     bublcal_lib.deleteBubble(request, id);
 
     return redirect("glance-view");
@@ -498,7 +498,7 @@ def killbubl(request, id):
     if(bubl.email.email != user):
         return redirect("glance-view");
     
-    bublcal_lib.killBubl(request, id);
+    bublcal_lib.killBubble(request, id);
 
     return redirect("glance-view");
 
@@ -514,15 +514,15 @@ def restorebubl(request, id):
 
     # Make sure bubble exists
     if(bubl == None):
-        return redirect("glance-view");
+        return redirect("dead-view");
 
     # Make sure user owns bubble
     if(bubl.email.email != user):
-        return redirect("glance-view");
+        return redirect("dead-view");
     
     bublcal_lib.restoreBubl(request, id);
 
-    return redirect("glance-view");
+    return redirect("dead-view");
 
 
 # Login page
