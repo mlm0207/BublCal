@@ -1,14 +1,4 @@
-ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-}
-
-* {
-    box-sizing: border-box;
-}
-
-body {
+.bodymonthly {
     font-family: Verdana, sans-serif;
 }
 .main-body {
@@ -18,10 +8,6 @@ body {
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.3), 0 12px 40px 0 rgba(0, 0, 0, 0.5);
     background-color: lightgray;
     background-image: linear-gradient(to bottom right,lightgoldenrodyellow, powderblue );
-}
-
-.cal-data {
-    margin: auto;
 }
 
 .month {

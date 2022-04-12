@@ -1,0 +1,27 @@
+#week_table
+{
+    margin: auto;
+    padding: 1%;
+    border-color: black;
+    border-width: 2px;
+    border-style: solid;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.3), 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+    background-color: lightgray;
+    background-image: linear-gradient(to bottom right,lightgoldenrodyellow, powderblue );
+}
+.weekdays th
+{
+    border: 1px solid black;
+}
+
+
+.table
+{
+    margin-bottom: 0%;
+    border: 1px solid rgb(0, 0, 0);
+}
+
+.weekly-td
+{
+ border: 1px solid black;
+}

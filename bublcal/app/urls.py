@@ -15,6 +15,7 @@ urlpatterns = [
     path('deadview/',           views.deadview,     name="dead-view"),
     path('kill-bubl/<int:id>/', views.killbubl,     name="kill"),
     path('restore/<int:id>/',   views.restorebubl,  name="restore-bubl"),
+    path('profile/',            views.profile,      name="profile"),
 
     path('daily/<int:month>/<int:day>/<int:year>/',  views.daily,       name="daily-view"),
     #path('week/<int:week>/<int:year>/', views.week),
