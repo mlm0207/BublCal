@@ -129,6 +129,21 @@ def getUserBubbles(email):
 
     return bubls;
 
+# Get a list of dead bubls using given user
+def getUserDeadBubls(email):
+    user = getUserObject(email);
+
+    if(user == None):
+        return None;
+
+    bubls = [];
+
+    for bubl in Bubl.objects.all():
+        if(bubl.email.email == email and bubl.deleted == True):
+            bubls.append(bubl);
+
+    return bubls; 
+
 # Get a bubble info via DB ID
 def getBubbleObject(id):
     for bubl in Bubl.objects.all():

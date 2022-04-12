@@ -456,6 +456,69 @@ def index(request):
 
     return render(request, "index.html", args);
 
+# Dead Bubl View
+def deadview(request):
+     # Make sure a user is logged in
+    result = bublcal_lib.verifyLogin(request);
+
+    if(not result[0]):
+        return redirect("index");
+    
+    user = result[1];
+
+    bubls = bublcal_lib.getUserDeadBubls(user);
+
+    args = {
+        "bubls": bubls,
+    };
+
+    return render(request, "deadview.html", args);
+
+def killbubl(request, id):
+    # Make sure a user is logged in
+    result = bublcal_lib.verifyLogin(request);
+    
+    if(not result[0]):
+        return redirect("index");
+    
+    user = result[1];
+    bubl = bublcal_lib.getBubbleObject(id);
+
+    # Make sure bubble exists
+    if(bubl == None):
+        return redirect("glance-view");
+
+    # Make sure user owns bubble
+    if(bubl.email.email != user):
+        return redirect("glance-view");
+    
+    bublcal_lib.killBubl(request, id);
+
+    return redirect("glance-view");
+
+def restorebubl(request, id):
+    # Make sure a user is logged in
+    result = bublcal_lib.verifyLogin(request);
+    
+    if(not result[0]):
+        return redirect("index");
+    
+    user = result[1];
+    bubl = bublcal_lib.getBubbleObject(id);
+
+    # Make sure bubble exists
+    if(bubl == None):
+        return redirect("glance-view");
+
+    # Make sure user owns bubble
+    if(bubl.email.email != user):
+        return redirect("glance-view");
+    
+    bublcal_lib.restoreBubl(request, id);
+
+    return redirect("glance-view");
+
+
 # Login page
 def login(request):
     result = bublcal_lib.verifyLogin(request);

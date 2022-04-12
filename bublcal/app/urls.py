@@ -12,6 +12,11 @@ urlpatterns = [
     path('bublcreate/',         views.createBubl,   name="create-bubl"),
     path('delete/<int:id>/',    views.deleteBubl,   name="delete-bubl"),
     path('modify/<int:id>/',    views.modifyBubl,   name="modify-bubl"),
-    
+    path('deadview/',           views.deadview,     name="dead-view"),
+    path('kill-bubl/<int:id>/', views.killbubl,     name="kill"),
+    path('restore/<int:id>/',   views.restorebubl,  name="restore-bubl"),
+
     path('daily/<int:month>/<int:day>/<int:year>/',  views.daily,       name="daily-view"),
+    #path('week/<int:week>/<int:year>/', views.week),
+    #path('month/<int:month>/<int:year>/', views.month, name="month"),
 ];
