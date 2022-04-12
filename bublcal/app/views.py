@@ -108,6 +108,8 @@ def weekly(request, month, day, year):
         "day_of_week": day_of_week,
         "day": suffix(today.day),
         "week": week,
+        "year": year,
+        "month": month,
         "month_year": today.strftime("%B %Y"),
         "nextWeekLink": nextWeek.strftime("/app/weekly/%m/%d/%Y"),
         "prevWeekLink": prevWeek.strftime("/app/weekly/%m/%d/%Y"),
