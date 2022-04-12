@@ -1,9 +1,12 @@
 {% extends "base.html" %}
 {% load static %}
 
+<title>{% block title %}Monthly View{% endblock %}</title>
+
 {% block styles %}
 <link rel="stylesheet" type="text/css" href="{% static 'main/monthly.css' %}">
 {% endblock styles %}
+
 {% block content %}
 <body class="bodymonthly" onload="calander()">
 <div class="container pt-4 pb-2">

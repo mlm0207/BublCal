@@ -28,6 +28,7 @@ year, week_num, day_of_week = current_date.isocalendar()
 month_year = current_date.strftime("%B") + " " + str(year)
 day_of_week = calendar.day_name[day_of_week - 1]
 
+# View profile
 def profile(request):
     result = bublcal_lib.verifyLogin(request)
     if(not result[0]):
@@ -57,7 +58,7 @@ def monthly(request):
     })
 
 # Weekly view
-def weekly(request):
+def weekly(request, month, day, year):
         
     # Make sure a user is logged in
     result = bublcal_lib.verifyLogin(request);
@@ -74,8 +75,7 @@ def weekly(request):
     bubls = bublcal_lib.getUserBubbles(user);
 
     # Get today
-    today = datetime.datetime.now();
-    today_name = today.strftime("%A");
+    today = datetime.datetime(year=year, month=month, day=day);
 
     # Get the week
     weeks = bublcal_lib.getWeekFromDay(today);
@@ -85,6 +85,10 @@ def weekly(request):
     # Format the week
     for day in weeks:
         week[day.strftime("%a")] = day.day;
+
+    # Get next & previous week links
+    nextWeek = bublcal_lib.getNextWeek(today)[0];
+    prevWeek = bublcal_lib.getPreviousWeek(today)[0];
 
     # add suffix to date
     def suffix(day):
@@ -104,7 +108,9 @@ def weekly(request):
         "day_of_week": day_of_week,
         "day": suffix(today.day),
         "week": week,
-        "month_year": month_year,
+        "month_year": today.strftime("%B %Y"),
+        "nextWeekLink": nextWeek.strftime("/app/weekly/%m/%d/%Y"),
+        "prevWeekLink": prevWeek.strftime("/app/weekly/%m/%d/%Y"),
     })
 
 # Create a bubble

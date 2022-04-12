@@ -59,6 +59,24 @@ def getMonthWeeks(year, month):
 
     return weeks; # Return results
 
+# Get previous week
+def getPreviousWeek(day):
+
+    week = getWeekFromDay(day);
+
+    previousWeekDay = week[0] - datetime.timedelta(1);
+
+    return getWeekFromDay(previousWeekDay);
+
+# Get next week
+def getNextWeek(day):
+
+    week = getWeekFromDay(day);
+
+    nextWeekDay = week[6] + datetime.timedelta(1);
+
+    return getWeekFromDay(nextWeekDay);
+
 # Verify if a user is logged in
 def verifyLogin(request):
     session = request.session;
@@ -205,6 +223,7 @@ def getBubbleObject(id):
         if(bubl.id == id):
             return bubl;
 
+# Restore a bubl via DB ID
 def restoreBubl(request, id):
     result = verifyLogin(request);
 
@@ -229,7 +248,6 @@ def restoreBubl(request, id):
                     return True;
 
     return False;
-
 
 # Kill a bubble via DB ID
 def killBubble(request, id):
@@ -300,5 +318,4 @@ def timeCheck(email):
                         if b2.date == datetime.date.today():
                             if bubl.time == b2.time:
                                 bubl.date = datetime.date.today() + datetime.timedelta(1) # If time slot is taken, move to tomorrow.
-                                bubl.save()
-                # Moves event to same time tomorrow
+                                bubl.save() # Moves event to same time tomorrow
