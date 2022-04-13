@@ -199,6 +199,13 @@ def getUserBubbles(email):
     for bubl in Bubl.objects.all():
         if(bubl.email.email == email and bubl.dead == False): # Can be changed - this 2nd if removed 'deleted' bubls from view
             bubls.append(bubl);
+    
+    # Bubble sort for user bubls, array is now ordered by time
+    i = len(bubls)
+    for b1 in range(i-1):
+        for b2 in range(0, i-1):
+            if bubls[b2].time > bubls[b2 + 1].time:
+                bubls[b2], bubls[b2 + 1] = bubls[b2 + 1], bubls[b2]
 
     return bubls;
 
