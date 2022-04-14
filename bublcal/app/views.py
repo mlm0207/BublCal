@@ -35,14 +35,15 @@ def profile(request):
         return redirect("index")
     
     usermail = result[1];
-    user = bublcal_lib.getUserObject(usermail)
 
     if(request.method == "POST"):
-        user.firstName = request.POST["fName"];
-        user.lastName = request.POST["lName"];
-        user.birthday = request.POST["birthDay"];
-        user.email = request.POST["email"];
-        user.save()
+        for user in UserData.objects.all():
+            if user.email == usermail:
+                user.firstName = request.POST["fName"];
+                user.lastName = request.POST["lName"];
+                user.birthday = request.POST["birthDay"];
+                user.email = request.POST["email"];
+                user.save()
     
     return render(request, "profile.html")
 
