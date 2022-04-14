@@ -174,7 +174,7 @@ def createBubl(request):
         result = bublcal_lib.createBubble(user, name, note, date, time, length);
 
         if(result[0]):
-            return redirect("glance-view");
+            return redirect(request.META.get('HTTP_REFERER'));
         else:
             return render(request, "bubl_create.html");
 
@@ -205,17 +205,15 @@ def deleteBubl(request, id):
 
     # Make sure bubble exists
     if(bubl == None):
-        return redirect("glance-view");
+        return redirect(request.META.get('HTTP_REFERER'));
 
     # Make sure user owns bubble
     if(bubl.email.email != user):
-        return redirect("glance-view");
+        return redirect(request.META.get('HTTP_REFERER'));
     
-    print("deleted:D\n\n");
-
     bublcal_lib.deleteBubble(request, id);
 
-    return redirect("glance-view");
+    return redirect(request.META.get('HTTP_REFERER'));
 
 # Modify a bubble
 def modifyBubl(request, id):
@@ -537,15 +535,15 @@ def killbubl(request, id):
 
     # Make sure bubble exists
     if(bubl == None):
-        return redirect("glance-view");
+        return redirect(request.META.get('HTTP_REFERER'));
 
     # Make sure user owns bubble
     if(bubl.email.email != user):
-        return redirect("glance-view");
+        return redirect(request.META.get('HTTP_REFERER'));
     
     bublcal_lib.killBubble(request, id);
 
-    return redirect("glance-view");
+    return redirect(request.META.get('HTTP_REFERER'));
 
 # Restore a bubl
 def restorebubl(request, id):
