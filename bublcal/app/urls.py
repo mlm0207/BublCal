@@ -6,10 +6,9 @@ urlpatterns = [
 
     path('login/',              views.login,        name="login"),
     path('logout/',             views.logout,       name="logout"),
-
     path('signup/',             views.signup,       name="signup"),
 
-    path('monthly/',            views.monthly,      name="monthly-view"),
+    #path('monthly/',            views.monthly,      name="monthly-view"),
     path('glance/',             views.glance,       name="glance-view"),
     #path('weekly/',             views.weekly,       name="weekly-view"),
     path('deadview/',           views.deadview,     name="dead-view"),
@@ -22,7 +21,7 @@ urlpatterns = [
 
     path('profile/',            views.profile,      name="profile"),
 
-    path('daily/<int:month>/<int:day>/<int:year>/',  views.daily,       name="daily-view"),
-    path('weekly/<int:month>/<int:day>/<int:year>/', views.weekly),
-    #path('month/<int:month>/<int:year>/', views.month, name="month"),
+    path('daily/<int:month>/<int:day>/<int:year>/',     views.daily,    name="daily-view"),
+    path('weekly/<int:month>/<int:day>/<int:year>/',    views.weekly,   name="weekly-view"),
+    path('monthly/<int:month>/<int:year>/',             views.monthly,  name="monthly-view"),
 ];

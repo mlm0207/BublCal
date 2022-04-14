@@ -5,6 +5,24 @@ import calendar
 from app.models import UserData
 from app.models import Bubl
 
+def nextMonthDate(month, year):
+    month += 1;
+
+    if(month > 12):
+        month = 1;
+        year += 1;
+
+    return [month, year];
+
+def previousMonthDate(month, year):
+    month -= 1;
+
+    if(month < 1):
+        month = 12;
+        year -= 1;
+
+    return [month, year];
+
 # Get the week from a given day
 def getWeekFromDay(day):
 
@@ -31,7 +49,7 @@ def getWeekFromDay(day):
 
 # Get all weeks associated with this month
 def getMonthWeeks(year, month):
-    firstDay    = datetime.datetime(year=2022, month=4, day=1);
+    firstDay    = datetime.datetime(year=year, month=month, day=1);
     lastDay     = calendar.monthrange(year, month)[1];
 
     # Week list to return

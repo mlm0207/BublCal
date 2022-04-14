@@ -7,6 +7,7 @@
     function main()
     {
         weeklyElement = document.getElementById("weekly1");
+        monthlyElement = document.getElementById("monthly1");
 
         today = new Date();
 
@@ -15,6 +16,7 @@
         day = today.getDate();
 
         weeklyElement.href = `/app/weekly/${month}/${day}/${year}/`;
+        monthlyElement.href = `/app/monthly/${month}/${year}/`;
     }
 
     window.onload = main;

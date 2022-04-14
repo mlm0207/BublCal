@@ -47,7 +47,7 @@ def profile(request):
     return render(request, "profile.html")
 
 # Monthly view
-def monthly(request):
+def monthly(request, month, year):
         
     # Make sure a user is logged in
     result = bublcal_lib.verifyLogin(request);
@@ -60,13 +60,38 @@ def monthly(request):
     # Checks that no bubls are over due
     bublcal_lib.timeCheck(user)
     
+    
+    nextMonth = bublcal_lib.nextMonthDate(month, year);
+    prevMonth = bublcal_lib.previousMonthDate(month, year);
+
+    nextMonthLink = "/app/monthly/" + str(nextMonth[0]) + "/" + str(nextMonth[1]) + "/";
+    prevMonthLink = "/app/monthly/" + str(prevMonth[0]) + "/" + str(prevMonth[1]) + "/";
+    
+    weeks = bublcal_lib.getMonthWeeks(year, month);
+    today = datetime.datetime(month=month, year=year, day=1);
+
     htcal = HTMLCalendar().formatmonth(current_date.year, current_date.month)
 
-    return render(request, "monthly.html", {
-        "loggedIn"  : True,
-        "htcal": htcal,
-        "month_year": month_year,
-    })
+    print(weeks);
+
+    args =  {
+                "loggedIn"  : True,
+                "weeks": weeks,
+                "month": month,
+                "monthName": today.strftime("%B"),
+                "dayToday": datetime.datetime.now().day,
+                "monthToday": datetime.datetime.now().month,
+                "nextMonthLink": nextMonthLink,
+                "prevMonthLink": prevMonthLink,
+                "year": year,
+            };
+
+    return render(request, "monthly.html", args);
+
+    #return render(request, "monthly.html", {
+    #    "htcal": htcal,
+    #    "month_year": month_year,
+    #})
 
 # Weekly view
 def weekly(request, month, day, year):
