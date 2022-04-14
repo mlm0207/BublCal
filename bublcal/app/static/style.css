@@ -6,6 +6,37 @@
         MONTHLY CSS
 ********************************/
 
+.bubble
+{
+    color: black;
+    background-image: linear-gradient(to bottom right,
+                                    rgba(207, 241, 255, 1), 
+                                    rgba(120, 217, 255, 1));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100px;
+    height: 100px;
+
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
+.sideBubble
+{
+    background-image: linear-gradient(to bottom right,
+                                    rgba(207, 241, 255, 1), 
+                                    rgba(120, 217, 255, 1));
+
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    margin-top: 10%;
+    margin-bottom: 10%;
+}
+
 /********************************
         GLANCE CSS
 ********************************/

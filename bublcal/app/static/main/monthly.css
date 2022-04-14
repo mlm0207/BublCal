@@ -65,12 +65,43 @@
     text-align: center;
 }
 
+.tableText
+{
+    font-family: Verdana, sans-serif;
+    font-size: 10px;
+}
+/*
 .days {
     border-collapse:collapse;
     padding: 10px 10px;
     margin: 0;
+}*/
+
+.bubldot
+{
+    width: 10px;
+    height: 10px;
+    background-color: red;
 }
 
+.days {
+    font-size: 30px;
+    display: inline-block;
+    width: 13.4%;
+    color: #000000;
+    text-align: center;
+}
+
+.dborder {
+    border: 2px solid black;
+}
+
+.day
+{
+    text-decoration: none;
+}
+
+/*
 .days li {
     list-style-type: none;
     display: inline-block;
@@ -80,7 +111,7 @@
     font-size: 30px;
     color: black;
     margin-left: 3px;
-}
+}*/
 
 .active {
     padding: 5px;

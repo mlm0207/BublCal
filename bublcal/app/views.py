@@ -58,9 +58,11 @@ def monthly(request, month, year):
     user = result[1];
     
     # Checks that no bubls are over due
-    bublcal_lib.timeCheck(user)
-    
-    
+    bublcal_lib.timeCheck(user);
+
+    # Grab the users bubls
+    bubls = bublcal_lib.getUserBubbles(user);
+
     nextMonth = bublcal_lib.nextMonthDate(month, year);
     prevMonth = bublcal_lib.previousMonthDate(month, year);
 
@@ -70,9 +72,11 @@ def monthly(request, month, year):
     weeks = bublcal_lib.getMonthWeeks(year, month);
     today = datetime.datetime(month=month, year=year, day=1);
 
-    htcal = HTMLCalendar().formatmonth(current_date.year, current_date.month)
+    thisMonthBubls = [];
 
-    print(weeks);
+    for bubl in bubls:
+        if(bubl.date.year == year and bubl.date.month == month):
+            thisMonthBubls.append(bubl);
 
     args =  {
                 "loggedIn"  : True,
@@ -83,15 +87,11 @@ def monthly(request, month, year):
                 "monthToday": datetime.datetime.now().month,
                 "nextMonthLink": nextMonthLink,
                 "prevMonthLink": prevMonthLink,
+                "bubls": thisMonthBubls,
                 "year": year,
             };
 
     return render(request, "monthly.html", args);
-
-    #return render(request, "monthly.html", {
-    #    "htcal": htcal,
-    #    "month_year": month_year,
-    #})
 
 # Weekly view
 def weekly(request, month, day, year):

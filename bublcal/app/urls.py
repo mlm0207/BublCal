@@ -8,9 +8,7 @@ urlpatterns = [
     path('logout/',             views.logout,       name="logout"),
     path('signup/',             views.signup,       name="signup"),
 
-    #path('monthly/',            views.monthly,      name="monthly-view"),
     path('glance/',             views.glance,       name="glance-view"),
-    #path('weekly/',             views.weekly,       name="weekly-view"),
     path('deadview/',           views.deadview,     name="dead-view"),
 
     path('bublcreate/',         views.createBubl,   name="create-bubl"),
