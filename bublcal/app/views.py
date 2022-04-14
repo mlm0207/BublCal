@@ -500,9 +500,14 @@ def glance(request):
 
 # Main Page View
 def index(request):
-    args = {};
+     # Make sure a user is logged in
+    result = bublcal_lib.verifyLogin(request);
 
-    return render(request, "index.html", args);
+    if(not result[0]):
+        return render(request, "index.html", args);
+    
+    return redirect("glance-view");
+
 
 # Dead Bubl View
 def deadview(request):
@@ -517,6 +522,7 @@ def deadview(request):
     bubls = bublcal_lib.getUserDeadBubls(user);
 
     args = {
+        "loggedIn": True,
         "bubls": bubls,
     };
 
