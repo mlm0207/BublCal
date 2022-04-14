@@ -3,6 +3,10 @@
 
 {% block title %}Daily View{% endblock title %}
 
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'main/glance.css' %}">
+{% endblock styles %}
+
 {% block content %}
     <span class="container pt-4"></span>
     
@@ -13,8 +17,8 @@
     </center>
     
     <!-- Day container -->
-    <div class="container container-glance">
-
+    <div class="container pt-2">
+    <div class="daily-table">
         {# Check if the day passed is valid #}
         {% if validDate == True %}
             <div class="row">
@@ -155,5 +159,6 @@
                 <h1>Invalid date</h1>
             </center>
         {% endif %}
+    </div>
     </div>
 {% endblock content %}

@@ -68,8 +68,31 @@
 .tableText
 {
     font-family: Verdana, sans-serif;
-    font-size: 10px;
+    font-size: 20px;
 }
+
+a
+{
+    text-decoration: none;
+    color: black;
+}
+
+a:hover
+{
+    color: black;
+}
+
+.otherMonth
+{
+    text-decoration: none;
+    color: gray;
+}
+
+.otherMonth:hover
+{
+    color: gray;
+}
+
 /*
 .days {
     border-collapse:collapse;
@@ -113,11 +136,10 @@
     margin-left: 3px;
 }*/
 
-/*
+
 .activeDay {
     padding: 5px;
     background: black;
     color: white !important;
     cursor: pointer;
 }
-*/
