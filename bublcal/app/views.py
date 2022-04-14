@@ -504,7 +504,7 @@ def index(request):
     result = bublcal_lib.verifyLogin(request);
 
     if(not result[0]):
-        return render(request, "index.html", args);
+        return render(request, "index.html");
     
     return redirect("glance-view");
 
