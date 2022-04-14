@@ -40,7 +40,7 @@
         <li class="nav-item">
             <a
                     id="monthly1"
-                    class="nav-link {% if request.path == monthly %} active {%endif%}"
+                    class="nav-link {% if 'monthly' in request.path %} active {%endif%}"
                     href="{{monthly}}">This Month</a>
         </li>
     </ul>
