@@ -1,137 +1,136 @@
 {% load static %}
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
-<head>
+	<head>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-		integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
-		integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
-		crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
-		integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
-		crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
 
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>{% block title %}BublCal{% endblock %}</title>
-	<link rel="icon" type="image/x-icon" href="/static/img/logo2.jpg">
-	<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
-	<script src="{% static 'script.js' %}"></script>
-	{% block styles %}{% endblock styles %}
-	{% block scripts %}{% endblock scripts %}
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-</head>
-<body>
-	<div class="container-sm">
-		{% if loggedIn == True %}
-			<nav class="navbar navbar-light" style="background-color:#FFFFFF">
-				<div class="container">
-					<a class="navbar-brand" href="/app/glance">
-						<img src="{% static 'img/logo2.jpg' %}" alt="" width="30" height="24">
-						BublCal
-					</a>
+		<title>{% block title %}BublCal{% endblock %}</title>
 
-					<div class="dropdown d-flex justify-content-end">
+		<link rel="icon" type="image/x-icon" href="/static/img/logo2.jpg">
+		<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
 
-						<b><a class="dateetime" id='ct7'></a></b>
+		<script src="{% static 'script.js' %}"></script>
 
-						<!-- Dirty fix :/ -->
-						<div style="width:10px"></div>
+		{% block styles %}{% endblock styles %}
+		{% block scripts %}{% endblock scripts %}
 
-						<!-- Bubble Create button -->
-						<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-							Create Bubble
-						</button>
+	</head>
+	<body>
+		<div class="container-sm">
+			{% if loggedIn == True %}
+				<nav class="navbar navbar-light" style="background-color:#FFFFFF">
+					<div class="container">
+						<a class="navbar-brand" href="/app/glance">
+							<img src="{% static 'img/logo2.jpg' %}" alt="" width="30" height="24">
+							BublCal
+						</a>
 
-						<!-- Dirty fix :/ -->
-						<div style="width:10px"></div>
+						<div class="dropdown d-flex justify-content-end">
 
-						<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
-							data-bs-toggle="dropdown" aria-expanded="false">
-							Menu
-						</button>
+							<b><a class="dateetime" id='ct7'></a></b>
 
-						<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
-							<li><a class="dropdown-item" href="/app/profile">Profile</a></li>
-							<li><a class="dropdown-item" href="#">Settings</a></li>
-							<li><a class="dropdown-item" href="/app/deadview">View dead bubls</a></li>
-							<li><hr class="dropdown-divider"></li>
-							<li><a class="dropdown-item" href="/app/logout/">Logout</a></li>
-						</ul>
-					</div>
-				</div>
-			</nav>
+							<!-- Dirty fix :/ -->
+							<div style="width:10px"></div>
 
-			<center>
-				<!-- Bubble Create Form -->
-				<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-					aria-hidden="true">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<form class="loginBox" method="post" action="/app/bublcreate/" id="event-form">{% csrf_token %}
-								<div class="modal-header">
-									<h5 class="modal-title" id="exampleModalLabel">Create Bubble</h5>
-									<button type="button" class="btn-close" data-bs-dismiss="modal"
-										aria-label="Close"></button>
-								</div>
+							<!-- Bubble Create button -->
+							<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+								Create Bubble
+							</button>
 
-								<div class="modal-body">
+							<!-- Dirty fix :/ -->
+							<div style="width:10px"></div>
 
-									<div class="input-group mb-3">
-										<input name="name" type="text" class="form-control"
-											aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"
-											placeholder="Bubble Name" required>
-									</div>
+							<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+								data-bs-toggle="dropdown" aria-expanded="false">
+								Menu
+							</button>
 
-									<div class="input-group mb-3">
-										<input name="note" type="text" class="form-control"
-											aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"
-											placeholder="Extra Note">
-									</div>
-
-									<div class="input-group mb-3">
-										<input name="time" type="time" class="form-control"
-											aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"
-											required>
-										<input name="date" type="date" class="form-control"
-											aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"
-											required>
-									</div>
-
-									<div class="input-group mb-3">
-										<input name="length" type="number" class="form-control"
-											aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"
-											placeholder="Length (minutes)" required>
-									</div>
-
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-									<button type="submit" class="btn btn-primary">Create</button>
-								</div>
-							</form>
+							<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+								<li><a class="dropdown-item" href="/app/profile">Profile</a></li>
+								<li><a class="dropdown-item" href="#">Settings</a></li>
+								<li><a class="dropdown-item" href="/app/deadview">View dead bubls</a></li>
+								<li><hr class="dropdown-divider"></li>
+								<li><a class="dropdown-item" href="/app/logout/">Logout</a></li>
+							</ul>
 						</div>
 					</div>
-				</div>
-			</center>
-			{% include "nav_tabs.html" %}
-		{% else %}
-			<nav class="navbar navbar-light" style="background-color:#FFFFFF">
-				<div class="container">
-					<a class="navbar-brand" href="/app/">
-						<img src="{% static 'img/logo2.jpg' %}" alt="" width="30" height="24">
-						BublCal
-					</a>
+				</nav>
 
-					<div>
-						<a class="btn btn-primary" href="/app/login" role="button">Login</a>
-						<a class="btn btn-primary" href="/app/signup" role="button">Signup</a>
+				<center>
+					<!-- Bubble Create Form -->
+					<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+						aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<form class="loginBox" method="post" action="/app/bublcreate/" id="event-form">{% csrf_token %}
+									<div class="modal-header">
+										<h5 class="modal-title" id="exampleModalLabel">Create Bubble</h5>
+										<button type="button" class="btn-close" data-bs-dismiss="modal"
+											aria-label="Close"></button>
+									</div>
+
+									<div class="modal-body">
+
+										<div class="input-group mb-3">
+											<input name="name" type="text" class="form-control"
+												aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"
+												placeholder="Bubble Name" required>
+										</div>
+
+										<div class="input-group mb-3">
+											<input name="note" type="text" class="form-control"
+												aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"
+												placeholder="Extra Note">
+										</div>
+
+										<div class="input-group mb-3">
+											<input name="time" type="time" class="form-control"
+												aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"
+												required>
+											<input name="date" type="date" class="form-control"
+												aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"
+												required>
+										</div>
+
+										<div class="input-group mb-3">
+											<input name="length" type="number" class="form-control"
+												aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"
+												placeholder="Length (minutes)" required>
+										</div>
+
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+										<button type="submit" class="btn btn-primary">Create</button>
+									</div>
+								</form>
+							</div>
+						</div>
 					</div>
-				</div>
-			</nav>
-		{% endif %}
-	</div>
-	{% block content %}{% endblock content %}
-</body>
+				</center>
+				{% include "nav_tabs.html" %}
+			{% else %}
+				<nav class="navbar navbar-light" style="background-color:#FFFFFF">
+					<div class="container">
+						<a class="navbar-brand" href="/app/">
+							<img src="{% static 'img/logo2.jpg' %}" alt="" width="30" height="24">
+							BublCal
+						</a>
+
+						<div>
+							<a class="btn btn-primary" href="/app/login" role="button">Login</a>
+							<a class="btn btn-primary" href="/app/signup" role="button">Signup</a>
+						</div>
+					</div>
+				</nav>
+			{% endif %}
+		</div>
+		{% block content %}{% endblock content %}
+	</body>
 </html>

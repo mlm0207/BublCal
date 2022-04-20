@@ -6,40 +6,42 @@
 <script>
     function main()
     {
-        weeklyElement = document.getElementById("weekly1");
-        monthlyElement = document.getElementById("monthly1");
+        // Get the required tags
+        weeklyElement   = document.getElementById("weekly");
+        monthlyElement  = document.getElementById("monthly");
 
-        today = new Date();
+        // Get todays year, month, and day
+        today   = new Date();
+        year    = today.getFullYear();
+        month   = today.getMonth() + 1;
+        day     = today.getDate();
 
-        year = today.getFullYear();
-        month = today.getMonth() + 1;
-        day = today.getDate();
-
+        // Change the hyperlink
         weeklyElement.href = `/app/weekly/${month}/${day}/${year}/`;
         monthlyElement.href = `/app/monthly/${month}/${year}/`;
     }
 
-    window.onload = main;
+    window.onload = main; // on load
 </script>
 
+<!-- Nav tabs -->
 <div class="container">
-    <!-- Nav tabs -->
     <ul class="nav nav-tabs nav-justified" id="tabs" role="tablist">
         <li class="nav-item">
             <a
-                    id="daily1"
+                    id="daily"
                     class="nav-link {% if request.path == daily %} active {%endif%}"
                     href="{{daily}}">Day at a Glance</a>
         </li>
         <li class="nav-item">
             <a
-                    id="weekly1"
+                    id="weekly"
                     class="nav-link {% if 'weekly' in request.path %} active {%endif%}"
                     href="/app/weekly/">This Week</a>
         </li>
         <li class="nav-item">
             <a
-                    id="monthly1"
+                    id="monthly"
                     class="nav-link {% if 'monthly' in request.path %} active {%endif%}"
                     href="{{monthly}}">This Month</a>
         </li>

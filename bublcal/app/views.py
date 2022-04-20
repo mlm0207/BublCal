@@ -12,7 +12,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django import forms
 
-# Names of the days
+# TODO REMOVE / CHANGE THE LOCATION OF THESE
 DAY_NAMES = [
                 [ "Monday",     "Mon" ], 
                 [ "Tuesday",    "Tue" ], 
@@ -35,17 +35,17 @@ day_of_week = calendar.day_name[day_of_week - 1]
 # day and the next to days
 #################################
 def glance(request):
-    
-    # Make sure a user is logged in
+
+    # Check if user is logged in
     result = bublcal_lib.verifyLogin(request);
 
+    # Tell user the need to be signed in
     if(not result[0]):
-        return redirect("index");
+        return render(request, "login_message.html");
     
+    # Grab the user and update their bubls
     user = result[1];
-    
-    # Checks that no bubls are over due
-    bublcal_lib.timeCheck(user)
+    bublcal_lib.timeCheck(user);
 
     # Grab the active day and the two days after
     today       = datetime.date.today();
@@ -150,7 +150,6 @@ def glance(request):
     # Render the page
     return render(request, "glance.html", args);
 
-
 #################################
 # Profile
 # 
@@ -164,7 +163,7 @@ def profile(request):
 
     # Tell user the need to be signed in
     if(not result[0]):
-        return render(request, "loggin_message.html");
+        return render(request, "login_message.html");
     
     # Grab the user
     user = result[1];
@@ -195,7 +194,7 @@ def monthly(request, month, year):
 
     # Tell user the need to be signed in
     if(not result[0]):
-        return render(request, "loggin_message.html");
+        return render(request, "login_message.html");
     
     # Grab the user and update their bubls
     user = result[1];
@@ -256,7 +255,7 @@ def weekly(request, month, day, year):
 
     # Tell user the need to be signed in
     if(not result[0]):
-        return render(request, "loggin_message.html");
+        return render(request, "login_message.html");
     
     # Grab the user and update their bubls
     user = result[1];
@@ -320,7 +319,7 @@ def daily(request, month, day, year):
 
     # Tell user the need to be signed in
     if(not result[0]):
-        return render(request, "loggin_message.html");
+        return render(request, "login_message.html");
     
     # Grab the user and update their bubls
     user = result[1];
@@ -450,7 +449,7 @@ def createBubl(request):
 
     # Tell user the need to be signed in
     if(not result[0]):
-        return render(request, "loggin_message.html");
+        return render(request, "login_message.html");
     
     # Grab the user
     user = result[1];
@@ -486,7 +485,7 @@ def deleteBubl(request, id):
 
     # Tell user the need to be signed in
     if(not result[0]):
-        return render(request, "loggin_message.html");
+        return render(request, "login_message.html");
     
     # Grab the user and get the bubl to delete
     user = result[1];
@@ -520,7 +519,7 @@ def killbubl(request, id):
 
     # Tell user the need to be signed in
     if(not result[0]):
-        return render(request, "loggin_message.html");
+        return render(request, "login_message.html");
     
     # Grab the user and get the bubl to kill
     user = result[1];
@@ -551,7 +550,7 @@ def modifyBubl(request, id):
 
     # Tell user the need to be signed in
     if(not result[0]):
-        return render(request, "loggin_message.html");
+        return render(request, "login_message.html");
     
     # Grab the user and get the bubl to modify
     user = result[1];
@@ -612,7 +611,7 @@ def deadview(request):
 
     # Tell user the need to be signed in
     if(not result[0]):
-        return render(request, "loggin_message.html");
+        return render(request, "login_message.html");
     
     # Grab the user and get the dead bubls
     user = result[1];
@@ -638,7 +637,7 @@ def restorebubl(request, id):
 
     # Tell user the need to be signed in
     if(not result[0]):
-        return render(request, "loggin_message.html");
+        return render(request, "login_message.html");
     
     # Grab the user and the bubl to restore
     user = result[1];
