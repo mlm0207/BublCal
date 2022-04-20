@@ -96,7 +96,7 @@ def glance(request):
             if(day == overmorrow.day):
                 overmorrowTasks += 1;
 
-            # Add bubbls that do fall under the active day
+            # Add bubls that do fall under the active day
             if(day == today.day):
 
                 # Go through each time slot for sorting
@@ -363,7 +363,7 @@ def daily(request, month, day, year):
             if(day == tomorrow.day):
                 tomorrowTasks += 1;
 
-            # Add bubbls that do fall under the active day
+            # Add bubls that do fall under the active day
             if(day == today.day):
 
                 # Go through each time slot for sorting
@@ -521,14 +521,22 @@ def killbubl(request, id):
 
     return redirect(request.META.get('HTTP_REFERER'));
 
-# Modify a bubble
+#################################
+# Modify bubl
+# 
+# Allows users to modify bubls
+# information
+#################################
 def modifyBubl(request, id):
-    # Make sure a user is logged in
+    
+    # Check if user is logged in
     result = bublcal_lib.verifyLogin(request);
-    
+
+    # Tell user the need to be signed in
     if(not result[0]):
-        return redirect("index");
+        return render(request, "loggin_message.html");
     
+    # Grab the user and get the bubl to modify
     user = result[1];
     bubl = bublcal_lib.getBubbleObject(id);
 
@@ -540,8 +548,10 @@ def modifyBubl(request, id):
     if(bubl.email.email != user):
         return redirect("glance-view");
 
-    # Make sure user is not updating info
+    # Make sure user is submitting data
     if(request.method == "POST"):
+
+        # Save the new info
         bubl.name = request.POST["name"];
         bubl.note = request.POST["note"];
         bubl.date = request.POST["date"];
@@ -550,28 +560,21 @@ def modifyBubl(request, id):
 
         bubl.save();
 
-        return redirect("glance-view");
+        #TODO add feature that tells if bubl was modified
+        return redirect(request.META.get('HTTP_REFERER'));
 
-    else: # If first time viewing
+    return redirect("index");
 
-        # Get correct format
-        bDate = str(bubl.date.year) + '-' + str(bubl.date.month).zfill(2) + '-' + str(bubl.date.day).zfill(2);
-        bTime = str(bubl.time.hour).zfill(2) + ':' + str(bubl.time.minute).zfill(2) + ":00";
-
-        args = {
-                    "bName": bubl.name,
-                    "bNote": bubl.note,
-                    "bDate": bDate,
-                    "bTime": bTime,
-                    "bLength": bubl.length,
-                    "bID":  bubl.id,
-                };
-
-        return render(request, "bubl_modify.html", args);
-
-# Main Page View
+#################################
+# Index
+# 
+# Shows the index view for new
+# users, redirects logged in
+# users to their glance view
+#################################
 def index(request):
-     # Make sure a user is logged in
+    
+    # Make sure a user is logged in
     result = bublcal_lib.verifyLogin(request);
 
     if(not result[0]):
@@ -579,33 +582,48 @@ def index(request):
     
     return redirect("glance-view");
 
-# Dead Bubl View
+#################################
+# Dead bubl view
+# 
+# Allows users to view their
+# dead bubls
+#################################
 def deadview(request):
-     # Make sure a user is logged in
+    
+    # Check if user is logged in
     result = bublcal_lib.verifyLogin(request);
 
+    # Tell user the need to be signed in
     if(not result[0]):
-        return redirect("index");
+        return render(request, "loggin_message.html");
     
+    # Grab the user and get the dead bubls
     user = result[1];
-
     bubls = bublcal_lib.getUserDeadBubls(user);
 
-    args = {
-        "loggedIn": True,
-        "bubls": bubls,
-    };
+    args =  {
+                "loggedIn": True,
+                "bubls": bubls,
+            };
 
     return render(request, "deadview.html", args);
 
-# Restore a bubl
+#################################
+# Restore bubl
+# 
+# Allows users to restore dead
+# bubls
+#################################
 def restorebubl(request, id):
-    # Make sure a user is logged in
+    
+    # Check if user is logged in
     result = bublcal_lib.verifyLogin(request);
-    
+
+    # Tell user the need to be signed in
     if(not result[0]):
-        return redirect("index");
+        return render(request, "loggin_message.html");
     
+    # Grab the user and the bubl to restore
     user = result[1];
     bubl = bublcal_lib.getBubbleObject(id);
 
@@ -617,6 +635,7 @@ def restorebubl(request, id):
     if(bubl.email.email != user):
         return redirect("dead-view");
     
+    # Restore it!
     bublcal_lib.restoreBubl(request, id);
 
     return redirect("dead-view");
