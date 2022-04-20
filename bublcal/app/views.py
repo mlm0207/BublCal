@@ -418,17 +418,27 @@ def daily(request, month, day, year):
 
     return render(request, "day.html", args);
 
-# Create a bubble
+#################################
+# Create bubl
+# 
+# Allows users to create bubls
+# if data is being passed, if
+# not then we just redirect to
+# index
+#################################
 def createBubl(request):
-    # Make sure user is logged in
+    
+    # Check if user is logged in
     result = bublcal_lib.verifyLogin(request);
 
+    # Tell user the need to be signed in
     if(not result[0]):
-        return redirect("index");
+        return render(request, "loggin_message.html");
     
+    # Grab the user
     user = result[1];
 
-    # If data is being submitted
+    # Make sure data is being submitted
     if(request.method == "POST"):
 
         # Grab bubble data
@@ -440,21 +450,28 @@ def createBubl(request):
 
         result = bublcal_lib.createBubble(user, name, note, date, time, length);
 
-        if(result[0]):
-            return redirect(request.META.get('HTTP_REFERER'));
-        else:
-            return render(request, "bubl_create.html");
+        # TODO add feature that tells users if bubl was created or not
+        return redirect(request.META.get('HTTP_REFERER'));
 
-    return render(request, "bubl_create.html");
+    return redirect("index");
 
-# Delete a bubble
+#################################
+# Delete bubl
+# 
+# Allows users to delete bubls
+# this WILL DELETE the bubl from
+# the database
+#################################
 def deleteBubl(request, id):
-    # Make sure a user is logged in
+    
+    # Check if user is logged in
     result = bublcal_lib.verifyLogin(request);
-    
+
+    # Tell user the need to be signed in
     if(not result[0]):
-        return redirect("index");
+        return render(request, "loggin_message.html");
     
+    # Grab the user and get the bubl to delete
     user = result[1];
     bubl = bublcal_lib.getBubbleObject(id);
 
@@ -466,18 +483,29 @@ def deleteBubl(request, id):
     if(bubl.email.email != user):
         return redirect(request.META.get('HTTP_REFERER'));
     
+    # Delete it!
     bublcal_lib.deleteBubble(request, id);
 
+    # TODO add feature that tells user if the bubl was deleted
     return redirect(request.META.get('HTTP_REFERER'));
 
-# Kill a bubl
+#################################
+# Kill bubl
+# 
+# Allows users to kill bubls
+# this WILL NOT DELETE the bubl 
+# from the database
+#################################
 def killbubl(request, id):
-    # Make sure a user is logged in
+    
+    # Check if user is logged in
     result = bublcal_lib.verifyLogin(request);
-    
+
+    # Tell user the need to be signed in
     if(not result[0]):
-        return redirect("index");
+        return render(request, "loggin_message.html");
     
+    # Grab the user and get the bubl to kill
     user = result[1];
     bubl = bublcal_lib.getBubbleObject(id);
 
