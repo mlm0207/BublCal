@@ -28,7 +28,12 @@ year, week_num, day_of_week = current_date.isocalendar()
 month_year = current_date.strftime("%B") + " " + str(year)
 day_of_week = calendar.day_name[day_of_week - 1]
 
-# Daily/"At a glance" view
+#################################
+# Glance view
+# 
+# Displays a view of the users
+# day and the next to days
+#################################
 def glance(request):
     
     # Make sure a user is logged in
@@ -146,16 +151,28 @@ def glance(request):
     return render(request, "glance.html", args);
 
 
+#################################
+# Profile
+# 
+# Allows users to view and 
+# change their profile info
+#################################
 def profile(request):
-    result = bublcal_lib.verifyLogin(request)
-    if(not result[0]):
-        return redirect("index")
-    
-    usermail = result[1];
 
+    # Check if user is logged in
+    result = bublcal_lib.verifyLogin(request);
+
+    # Tell user the need to be signed in
+    if(not result[0]):
+        return render(request, "loggin_message.html");
+    
+    # Grab the user
+    user = result[1];
+
+    # TODO update this
     if(request.method == "POST"):
         for user in UserData.objects.all():
-            if user.email == usermail:
+            if user.email == user:
                 user.firstName = request.POST["fName"];
                 user.lastName = request.POST["lName"];
                 user.birthday = request.POST["birthDay"];
