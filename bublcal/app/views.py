@@ -28,7 +28,6 @@ year, week_num, day_of_week = current_date.isocalendar()
 month_year = current_date.strftime("%B") + " " + str(year)
 day_of_week = calendar.day_name[day_of_week - 1]
 
-# View profile
 def profile(request):
     result = bublcal_lib.verifyLogin(request)
     if(not result[0]):
@@ -47,81 +46,99 @@ def profile(request):
     
     return render(request, "profile.html")
 
+#################################
 # Monthly view
+# 
+# Displays a view of the month
+# and allows for the users to view
+# other months
+#################################
 def monthly(request, month, year):
-        
-    # Make sure a user is logged in
+
+    # Check if user is logged in
     result = bublcal_lib.verifyLogin(request);
 
+    # Tell user the need to be signed in
     if(not result[0]):
-        return redirect("index");
+        return render(request, "loggin_message.html");
     
+    # Grab the user and update their bubls
     user = result[1];
-    
-    # Checks that no bubls are over due
     bublcal_lib.timeCheck(user);
 
     # Grab the users bubls
     bubls = bublcal_lib.getUserBubbles(user);
 
+    # Grab and create the links for the previous and next months
     nextMonth = bublcal_lib.nextMonthDate(month, year);
     prevMonth = bublcal_lib.previousMonthDate(month, year);
 
-    nextMonthLink = "/app/monthly/" + str(nextMonth[0]) + "/" + str(nextMonth[1]) + "/";
-    prevMonthLink = "/app/monthly/" + str(prevMonth[0]) + "/" + str(prevMonth[1]) + "/";
+    nextMonthLink = F"/app/monthly/{str(nextMonth[0])}/{str(nextMonth[1])}/";
+    prevMonthLink = F"/app/monthly/{str(prevMonth[0])}/{str(prevMonth[1])}/";
     
+    # Get the month weeks to be displayed
     weeks = bublcal_lib.getMonthWeeks(year, month);
-    today = datetime.datetime(month=month, year=year, day=1);
 
-    thisMonthBubls = [];
+    # Get month firstDay
+    monthFirstDay = datetime.datetime(month=month, year=year, day=1);
+    monthName = monthFirstDay.strftime("%B");
+
+    # Get todays actual month and day for proper bubl filtering & month rendering
+    today = datetime.datetime.now();
+
+    # This months bubls
+    monthBubls = [];
 
     for bubl in bubls:
         if(bubl.date.year == year and bubl.date.month == month):
-            thisMonthBubls.append(bubl);
-
+            monthBubls.append(bubl);
+    
     args =  {
-                "loggedIn"  : True,
-                "weeks": weeks,
-                "month": month,
-                "monthName": today.strftime("%B"),
-                "dayToday": datetime.datetime.now().day,
-                "monthToday": datetime.datetime.now().month,
-                "nextMonthLink": nextMonthLink,
-                "prevMonthLink": prevMonthLink,
-                "bubls": thisMonthBubls,
-                "year": year,
+                "loggedIn"      : True,
+                "weeks"         : weeks,
+                "month"         : month,
+                "year"          : year,
+                "monthName"     : monthName,
+                "today"         : today.day,
+                "nextMonthLink" : nextMonthLink,
+                "prevMonthLink" : prevMonthLink,
+                "bubls"         : monthBubls,
             };
 
     return render(request, "monthly.html", args);
 
+#################################
 # Weekly view
+# 
+# Displays a view of the week
+# and allows for the users to view
+# other weeks
+#################################
 def weekly(request, month, day, year):
         
-    # Make sure a user is logged in
+    # Check if user is logged in
     result = bublcal_lib.verifyLogin(request);
 
+    # Tell user the need to be signed in
     if(not result[0]):
-        return redirect("index");
+        return render(request, "loggin_message.html");
     
+    # Grab the user and update their bubls
     user = result[1];
-    
-    # Checks that no bubls are over due
-    bublcal_lib.timeCheck(user)
+    bublcal_lib.timeCheck(user);
 
     # Grab the users bubls
     bubls = bublcal_lib.getUserBubbles(user);
 
-    # Get today
+    # Get the days and week that we are viewing
     today = datetime.datetime(year=year, month=month, day=day);
+    week = bublcal_lib.getWeekFromDay(today);
 
-    # Get the week
-    weeks = bublcal_lib.getWeekFromDay(today);
-
-    week = {};
+    weekFormatted = {};
 
     # Format the week
-    for day in weeks:
-        week[day.strftime("%a")] = day.day;
+    for day in week:
+        weekFormatted[day.strftime("%a")] = day.day;
 
     # Get next & previous week links
     nextWeek = bublcal_lib.getNextWeek(today)[0];
@@ -139,18 +156,20 @@ def weekly(request, month, day, year):
             day = str(day) + "rd"
         return day
 
-    return render(request, "weekly.html", {
-        "loggedIn"  : True,
-        "bubls": bubls,
-        "day_of_week": day_of_week,
-        "day": suffix(today.day),
-        "week": week,
-        "year": year,
-        "month": month,
-        "month_year": today.strftime("%B %Y"),
-        "nextWeekLink": nextWeek.strftime("/app/weekly/%m/%d/%Y"),
-        "prevWeekLink": prevWeek.strftime("/app/weekly/%m/%d/%Y"),
-    })
+    args = {
+        "loggedIn"          : True,
+        "bubls"             : bubls,
+        "day_of_week"       : day_of_week,
+        "day"               : suffix(today.day),
+        "week"              : weekFormatted,
+        "year"              : year,
+        "month"             : month,
+        "month_year"        : today.strftime("%B %Y"),
+        "nextWeekLink"      : nextWeek.strftime("/app/weekly/%m/%d/%Y"),
+        "prevWeekLink"      : prevWeek.strftime("/app/weekly/%m/%d/%Y"),
+    };
+
+    return render(request, "weekly.html", args);
 
 # Create a bubble
 def createBubl(request):
