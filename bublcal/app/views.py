@@ -166,12 +166,12 @@ def profile(request):
         return render(request, "login_message.html");
     
     # Grab the user
-    user = result[1];
+    usermail = result[1];
 
     # TODO update this
     if(request.method == "POST"):
         for user in UserData.objects.all():
-            if user.email == user:
+            if user.email == usermail:
                 user.firstName = request.POST["fName"];
                 user.lastName = request.POST["lName"];
                 user.birthday = request.POST["birthDay"];
