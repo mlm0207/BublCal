@@ -39,182 +39,41 @@
                         <tbody>
                             {% for week in weeks %}
                                 <tr>
-                                {% for day in week %}
+                                    {% for day in week %}
 
-                                    <td scope="col"
-                                    
-                                    {% if day.day == dayToday and day.month == monthToday %}
-                                        class="active"
-                                    {% else %}
+                                        <td scope="col"
+                                        
+                                        {% if day.day == today.day and day.month == today.month %}
+                                            class="activeDay"
+                                        {% else %}
 
-                                        class="day"
-
-                                        {% if day.month != month %}
-                                            style="color:gray;"
+                                            {% if day.month != month %}
+                                                style="color:gray;"
+                                            {% endif %}
                                         {% endif %}
-                                    {% endif %}
 
-                                    >
-                                        <a href="/app/daily/{{month}}/{{day.day}}/{{year}}">
-                                            <span>{{day.day}}</span>
-
-
-                                            {% for bubl in bubls %}
-                                                {% if bubl.date.day == day.day and bubl.date.month == day.month %}
-                                                    <span>•</span>
-                                                {% endif %}
-                                            {% endfor %}
+                                        >
+                                            <a href="/app/daily/{{month}}/{{day.day}}/{{year}}">
+                                                <span>{{day.day}}</span>
 
 
-                                        </a>
-                                    </td>
+                                                {% for bubl in bubls %}
+                                                    {% if bubl.date.day == day.day and bubl.date.month == day.month %}
+                                                        <span style="color: red;">•</span>
+                                                    {% endif %}
+                                                {% endfor %}
 
-                                {% endfor %}
+
+                                            </a>
+                                        </td>
+
+                                    {% endfor %}
                                 </tr>
                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
-
-                <!--
-
-                <div class="cal-data">
-                    <ul class="weekdays">
-                        <li>Mo</li>
-                        <li>Tu</li>
-                        <li>We</li>
-                        <li>Th</li>
-                        <li>Fr</li>
-                        <li>Sa</li>
-                        <li>Su</li>
-                    </ul>
-                    <ul class="weekdays">
-                        <li>
-                            <span>1</span>
-                            <div class="bubldot">a</div>
-                        </li>
-                        {% for week in weeks %}
-                            {% for day in week %}
-                                {% if day.day == dayToday and day.month == monthToday %}
-                                    <li class="active">{{day.day}}</li>
-                                {% else %}
-                                    {% if day.month == month %}
-                                        <li class="dborder">{{day.day}}</li>
-                                    {% else %}
-                                        <li class="dborder" style="color:gray;">{{day.day}}</li>
-                                    {% endif %}
-                                {% endif %}
-                            {% endfor %}
-                        {% endfor %}
-                    </ul>
-                </div>
-                -->
             </div>
         </div>
     </body>
-
-    <!--
-    <body class="bodymonthly" onload="calander()">
-        <div class="container pt-4 pb-2">
-            <div class="main-body">
-                <h1 class="month">
-                    <div>
-                        <p class='month-title'>
-                            <span style="font-size:50px" class="month-name"></span>
-                        <p class="prev">&#10094;</p>
-                        <p class="next">&#10095;</p>
-                        <p id="dateDisplay"></p>
-                        <span class='year' style="font-size:30px"></span>
-                        </p>
-                    </div>
-                </h1>
-                <div class="cal-data">
-                    <ul class="weekdays">
-                        <li>Mo</li>
-                        <li>Tu</li>
-                        <li>We</li>
-                        <li>Th</li>
-                        <li>Fr</li>
-                        <li>Sa</li>
-                        <li>Su</li>
-                    </ul>
-                    <ul class="days">
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <script>
-            let daylist = document.querySelector('.days')
-            let monthName = document.querySelector('.month-name')
-            let yearName = document.querySelector('.year')
-            let prev = document.querySelector('.prev')
-            let next = document.querySelector('.next')
-            let dateDisplay = document.querySelector('#dateDisplay')
-
-
-            let monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'july', 'August', 'September', 'October', 'November', 'December']
-            var dt = new Date();
-            var month = dt.getMonth() + 1;
-            var year = dt.getFullYear();
-            var currentDay = dt.getDate();
-
-            prev.addEventListener('click', event => {
-                if (month === 1) {
-                    month = 12;
-                    year -= 1
-                } else {
-                    month = month - 1;
-                }
-                calander();
-            })
-            next.addEventListener('click', event => {
-                if (month === 12) {
-                    month = 1;
-                    year += 1
-                } else {
-                    month = month + 1;
-
-                }
-                calander()
-            })
-
-            const calander = () => {
-                daylist.innerHTML = ''
-                daysInMonth = new Date(year, month, 0).getDate();
-                dayNumber = new Date(year, month - 1, 1).getDay();
-
-                console.log(year, month, monthName, dayNumber)
-
-                monthName.innerHTML = monthNames[month - 1]
-                yearName.innerHTML = year;
-                dateDisplay.textContent = currentDay
-
-                let gaps;
-                if (dayNumber === 0) {
-                    gaps = 6
-                    console.log(gaps)
-                } else {
-                    gaps = dayNumber - 1
-                }
-
-                for (var day = -gaps + 1; day <= daysInMonth; day++) {
-                    const days = document.createElement('li')
-
-                    if (day <= 0) {
-                        days.innerHTML = "";
-                        daylist.appendChild(days);
-                    } else if (day === currentDay && month === dt.getMonth() + 1 && year === dt.getFullYear()) {
-                        days.setAttribute('class', 'active');
-                        days.innerHTML = day;
-                        daylist.appendChild(days);
-                    } else {
-                        days.innerHTML = day;
-                        daylist.appendChild(days);
-                    }
-                }
-            }
-
-        </script>
-    </body>
--->
 {% endblock content %}

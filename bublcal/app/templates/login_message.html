@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Login required{% endblock title %}
+
+{% block content %}
+    <div class="container-sm">
+        <p>You must be logged in to use this feature.</p>
+        <p>Please <a href="/app/login/">login</a> or <a href="/app/signup/">create an account</a></p>
+    </div>
+{% endblock content %}
