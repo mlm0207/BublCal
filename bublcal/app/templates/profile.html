@@ -24,28 +24,28 @@
           <center>
             <h3>Personal information</h3><br>
 
-            <form class="form" role="form">
+            <form class="form" role="form" method="post">{% csrf_token %}
 
 
               <div class="fName">First name: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <input class="form-control" type="text" value="">
+                <input name="fName" class="form-control" type="text" value="">
               </div>
               <br>
 
 
               <div class="lName">Last name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <input class="form-control" type="text" value="">
+                <input name="lName" class="form-control" type="text" value="">
               </div>
               <br>
 
-              <div class="birthDay">Date of Birth:&nbsp;&nbsp;&nbsp;
-                <input class="form-control" type="text" value="">
+              <div class="birthDay">Date of Birth (YYYY-MM-DD):&nbsp;&nbsp;&nbsp;
+                <input name="birthDay" class="form-control" type="text" value="">
               </div>
               <br>
               <div>
                 <div class="email">
                   Email:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  <input type="text" value="">
+                  <input name="email" type="text" value="">
                 </div>
               </div><br>
               <div class="button">
