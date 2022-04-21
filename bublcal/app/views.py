@@ -177,6 +177,8 @@ def profile(request):
                 user.birthday = request.POST["birthDay"];
                 user.email = request.POST["email"];
                 user.save()
+                
+                return redirect("index")
     
     return render(request, "profile.html")
 
