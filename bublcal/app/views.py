@@ -177,10 +177,19 @@ def profile(request):
                 user.birthday = request.POST["birthDay"];
                 user.email = request.POST["email"];
                 user.save()
-                
+
                 return redirect("index")
+
+    # args for default form values
+    args = {}
+    for user in UserData.objects.all():
+        if user.email == usermail:
+            args["first_name"] = user.firstName
+            args["last_name"] = user.lastName
+            args["bday"] = user.birthday.strftime("%Y-%m-%d")
+            args["email"] = user.email
     
-    return render(request, "profile.html")
+    return render(request, "profile.html", args)
 
 #################################
 # Monthly view
