@@ -168,28 +168,37 @@ def profile(request):
     # Grab the user
     usermail = result[1];
 
-    # TODO update this
+    correctPassword = True;
+    infoUpdated = False;
+
+    # Update info if passed
     if(request.method == "POST"):
         for user in UserData.objects.all():
             if user.email == usermail:
-                user.firstName = request.POST["fName"];
-                user.lastName = request.POST["lName"];
-                user.birthday = request.POST["birthDay"];
-                user.email = request.POST["email"];
-                user.save()
-
-                return redirect("index")
+                if user.password == request.POST["password"]:
+                    user.firstName = request.POST["fName"];
+                    user.lastName = request.POST["lName"];
+                    user.birthday = request.POST["birthDay"];
+                    user.save();
+                    infoUpdated = True;
+                else:
+                    correctPassword = False;
 
     # args for default form values
-    args = {}
+    args = { 
+                "loggedIn": True, 
+                "correctPassword": correctPassword,
+                "infoUpdated": infoUpdated, 
+            };
+
     for user in UserData.objects.all():
         if user.email == usermail:
-            args["first_name"] = user.firstName
-            args["last_name"] = user.lastName
-            args["bday"] = user.birthday.strftime("%Y-%m-%d")
-            args["email"] = user.email
+            args["first_name"] = user.firstName;
+            args["last_name"] = user.lastName;
+            args["bday"] = user.birthday.strftime("%Y-%m-%d");
+            args["email"] = user.email;
     
-    return render(request, "profile.html", args)
+    return render(request, "profile.html", args);
 
 #################################
 # Monthly view
@@ -706,7 +715,7 @@ def signup(request):
 #################################
 # Login
 # 
-# Allows users to login
+# Allows users to login/
 #################################
 def login(request):
 
