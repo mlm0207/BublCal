@@ -5,6 +5,12 @@ import calendar
 from app.models import UserData
 from app.models import Bubl
 
+#################################
+# nextMonthDate
+# 
+# returns the next month and year
+# using given month/year
+#################################
 def nextMonthDate(month, year):
     month += 1;
 
@@ -14,6 +20,12 @@ def nextMonthDate(month, year):
 
     return [month, year];
 
+#################################
+# previousMonthDate
+# 
+# returns the previous month and 
+# year using given month/year
+#################################
 def previousMonthDate(month, year):
     month -= 1;
 
@@ -23,16 +35,20 @@ def previousMonthDate(month, year):
 
     return [month, year];
 
+#################################
+# getWeekFromDay
+# 
 # Get the week from a given day
+#################################
 def getWeekFromDay(day):
 
-    # The name of the game is find monday
-    # if the day given is not a monday, then we will go back 1 day until we find monday
-    # once monday is found we return a list of datetime objects mon-sun
+    # The name of the game is find sunday
+    # if the day given is not a sunday, then we will go back 1 day until we find sunday
+    # once sunday is found we return a list of datetime objects mon-sun
 
     dayName = day.strftime("%A");
 
-    if(dayName == "Monday"): # Found!
+    if(dayName == "Sunday"): # Found!
 
         days = [];
 
@@ -47,7 +63,11 @@ def getWeekFromDay(day):
     else:
         return getWeekFromDay(day - datetime.timedelta(1)); # Go back 1 day
 
+#################################
+# getMonthWeeks
+# 
 # Get all weeks associated with this month
+#################################
 def getMonthWeeks(year, month):
     firstDay    = datetime.datetime(year=year, month=month, day=1);
     lastDay     = calendar.monthrange(year, month)[1];

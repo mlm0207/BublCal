@@ -14,6 +14,7 @@ urlpatterns = [
     path("bublcreate/",         views.createBubl,   name="create-bubl"),
     path("delete/<int:id>/",    views.deleteBubl,   name="delete-bubl"),
     path("modify/<int:id>/",    views.modifyBubl,   name="modify-bubl"),
+    path("complete/<int:id>/",  views.complete,     name="complete-bubl"),
     path("kill-bubl/<int:id>/", views.killbubl,     name="kill-bubl"),
     path("restore/<int:id>/",   views.restorebubl,  name="restore-bubl"),
 

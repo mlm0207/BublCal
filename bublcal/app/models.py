@@ -8,15 +8,18 @@ class UserData(models.Model):
     firstName   = models.CharField(max_length=32)
     lastName    = models.CharField(max_length=32)
     birthday    = models.DateField()
+
+    # Future use
     #Not needed atm - time_zone = models.IntegerField()
     #Not needed atm - retention_date = models.DateField()
 
 class Bubl(models.Model):
-    email = models.ForeignKey(UserData, on_delete=models.CASCADE);
-    name = models.CharField(max_length=32);
-    note = models.CharField(max_length=32);
-    date = models.DateField();
-    time = models.TimeField(auto_now=False, auto_now_add=False);
-    length = models.IntegerField();
-    moved = models.IntegerField(default=0);
-    dead = models.BooleanField(default=False);
+    email   = models.ForeignKey(UserData, on_delete=models.CASCADE);
+    name    = models.CharField(max_length=32);
+    note    = models.CharField(max_length=32);
+    date    = models.DateField();
+    time    = models.TimeField(auto_now=False, auto_now_add=False);
+    length  = models.IntegerField();
+    moved   = models.IntegerField(default=0);
+    dead    = models.BooleanField(default=False);
+    done    = models.BooleanField(default=False);

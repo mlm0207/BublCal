@@ -4,161 +4,227 @@
 {% block title %}Daily View{% endblock title %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{% static 'main/glance.css' %}">
+    {#<link rel="stylesheet" type="text/css" href="{% static 'main/glance.css' %}">#}
 {% endblock styles %}
 
 {% block content %}
-    <span class="container pt-4"></span>
-    
-    <!-- Day navigation buttons -->
-    <center>
-        <a class="btn btn-primary" href="/app/daily/{{previousDayLink}}" role="button">Previous Day</a>
-        <a class="btn btn-primary" href="/app/daily/{{nextDayLink}}" role="button">Next Day</a>        
-    </center>
-    
-    <!-- Day container -->
-    <div class="container pt-2">
-    <div class="daily-table">
-        {# Check if the day passed is valid #}
-        {% if validDate == True %}
-            <div class="row">
+    <style>
+        /* Base background look */
+        .baseBG
+        {
+            border              : 2px solid black;
+            box-shadow          : 0 8px 16px 0 rgba(0, 0, 0, 0.3), 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+            background-color    : lightgray;
+            background-image    : linear-gradient(to bottom right,#fafad2, #b0e0e6 );
+        }
 
-                <!-- Yesterday -->
-                <div class="col">
-                
-                    <center>
-                        <h3>{{ yesterday_name }}</h3>
-                    </center>
-                    
-                    {# Side-bubbles for yesterday #}
-                    
-                    <div class="col">
-                        <center>
-                            {% for i in yesterdayTasks %}
-                                <div class="sideBubble"></div>
-                            {% endfor %}
-                        </center>
-                    </div>
+        /* Column headers */
+        .left
+        {
+            border-left     : 1px solid black;
+            border-bottom   : 2px solid black;
+        }
 
-                </div>
+        /* Column content */
+        .right
+        {
+            border-left     : 2px solid black;
+            border-bottom   : 2px solid black;
+        }
 
-                <!-- Today -->
-                <div class="col-6">
-                    
-                    <center>
-                        <h2>{{ today_name }}</h2>
-                        <h5>{{today}}</h5>
-                    </center>
-                    
-                    {# Bubble Row #}
-                    <div class="row">
-                        <div class="col-6">
+        /* Time slot underline */
+        .timeslot
+        {
+            border-bottom: 1px solid black;
+        }
 
-                            {# Display all timeslots available for the day #}
-                            {% for slot in timeSlots %}
-                                <div class="timeslot">{{slot.1}}</div>
+        /* Clickable style */
+        .bubl
+        {
+            color               : black;
+            background-image    : linear-gradient(to bottom right,
+                                                rgba(207, 241, 255, 1), 
+                                                rgba(120, 217, 255, 1));
+
+            border-radius       : 50%;
+            display             : flex;
+            align-items         : center;
+            justify-content     : center;
+
+            width               : 100px;
+            height              : 100px;
+
+            margin-top          : 5%;
+            margin-bottom       : 5%;
+        }
+
+        /* Side bubl style */
+        .sideBubl
+        {
+            background-image    : linear-gradient(to bottom right,
+                                            rgba(207, 241, 255, 1), 
+                                            rgba(120, 217, 255, 1));
             
-                                {# Display bubbles that fall under the time slot #}
-                                {% for bubl in slot.2 %}
-                                    <!-- Bubble -->
-                                    <button type="button" class="btn btn-primary bubble" data-bs-toggle="modal" data-bs-target="#bubl-{{bubl.id}}" title="At {{bubl.time}}">
-                                        {{ bubl.name }}
-                                    </button>
-                                    
-                                    <!-- Bubble Info View -->
-                                    <div class="modal fade" id="bubl-{{bubl.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">{{ bubl.name }}</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    At {{ bubl.time }} {{ bubl.date }} for {{ bubl.length }} minutes
-                                                    <br>
-                                                    {{ bubl.note }}
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <a class="btn btn-danger" href="/app/kill-bubl/{{bubl.id}}" role="button">Delete</a>
-                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bubl-{{ bubl.id }}-edit">Edit</button>
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                </div>
-                                            </div>
-                                        </div>
+            border              : 1px solid rgba(0, 0, 0, 0.411);
+            border-radius       : 50%;
+            
+            width               : 30px;
+            height              : 30px;
+            
+            margin-top          : 10%;
+            margin-bottom       : 10%;
+        }
+    </style>
+
+    <br>
+
+    {# Title and navigation #}
+    <div class="container">
+        <div class="row">
+
+            {# Previous day #}
+            <div class="col d-flex justify-content-center">
+                <a type="button" class="btn btn-primary" title="Previous Day" href="/app/daily/{{previousDayLink}}">&lt;</a>
+            </div>
+            
+            {# Title #}
+            <div class="col-5 d-flex justify-content-center">
+                <h5 class="text-center">Schedule of {{ today }}</h5>
+            </div>
+
+            {# Next day #}
+            <div class="col d-flex justify-content-center">
+                <a type="button" class="btn btn-primary" title="To Next Day" href="/app/daily/{{nextDayLink}}">&gt;</a>
+            </div>
+        </div>
+    </div>
+
+    <br>
+
+    {# Bubls and side bubls #}
+    <div class="container baseBG">
+
+        {# Column names #}
+        <div class="row">
+            <div class="col d-flex justify-content-center fw-bold left">{{ yesterday_name }}</div>
+            <div class="col-8 d-flex justify-content-center fw-bold right">{{ today_name }}</div>
+            <div class="col d-flex justify-content-center fw-bold right">{{ tomorrow_name }}</div>
+        </div>
+
+        {# Bubls #}
+        <div class="row">
+
+            {# Yesterday side bubls #}
+            <div class="col d-flex justify-content-center left" onclick="location.href='/app/daily/{{previousDayLink}}'">
+                <center>
+                    {% for bubl in yesterdayTasks %}
+                        <div class="sideBubl" title="{{ bubl.name }} @ {{ bubl.time }}"></div>
+                    {% endfor %}
+                </center>
+            </div>
+
+            {# Today bubls #}
+            <div class="col-8 right">
+
+                {# Display all timeslots available for the day #}
+                {% for slot in timeSlots %}
+
+                    <div class="timeslot">{{ slot.1 }}</div>
+
+                    <center>
+
+                    {# Display bubls that fall under the time slot #}
+                    {% for bubl in slot.2 %}
+
+                        {# Bubl button #}
+                        <button type="button" class="btn btn-primary bubl" data-bs-toggle="modal" data-bs-target="#bubl-{{bubl.id}}" title="At {{bubl.time}}">
+                            {{ bubl.name }}
+                        </button>
+
+                        {# Bubl Info View #}
+                        <div class="modal fade" id="bubl-{{bubl.id}}" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">{{ bubl.name }}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                     </div>
-            
-                                    <!-- Bubble Edit Form -->
-                                    <div class="modal fade" id="bubl-{{ bubl.id }}-edit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <form method="post" action="/app/modify/{{bubl.id}}/">{% csrf_token %}
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Edit Bubble</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-            
-                                                    <div class="modal-body">
-            
-                                                        <!-- Name -->
-                                                        <div class="input-group mb-3">
-                                                            <input name="name" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="Bubble Name" value="{{bubl.name}}" required>
-                                                        </div>
-                                                            
-                                                        <!-- Note -->
-                                                        <div class="input-group mb-3">
-                                                            <input name="note" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="Extra Note" value="{{bubl.note}}">
-                                                        </div>
-                                                        
-                                                        <!-- Date & Time -->
-                                                        <div class="input-group mb-3">
-                                                            <input name="time" type="time" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value="{{bubl.time.hour|stringformat:'02d'}}:{{bubl.time.minute|stringformat:'02d'}}" required>
-                                                            <input name="date" type="date" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value="{{bubl.date.year}}-{{bubl.date.month|stringformat:'02d'}}-{{bubl.date.day|stringformat:'02d'}}" required>
-                                                        </div>
-            
-                                                        <!-- Length -->
-                                                        <div class="input-group mb-3">
-                                                            <input name="length" type="number" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value="{{bubl.length}}" placeholder="Length (minutes)">
-                                                        </div>
-                                                        
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                        <button type="submit" class="btn btn-primary">Save changes</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
+                                    <div class="modal-body">
+                                        At {{ bubl.time }} {{ bubl.date }} for {{ bubl.length }} minutes
+                                        <br>
+                                        {{ bubl.note }}
                                     </div>
-                                {% endfor %}
-                            {% endfor %}
-                            <br>
-                        </div>    
-                    </div>
-                </div>
+                                    <div class="modal-footer">
+                                        <a class="btn btn-danger" href="/app/kill-bubl/{{bubl.id}}" role="button">Delete</a>
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bubl-{{ bubl.id }}-edit">Edit</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                <!-- Tomorrow -->
-                <div class="col">
+                        {# Bubl edit form #}
+                        <div class="modal fade" id="bubl-{{ bubl.id }}-edit" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form method="post" action="/app/modify/{{bubl.id}}/">{% csrf_token %}
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Edit Bubl</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+
+                                        <div class="modal-body">
+
+                                            {# Name #}
+                                            <div class="input-group mb-3">
+                                                <input name="name" type="text" class="form-control" placeholder="Bubble Name" value="{{bubl.name}}" required>
+                                            </div>
+
+                                            {# Note #}
+                                            <div class="input-group mb-3">
+                                                <input name="note" type="text" class="form-control" placeholder="Extra Note" value="{{bubl.note}}">
+                                            </div>
+                                            
+                                            {# Date & Time #}
+                                            <div class="input-group mb-3">
+                                                <input name="time" type="time" class="form-control" value="{{bubl.time.hour|stringformat:'02d'}}:{{bubl.time.minute|stringformat:'02d'}}" required>
+                                                <input name="date" type="date" class="form-control" value="{{bubl.date.year}}-{{bubl.date.month|stringformat:'02d'}}-{{bubl.date.day|stringformat:'02d'}}" required>
+                                            </div>
+
+                                            {# Length #}
+                                            <div class="input-group mb-3">
+                                                <input name="length" type="number" class="form-control" value="{{bubl.length}}" placeholder="Length (minutes)">
+                                            </div>
+                                            
+                                        </div>
+
+                                        {# Action buttons #}
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     
-                    <center>
-                        <h4>{{ tomorrow_name }}</h4>
+                    {% endfor %}
+
                     </center>
 
-                    {# Side-bubbles for tomorrow #}
-                    <div class="col">
-                        <center>
-                            {% for i in tomorrowTasks %}
-                                <div class="sideBubble"></div>
-                            {% endfor %}
-                        </center>
-                    </div>
-                </div>
+                {% endfor %}
+                <br>
 
             </div>
-        {% else %}
-            <center>
-                <h1>Invalid date</h1>
-            </center>
-        {% endif %}
-    </div>
+
+            {# Tomorrow side bubls #}
+            <div class="col d-flex justify-content-center right" onclick="location.href='/app/daily/{{nextDayLink}}'">
+                <center>
+                    {% for bubl in tomorrowTasks %}
+                        <div class="sideBubl" title="{{ bubl.name }} @ {{ bubl.time }}"></div>
+                    {% endfor %}
+                </center>
+            </div>
+        </div>
     </div>
 {% endblock content %}

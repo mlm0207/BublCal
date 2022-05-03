@@ -4,116 +4,194 @@
 {% block title %}Weekly Schedule{% endblock title %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{% static 'main/weekly.css' %}">
+    {#<link rel="stylesheet" type="text/css" href="{% static 'main/weekly.css' %}">#}
 {% endblock styles %}
 
 {% block content %}
-    <div class="container pt-4 pb-2">
+    <style>
+        /* Base background look */
+        .baseBG
+        {
+            border              : 2px solid black;
+            box-shadow          : 0 8px 16px 0 rgba(0, 0, 0, 0.3), 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+            background-color    : lightgray;
+            background-image    : linear-gradient(to bottom right,#fafad2, #b0e0e6 );
+        }
 
-        <div class="row-fluid d-flex justify-content-evenly">
-            <a class="btn btn-primary" role="button" href="{{prevWeekLink}}">Last Week</a>
-            <a style="font-size: calc(1.325rem + .9vw);font-weight: 500;line-height: 1.2;">{{ month_year }}</a>
-            <a class="btn btn-primary" role="button" href="{{nextWeekLink}}">Next Week</a>
+        /* Column headers */
+        .left
+        {
+            border-left     : 1px solid black;
+            border-bottom   : 2px solid black;
+        }
+
+        /* Column content */
+        .right
+        {
+            border-left     : 2px solid black;
+            border-bottom   : 2px solid black;
+        }
+
+        /* Time slot underline */
+        .timeslot
+        {
+            border-bottom: 1px solid black;
+        }
+
+        /* Clickable style */
+        .bublSM
+        {
+            color               : black;
+            background-image    : linear-gradient(to bottom right,
+                                                rgba(207, 241, 255, 1), 
+                                                rgba(120, 217, 255, 1));
+
+            border-radius       : 50%;
+            display             : flex;
+            align-items         : center;
+            justify-content     : center;
+
+            width               : 45px;
+            height              : 45px;
+
+            margin-top          : 5%;
+            margin-bottom       : 5%;
+        }
+
+        /* Side bublSM style */
+        .sideBubl
+        {
+            background-image    : linear-gradient(to bottom right,
+                                            rgba(207, 241, 255, 1), 
+                                            rgba(120, 217, 255, 1));
+            
+            border              : 1px solid rgba(0, 0, 0, 0.411);
+            border-radius       : 50%;
+            
+            width               : 30px;
+            height              : 30px;
+            
+            margin-top          : 10%;
+            margin-bottom       : 10%;
+        }
+    </style>
+
+    <br>
+
+    {# Title & navigation #}
+    <div class="container">
+        <div class="row">
+
+            {# Last week #}
+            <div class="col d-flex justify-content-center">
+                <a type="button" class="btn btn-primary" title="Last Week" href="{{prevWeekLink}}">&lt;</a>
+            </div>
+            
+            {# Title #}
+            <div class="col-5 d-flex justify-content-center">
+                <h5 class="text-center">Week of {{ day_of_week }}, the {{ day }}</h5>
+            </div>
+
+            {# Next week #}
+            <div class="col d-flex justify-content-center">
+                <a type="button" class="btn btn-primary" title="Next Week" href="{{nextWeekLink}}">&gt;</a>
+            </div>
         </div>
+    </div>
 
-        <h4 class="text-center">Week of {{ day_of_week }}, the {{ day }}</h4>
+    <br>
 
-        <div id="week_table" class="container table-responsive">
-            <table class="table table-bordered">
-                <tr class="weekdays">
-                    {% for name, date in week.items %}
-                        <th class="weekly-th text-center"> 
-                            
-                            <a href="/app/daily/{{month}}/{{date}}/{{year}}">{{ name }} {{ date }}</a>
+    <div class="container baseBG">
+        <div class="row">
+            {% for name, date in week.items %}
+                <div class="col d-flex justify-content-center fw-bold left" onclick="location.href='/app/daily/{{month}}/{{date}}/{{year}}'">{{ name }} {{ date }}</div>
+            {% endfor %}
+        </div>
+        <div class="row" style="height:600px">
+            
+            
+        <!--Weekly Bubls will go here -->
+            {% for name, date in week.items %}
+                <div class="col left">
+                    <center>
+                        {% for bubl in bubls %}
+                            {% if bubl.date.day == date %}
+                                {# Bubl button #}
+                                <button type="button" class="btn btn-primary bublSM" data-bs-toggle="modal" data-bs-target="#bubl-{{bubl.id}}" title="At {{bubl.time}}">
+                                    {{ bubl.name }}
+                                </button>
 
-                        </th>
-                    {% endfor %}
-                </tr>
+                                {# Bubl Info View #}
+                                <div class="modal fade" id="bubl-{{bubl.id}}" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">{{ bubl.name }}</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                At {{ bubl.time }} {{ bubl.date }} for {{ bubl.length }} minutes
+                                                <br>
+                                                {{ bubl.note }}
+                                            </div>
+                                            <div class="modal-footer">
+                                                <a class="btn btn-danger" href="/app/kill-bubl/{{bubl.id}}" role="button">Delete</a>
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bubl-{{ bubl.id }}-edit">Edit</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-                <!--Weekly Bubls will go here -->
-                <tr class="vh-100">
-                    {% for name, date in week.items %}
-                        <td class="weekly-td">
-                            {% for bubl in bubls %}
-                                {% if bubl.date.day == date %}
-                                    <button
-                                            type="button"
-                                            class="btn btn-primary bubble"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#bubl-{{bubl.id}}"
-                                            title="At {{bubl.time}}">{{ bubl.name }}
-                                    </button>
-
-                                    <!-- Bubble Info View -->
-                                    <div class="modal fade" id="bubl-{{bubl.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
+                                {# Bubl edit form #}
+                                <div class="modal fade" id="bubl-{{ bubl.id }}-edit" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <form method="post" action="/app/modify/{{bubl.id}}/">{% csrf_token %}
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">{{ bubl.name }}</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    <h5 class="modal-title" id="exampleModalLabel">Edit Bubl</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                 </div>
+
                                                 <div class="modal-body">
-                                                    At {{ bubl.time }} {{ bubl.date }} for {{ bubl.length }} minutes
-                                                    <br>
-                                                    {{ bubl.note }}
+
+                                                    {# Name #}
+                                                    <div class="input-group mb-3">
+                                                        <input name="name" type="text" class="form-control" placeholder="Bubble Name" value="{{bubl.name}}" required>
+                                                    </div>
+
+                                                    {# Note #}
+                                                    <div class="input-group mb-3">
+                                                        <input name="note" type="text" class="form-control" placeholder="Extra Note" value="{{bubl.note}}">
+                                                    </div>
+                                                    
+                                                    {# Date & Time #}
+                                                    <div class="input-group mb-3">
+                                                        <input name="time" type="time" class="form-control" value="{{bubl.time.hour|stringformat:'02d'}}:{{bubl.time.minute|stringformat:'02d'}}" required>
+                                                        <input name="date" type="date" class="form-control" value="{{bubl.date.year}}-{{bubl.date.month|stringformat:'02d'}}-{{bubl.date.day|stringformat:'02d'}}" required>
+                                                    </div>
+
+                                                    {# Length #}
+                                                    <div class="input-group mb-3">
+                                                        <input name="length" type="number" class="form-control" value="{{bubl.length}}" placeholder="Length (minutes)">
+                                                    </div>
+                                                    
                                                 </div>
+
+                                                {# Action buttons #}
                                                 <div class="modal-footer">
-                                                    <a class="btn btn-danger" href="/app/kill-bubl/{{bubl.id}}" role="button">Delete</a>
-                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bubl-{{ bubl.id }}-edit">Edit</button>
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary">Save changes</button>
                                                 </div>
-                                            </div>
+                                            </form>
                                         </div>
                                     </div>
-
-                                    <!-- Bubble Edit Form -->
-                                    <div class="modal fade" id="bubl-{{ bubl.id }}-edit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <form method="post" action="/app/modify/{{bubl.id}}/">{% csrf_token %}
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Edit Bubble</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-
-                                                    <div class="modal-body">
-
-                                                        <!-- Name -->
-                                                        <div class="input-group mb-3">
-                                                            <input name="name" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="Bubble Name" value="{{bubl.name}}" required>
-                                                        </div>
-
-                                                        <!-- Note -->
-                                                        <div class="input-group mb-3">
-                                                            <input name="note" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="Extra Note" value="{{bubl.note}}">
-                                                        </div>
-
-                                                        <!-- Date & Time -->
-                                                        <div class="input-group mb-3">
-                                                            <input name="time" type="time" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value="{{bubl.time.hour|stringformat:'02d'}}:{{bubl.time.minute|stringformat:'02d'}}" required>
-                                                            <input name="date" type="date" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value="{{bubl.date.year}}-{{bubl.date.month|stringformat:'02d'}}-{{bubl.date.day|stringformat:'02d'}}" required>
-                                                        </div>
-
-                                                        <!-- Length -->
-                                                        <div class="input-group mb-3">
-                                                            <input name="length" type="number" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value="{{bubl.length}}" placeholder="Length (minutes)">
-                                                        </div>
-
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                        <button type="submit" class="btn btn-primary">Save changes</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
-                        </td>
-                    {% endfor %}
-                </tr>
-            </table>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </center>
+                </div>
+            {% endfor %}
         </div>
     </div>
 {% endblock content %}

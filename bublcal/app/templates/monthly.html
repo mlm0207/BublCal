@@ -4,76 +4,170 @@
 {% block title %}Monthly View{% endblock title %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{% static 'main/monthly.css' %}">
+    {#<link rel="stylesheet" type="text/css" href="{% static 'main/monthly.css' %}">#}
 {% endblock styles %}
 
 {% block content %}
-    <body class="bodymonthly">
-        <div class="container pt-4 pb-2">
-            <div class="main-body">
-                <h1 class="month">
-                    <div>
-                        <p class='month-title'>
-                            <span style="font-size:50px" class="month-name"></span>
-                            <a class="prev" href="{{prevMonthLink}}">&#10094;</a>
-                            <a class="next" href="{{nextMonthLink}}">&#10095;</a>
-                            <p id="dateDisplay">{{monthName}}</p>
-                            <span class='year' style="font-size:30px">{{year}}</span>
-                        </p>
-                    </div>
-                </h1>
-                                
-                <div class="cal-data">
-                    <table class="tableText table table-bordered border-dark">
-                        <thead>
-                            <tr>
-                                <th scope="col">Mo</th>
-                                <th scope="col">Tu</th>
-                                <th scope="col">We</th>
-                                <th scope="col">Th</th>
-                                <th scope="col">Fr</th>
-                                <th scope="col">Sa</th>
-                                <th scope="col">Su</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for week in weeks %}
-                                <tr>
-                                    {% for day in week %}
+    <style>
+        /* Base background look */
+        .baseBG
+        {
+            border              : 2px solid black;
+            box-shadow          : 0 8px 16px 0 rgba(0, 0, 0, 0.3), 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+            background-color    : lightgray;
+            background-image    : linear-gradient(to bottom right,#fafad2, #b0e0e6 );
+        }
 
-                                        <td scope="col"
-                                        
-                                        {% if day.day == today.day and day.month == today.month %}
-                                            class="activeDay"
-                                        {% else %}
+        /* Column headers */
+        .left
+        {
+            border-left     : 1px solid black;
+            border-bottom   : 2px solid black;
+        }
 
-                                            {% if day.month != month %}
-                                                style="color:gray;"
-                                            {% endif %}
-                                        {% endif %}
+        /* Column content */
+        .right
+        {
+            border-left     : 2px solid black;
+            border-bottom   : 2px solid black;
+        }
 
-                                        >
-                                            <a href="/app/daily/{{month}}/{{day.day}}/{{year}}">
-                                                <span>{{day.day}}</span>
+        /* Time slot underline */
+        .timeslot
+        {
+            border-bottom: 1px solid black;
+        }
 
+        /* Clickable style */
+        .bubl
+        {
+            color               : black;
+            background-image    : linear-gradient(to bottom right,
+                                                rgba(207, 241, 255, 1), 
+                                                rgba(120, 217, 255, 1));
 
-                                                {% for bubl in bubls %}
-                                                    {% if bubl.date.day == day.day and bubl.date.month == day.month %}
-                                                        <span style="color: red;">•</span>
-                                                    {% endif %}
-                                                {% endfor %}
+            border-radius       : 50%;
+            display             : flex;
+            align-items         : center;
+            justify-content     : center;
 
+            width               : 45px;
+            height              : 45px;
 
-                                            </a>
-                                        </td>
+            margin-top          : 5%;
+            margin-bottom       : 5%;
+        }
 
-                                    {% endfor %}
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+        /* Side bubl style */
+        .sideBubl
+        {
+            background-image    : linear-gradient(to bottom right,
+                                            rgba(207, 241, 255, 1), 
+                                            rgba(120, 217, 255, 1));
+            
+            border              : 1px solid rgba(0, 0, 0, 0.411);
+            border-radius       : 50%;
+            
+            width               : 30px;
+            height              : 30px;
+            
+            margin-top          : 10%;
+            margin-bottom       : 10%;
+        }
+
+        .activeDay
+        {
+            color: white;
+            background-color: black;
+        }
+
+        .otherMonth
+        {
+            color: rgb(156, 156, 156);
+        }
+
+        .col
+        {
+            width: 50px;
+            height: 50px;
+        }
+    </style>
+
+    <br>
+
+    <div class="container">
+        <div class="row">
+            <div class="col d-flex justify-content-center">
+                <a type="button" class="btn btn-primary" title="Previous Month" href="{{prevMonthLink}}">&lt;</a>
+            </div>
+            
+            <div class="col-5 d-flex justify-content-center">
+                <h5 class="text-center">Month of {{ monthName }}</h5>
+            </div>
+
+            <div class="col d-flex justify-content-center">
+                <a type="button" class="btn btn-primary" title="Next Month" href="{{nextMonthLink}}">&gt;</a>
             </div>
         </div>
-    </body>
+    </div>
+
+    <br>
+    
+    <div class="container baseBG">
+        <div class="row">
+            <div class="col d-flex justify-content-center fw-bold left">Sun</div>
+            <div class="col d-flex justify-content-center fw-bold left">Mon</div>
+            <div class="col d-flex justify-content-center fw-bold left">Tue</div>
+            <div class="col d-flex justify-content-center fw-bold left">Wed</div>
+            <div class="col d-flex justify-content-center fw-bold left">Thu</div>
+            <div class="col d-flex justify-content-center fw-bold left">Fri</div>
+            <div class="col d-flex justify-content-center fw-bold left">Sat</div>
+        </div>
+            {% for week in weeks %}
+                <div class="row">
+                    {% for day in week %}
+
+                        {# Same month #}
+                        {% if day.month == month %}
+                            {# Check for active day #}
+                            {% if day.day == today.day and day.month == today.month %}
+                                <div class="col d-flex justify-content-center left activeDay" onclick="location.href='/app/daily/{{month}}/{{day.day}}/{{year}}'">
+                            {# Other day, same month #}
+                            {% else %}
+                                <div class="col d-flex justify-content-center left" onclick="location.href='/app/daily/{{month}}/{{day.day}}/{{year}}'">
+                            {% endif %}
+
+                        {# Other month days #}
+                        {% else %}
+                            <div class="col d-flex justify-content-center left otherMonth" onclick="location.href='/app/daily/{{month}}/{{day.day}}/{{year}}'">
+                        {% endif %}
+
+                        <!--title="
+                        {# List bubls #}
+                        {% for bubl in bubls %}
+                            {% if bubl.date.day == day.day and bubl.date.month == day.month %}
+                                {{bubl.name}} @ {{bubl.time}} &#10;
+                            {% endif %}
+                        {% endfor %}
+                        "-->
+
+                        
+
+                        {# Print day w/ number of bubls #}
+                        <span>{{day.day}}</span>
+
+                        <span style="writing-mode: tb-rl;">
+                            {% for bubl in bubls %}
+                                {% if bubl.date.day == day.day and bubl.date.month == day.month %}
+                                    •
+                                {% endif %}
+                            {% endfor %}
+                        </span>
+
+                        </div>
+
+                    {% endfor %}
+                </div>
+            {% endfor %}
+    </div>
 {% endblock content %}

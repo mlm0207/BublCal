@@ -12,17 +12,6 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django import forms
 
-# TODO REMOVE / CHANGE THE LOCATION OF THESE
-DAY_NAMES = [
-                [ "Monday",     "Mon" ], 
-                [ "Tuesday",    "Tue" ], 
-                [ "Wednesday",  "Wed" ], 
-                [ "Thursday",   "Thu" ], 
-                [ "Friday",     "Fri" ], 
-                [ "Saturday",   "Sat" ], 
-                [ "Sunday",     "Sun" ], 
-            ];
-
 current_date = datetime.date.today()
 year, week_num, day_of_week = current_date.isocalendar()
 month_year = current_date.strftime("%B") + " " + str(year)
@@ -53,9 +42,9 @@ def glance(request):
     overmorrow  = datetime.date.today() + datetime.timedelta(2);
     
     # Grab the names for the days above
-    todayName      = DAY_NAMES[today.weekday()][0];         # Long name
-    tomorrowName   = DAY_NAMES[tomorrow.weekday()][1];      # Short name
-    overmorrowName = DAY_NAMES[overmorrow.weekday()][1];    # Short name
+    todayName      = today.strftime("%A");         # Long name
+    tomorrowName   = tomorrow.strftime("%a");      # Short name
+    overmorrowName = overmorrow.strftime("%a");    # Short name
 
     # Get current time
     currentTime = datetime.datetime.today().time();
@@ -83,8 +72,8 @@ def glance(request):
     todaysBubls = [];
 
     # Number of tasks for tomorrow and overmorrow
-    tomorrowTasks = 0;
-    overmorrowTasks = 0;
+    tomorrowTasks = [];
+    overmorrowTasks = [];
 
     # Go through users bubls to check what to do to them
     if(bubls != None):
@@ -95,11 +84,11 @@ def glance(request):
 
             # Check if the tasks lands tomorrow
             if(day == tomorrow.day):
-                tomorrowTasks += 1;
+                tomorrowTasks.append(bubl);
 
             # Check if the tasks lands overmorrow
             if(day == overmorrow.day):
-                overmorrowTasks += 1;
+                overmorrowTasks.append(bubl);
 
             # Add bubls that do fall under the active day
             if(day == today.day):
@@ -131,20 +120,38 @@ def glance(request):
                             if(not foundSpot):
                                 time[2].append(bubl);
 
+    # Get the greeting
+    hour = datetime.datetime.now().hour;
+    
+    greeting = "evening";
+
+    if(hour < 16):
+        greeting = "afternoon";
+    
+    if(hour < 12):
+        greeting = "morning";
+    
+    print(overmorrowTasks);
+
     # Arguments to pass
     args = {
                 "loggedIn"  : True,
                 "today"     : today,
                 "tomorrow"  : tomorrow,
                 "overmorrow": overmorrow,
+                "greeting"  : greeting,
+                "firstName" : bublcal_lib.getUserObject(user).firstName,
                 
                 "today_name"        : todayName,
                 "tomorrow_name"     : tomorrowName,
                 "overmorrow_name"   : overmorrowName,
 
+                "tomorrowLink" : tomorrow.strftime("%m/%d/%Y/"),
+                "overmorrowLink" : overmorrow.strftime("%m/%d/%Y/"),
+
                 "timeSlots"         : timeSlots,
-                "tomorrowTasks"     : range(tomorrowTasks),
-                "overmorrowTasks"   : range(overmorrowTasks),
+                "tomorrowTasks"     : tomorrowTasks,
+                "overmorrowTasks"   : overmorrowTasks,
             };
 
     # Render the page
@@ -246,14 +253,14 @@ def monthly(request, month, year):
     for bubl in bubls:
         if(bubl.date.year == year and bubl.date.month == month):
             monthBubls.append(bubl);
-    
+
     args =  {
                 "loggedIn"      : True,
                 "weeks"         : weeks,
                 "month"         : month,
                 "year"          : year,
                 "monthName"     : monthName,
-                "today"         : today.day,
+                "today"         : today,
                 "nextMonthLink" : nextMonthLink,
                 "prevMonthLink" : prevMonthLink,
                 "bubls"         : monthBubls,
@@ -365,9 +372,9 @@ def daily(request, month, day, year):
     tomorrow    = dayToView + datetime.timedelta(1);
     
     # Grab the names for the days above
-    todayName       = DAY_NAMES[today.weekday()][0];         # Long name
-    yesterdayName   = DAY_NAMES[yesterday.weekday()][1];     # Short name
-    tomorrowName    = DAY_NAMES[tomorrow.weekday()][1];      # Short name
+    todayName       = today.strftime("%A");         # Long name
+    yesterdayName   = yesterday.strftime("%a");     # Short name
+    tomorrowName    = tomorrow.strftime("%a");      # Short name
     
     # Time slots for the day, in this instantce we will be viewing all 24 hours
     timeSlots = [];
@@ -381,8 +388,8 @@ def daily(request, month, day, year):
     bubls = bublcal_lib.getUserBubbles(user);
 
     # Number of tasks for yesterday and tomorrow
-    yesterdayTasks = 0;
-    tomorrowTasks = 0;
+    yesterdayTasks = [];
+    tomorrowTasks = [];
 
     # Go through users bubls to check what to do to them
     if(bubls != None):
@@ -393,11 +400,11 @@ def daily(request, month, day, year):
 
             # Check if the tasks lands yesterday
             if(day == yesterday.day):
-                yesterdayTasks += 1;
+                yesterdayTasks.append(bubl);
 
             # Check if the tasks lands tomorrow
             if(day == tomorrow.day):
-                tomorrowTasks += 1;
+                tomorrowTasks.append(bubl);
 
             # Add bubls that do fall under the active day
             if(day == today.day):
@@ -445,8 +452,8 @@ def daily(request, month, day, year):
                 "tomorrow_name"     : tomorrowName,
 
                 "timeSlots"         : timeSlots,
-                "yesterdayTasks"    : range(yesterdayTasks),
-                "tomorrowTasks"     : range(tomorrowTasks),
+                "yesterdayTasks"    : yesterdayTasks,
+                "tomorrowTasks"     : tomorrowTasks,
                 "previousDayLink"   : previousDayLink,
                 "nextDayLink"       : nextDayLink,
                 "validDate"         : True,
@@ -600,6 +607,39 @@ def modifyBubl(request, id):
         return redirect(request.META.get('HTTP_REFERER'));
 
     return redirect("index");
+
+#################################
+# Complete bubl
+# 
+# Allows users to mark bubls as
+# "done"
+#################################
+def complete(request, id):
+        # Check if user is logged in
+    result = bublcal_lib.verifyLogin(request);
+
+    # Tell user the need to be signed in
+    if(not result[0]):
+        return render(request, "login_message.html");
+    
+    # Grab the user and get the bubl to modify
+    user = result[1];
+    bubl = bublcal_lib.getBubbleObject(id);
+
+    # Make sure bubble exists
+    if(bubl == None):
+        return redirect("glance-view");
+
+    # Make sure user owns bubble
+    if(bubl.email.email != user):
+        return redirect("glance-view");
+    
+    bubl.done = True;
+    bubl.save();
+
+    return redirect(request.META.get('HTTP_REFERER'));
+
+    
 
 #################################
 # Index

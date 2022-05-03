@@ -1,114 +1,122 @@
-/********************************
-        WEEKLY CSS
-********************************/
-
-/********************************
-        MONTHLY CSS
-********************************/
-
-.bubble
+/* Base background look */
+.baseBG
 {
-    color: black;
-    background-image: linear-gradient(to bottom right,
+    border              : 2px solid black;
+    box-shadow          : 0 8px 16px 0 rgba(0, 0, 0, 0.3), 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+    background-color    : lightgray;
+    background-image    : linear-gradient(to bottom right,#fafad2, #b0e0e6 );
+}
+
+/* Column headers */
+.left
+{
+    border-left     : 1px solid black;
+    border-bottom   : 2px solid black;
+}
+
+/* Column content */
+.right
+{
+    border-left     : 2px solid black;
+    border-bottom   : 2px solid black;
+}
+
+/* Time slot underline */
+.timeslot
+{
+    border-bottom: 1px solid black;
+}
+
+/* Clickable style */
+.bubl
+{
+    color               : black;
+    background-image    : linear-gradient(to bottom right,
+                                        rgba(207, 241, 255, 1), 
+                                        rgba(120, 217, 255, 1));
+
+    border-radius       : 50%;
+    display             : flex;
+    align-items         : center;
+    justify-content     : center;
+
+    width               : 45px;
+    height              : 45px;
+
+    margin-top          : 5%;
+    margin-bottom       : 5%;
+}
+
+/* Side bubl style */
+.sideBubl
+{
+    background-image    : linear-gradient(to bottom right,
                                     rgba(207, 241, 255, 1), 
                                     rgba(120, 217, 255, 1));
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 100px;
-    height: 100px;
-
-    margin-top: 5%;
-    margin-bottom: 5%;
-}
-
-.sideBubble
-{
-    background-image: linear-gradient(to bottom right,
-                                    rgba(207, 241, 255, 1), 
-                                    rgba(120, 217, 255, 1));
-
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    margin-top: 10%;
-    margin-bottom: 10%;
-}
-
-/********************************
-        GLANCE CSS
-********************************/
-
-/*
-a.signup, a.login
-{
-    background-color: #04AA6D;
-    color: white;
-    padding: 10px 15px;
-}
-
-a.signup
-{
-    right: 12px;
-    position: absolute;
-}
-
-a.login
-{
-    right: 108px;
-    position: absolute;
-}
-
-#calendar-popup
-{
-    display:none;
-    left: 50%;
-    position: absolute;
-    margin-bottom: 0;
-    padding: 0 1.33em;
-    background: #ADD8E6;
-    border: solid rgba(200, 200, 200, 0.75) 2px;
-    border-radius: 10px;
-    color: black; 
-}
-
-.calander_popup_title
-{
-    border-bottom: 1px solid #484141;   
-    margin: 0.5em 0.5em;
-    padding: .5em;
-    font-size: 20px;
-    background: #eee;
-}
     
-#calendar-popup *
-{
-    display: block; 
+    border              : 1px solid rgba(0, 0, 0, 0.411);
+    border-radius       : 50%;
+    
+    width               : 30px;
+    height              : 30px;
+    
+    margin-top          : 10%;
+    margin-bottom       : 10%;
 }
 
-#calendar-popup label,
-#calendar-popup input,
-#calendar-popup textarea
+/* Clickable style */
+.bubl
 {
-    font-size: 0.9em;
-    font-weight: normal;
-    margin-bottom: 0;
-    padding: 0;
-    width: 100%;
+    color               : black;
+    background-image    : linear-gradient(to bottom right,
+                                        rgba(207, 241, 255, 1), 
+                                        rgba(120, 217, 255, 1));
+
+    border-radius       : 50%;
+    display             : flex;
+    align-items         : center;
+    justify-content     : center;
+
+    width               : 100px;
+    height              : 100px;
+
+    margin-top          : 5%;
+    margin-bottom       : 5%;
 }
 
-#calendar-popup input
+/* Completed style */
+.bublDone
 {
-    margin-bottom: 0.5em;
-    padding: 0;
+    color               : black;
+    background-image    : linear-gradient(to bottom right,
+                                        rgb(207, 255, 239), 
+                                        rgb(120, 255, 154));
+
+    border-radius       : 50%;
+    display             : flex;
+    align-items         : center;
+    justify-content     : center;
+
+    width               : 100px;
+    height              : 100px;
+
+    margin-top          : 5%;
+    margin-bottom       : 5%;
 }
 
-.create
+.activeDay
 {
-    margin: 0em 0em;
-    padding: .3em;
-    font-size: 20px;
-    background: #ADD8E6;
-}*/
+    color: white;
+    background-color: black;
+}
+
+.otherMonth
+{
+    color: rgb(156, 156, 156);
+}
+
+.col
+{
+    width: 50px;
+    height: 50px;
+}
