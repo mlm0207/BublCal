@@ -335,7 +335,7 @@ def timeCheck(email):
         return False
 
     for bubl in Bubl.objects.all():
-        if bubl.email.email == email and bubl.dead == False:
+        if bubl.email.email == email and bubl.dead == False and bubl.done == False:
 
             # If date is today then check time
             if bubl.date == datetime.date.today():
