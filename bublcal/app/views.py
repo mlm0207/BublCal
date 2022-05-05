@@ -131,8 +131,6 @@ def glance(request):
     if(hour < 12):
         greeting = "morning";
     
-    print(overmorrowTasks);
-
     # Arguments to pass
     args = {
                 "loggedIn"  : True,
@@ -254,9 +252,36 @@ def monthly(request, month, year):
         if(bubl.date.year == year and bubl.date.month == month):
             monthBubls.append(bubl);
 
+    newT = [];
+
+    for week in bublcal_lib.getMonthWeeks(year, month):
+        sweek = [];
+        for day in week:
+            
+            bublsDone = [];
+            bublsComing = [];
+
+            toolTipString = "";
+
+
+            for bubl in monthBubls:
+                if(bubl.date.day == day.day and bubl.date.month == day.month):
+                    if(bubl.done):
+                        if(len(bublsDone) < 2):
+                            bublsDone.append(bubl);
+                    else:
+                        if(len(bublsComing) < 2):
+                            bublsComing.append(bubl);
+
+                    toolTipString += F"{bubl.name} @ {bubl.time.strftime('%I:%M %p')}\n";
+
+            sweek.append([day, bublsDone, bublsComing, toolTipString]);
+
+        newT.append(sweek);
+    
     args =  {
                 "loggedIn"      : True,
-                "weeks"         : weeks,
+                "weeks"         : newT,
                 "month"         : month,
                 "year"          : year,
                 "monthName"     : monthName,
@@ -450,6 +475,7 @@ def daily(request, month, day, year):
                 "today_name"        : todayName,
                 "yesterday_name"    : yesterdayName,
                 "tomorrow_name"     : tomorrowName,
+                "month_name"        : today.strftime("%B"),
 
                 "timeSlots"         : timeSlots,
                 "yesterdayTasks"    : yesterdayTasks,

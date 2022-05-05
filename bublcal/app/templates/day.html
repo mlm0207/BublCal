@@ -58,6 +58,27 @@
             margin-bottom       : 5%;
         }
 
+        /* Clickable style */
+        .bublDone
+        {
+            color               : black;
+            background-image    : linear-gradient(to bottom right,
+                                                rgb(207, 255, 217), 
+                                                rgb(120, 255, 131));
+
+            border              : solid 1px green;
+            border-radius       : 50%;
+            display             : flex;
+            align-items         : center;
+            justify-content     : center;
+
+            width               : 100px;
+            height              : 100px;
+
+            margin-top          : 5%;
+            margin-bottom       : 5%;
+        }
+
         /* Side bubl style */
         .sideBubl
         {
@@ -80,22 +101,28 @@
 
     {# Title and navigation #}
     <div class="container">
+
         <div class="row">
-
-            {# Previous day #}
-            <div class="col d-flex justify-content-center">
-                <a type="button" class="btn btn-primary" title="Previous Day" href="/app/daily/{{previousDayLink}}">&lt;</a>
-            </div>
-            
-            {# Title #}
-            <div class="col-5 d-flex justify-content-center">
-                <h5 class="text-center">Schedule of {{ today }}</h5>
-            </div>
-
-            {# Next day #}
-            <div class="col d-flex justify-content-center">
-                <a type="button" class="btn btn-primary" title="To Next Day" href="/app/daily/{{nextDayLink}}">&gt;</a>
-            </div>
+            <table>
+                <tr>
+                    <th>
+                        <center>
+                            <a type="button" class="btn btn-primary" title="Jump to last day" href="/app/daily/{{previousDayLink}}">Last Day</a>
+                        </center>
+                    </th>
+                    <th>
+                        <center>
+                            <h2>{{ month_name }} {{ today.year }}</h2>
+                            <h5 class="text-center">Schedule of {{ today }}</h5>
+                        </center>
+                    </th>
+                    <th>
+                        <center>
+                            <a type="button" class="btn btn-primary" title="Jump to next day" href="/app/daily/{{nextDayLink}}">Next Day</a>
+                        </center>
+                    </th>
+                </tr>
+            </table>
         </div>
     </div>
 
@@ -137,7 +164,11 @@
                     {% for bubl in slot.2 %}
 
                         {# Bubl button #}
-                        <button type="button" class="btn btn-primary bubl" data-bs-toggle="modal" data-bs-target="#bubl-{{bubl.id}}" title="At {{bubl.time}}">
+                        {% if bubl.done == True %}
+                            <button type="button" class="btn btn-primary bublDone" data-bs-toggle="modal" data-bs-target="#bubl-{{bubl.id}}" title="At {{bubl.time}}">
+                        {% else %}
+                            <button type="button" class="btn btn-primary bubl" data-bs-toggle="modal" data-bs-target="#bubl-{{bubl.id}}" title="At {{bubl.time}}">
+                        {% endif %}
                             {{ bubl.name }}
                         </button>
 

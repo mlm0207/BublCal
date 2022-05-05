@@ -58,6 +58,27 @@
             margin-bottom       : 5%;
         }
 
+        /* Clickable style */
+        .bublDone
+        {
+            color               : black;
+            background-image    : linear-gradient(to bottom right,
+                                                rgb(207, 255, 217), 
+                                                rgb(120, 255, 131));
+
+            border              : solid 1px green;
+            border-radius       : 50%;
+            display             : flex;
+            align-items         : center;
+            justify-content     : center;
+
+            width               : 100px;
+            height              : 100px;
+
+            margin-top          : 5%;
+            margin-bottom       : 5%;
+        }
+
         /* Side bubl style */
         .sideBubl
         {
@@ -97,17 +118,25 @@
 
     <div class="container">
         <div class="row">
-            <div class="col d-flex justify-content-center">
-                <a type="button" class="btn btn-primary" title="Previous Month" href="{{prevMonthLink}}">&lt;</a>
-            </div>
-            
-            <div class="col-5 d-flex justify-content-center">
-                <h5 class="text-center">Month of {{ monthName }}</h5>
-            </div>
-
-            <div class="col d-flex justify-content-center">
-                <a type="button" class="btn btn-primary" title="Next Month" href="{{nextMonthLink}}">&gt;</a>
-            </div>
+            <table>
+                <tr>
+                    <th>
+                        <center>
+                            <a type="button" class="btn btn-primary" title="Jump to last month" href="{{prevMonthLink}}">Last Month</a>
+                        </center>
+                    </th>
+                    <th>
+                        <center>
+                            <h2>{{ monthName }} {{ year }}</h2>
+                        </center>
+                    </th>
+                    <th>
+                        <center>
+                            <a type="button" class="btn btn-primary" title="Jump to next month" href="{{nextMonthLink}}">Next Month</a>
+                        </center>
+                    </th>
+                </tr>
+            </table>
         </div>
     </div>
 
@@ -128,39 +157,33 @@
                     {% for day in week %}
 
                         {# Same month #}
-                        {% if day.month == month %}
+                        {% if day.0.month == month %}
                             {# Check for active day #}
-                            {% if day.day == today.day and day.month == today.month %}
-                                <div class="col d-flex justify-content-center left activeDay" onclick="location.href='/app/daily/{{month}}/{{day.day}}/{{year}}'">
+                            {% if day.0.day == today.day and day.0.month == today.month %}
+                                <div class="col d-flex justify-content-center left activeDay" onclick="location.href='/app/daily/{{month}}/{{day.0.day}}/{{year}}'" title="{{day.3}}">
                             {# Other day, same month #}
                             {% else %}
-                                <div class="col d-flex justify-content-center left" onclick="location.href='/app/daily/{{month}}/{{day.day}}/{{year}}'">
+                                <div class="col d-flex justify-content-center left" onclick="location.href='/app/daily/{{month}}/{{day.0.day}}/{{year}}'" title="{{day.3}}">
                             {% endif %}
 
                         {# Other month days #}
                         {% else %}
-                            <div class="col d-flex justify-content-center left otherMonth" onclick="location.href='/app/daily/{{month}}/{{day.day}}/{{year}}'">
+                            <div class="col d-flex justify-content-center left otherMonth" onclick="location.href='/app/daily/{{month}}/{{day.0.day}}/{{year}}'">
                         {% endif %}
 
-                        <!--title="
-                        {# List bubls #}
-                        {% for bubl in bubls %}
-                            {% if bubl.date.day == day.day and bubl.date.month == day.month %}
-                                {{bubl.name}} @ {{bubl.time}} &#10;
-                            {% endif %}
-                        {% endfor %}
-                        "-->
+                        {# Print day w/ number of bubls #}
+                        <span>{{ day.0.day }}</span>
 
                         
-
-                        {# Print day w/ number of bubls #}
-                        <span>{{day.day}}</span>
-
-                        <span style="writing-mode: tb-rl;">
-                            {% for bubl in bubls %}
-                                {% if bubl.date.day == day.day and bubl.date.month == day.month %}
-                                    •
-                                {% endif %}
+                        <span style="writing-mode: tb-rl; color: darkblue; font-size:30px">
+                            {% for bubl in day.2 %}
+                                •
+                            {% endfor %}
+                        </span>
+                        
+                        <span style="writing-mode: tb-rl; color: darkgreen; font-size:30px">
+                            {% for bubl in day.1 %}
+                                •
                             {% endfor %}
                         </span>
 

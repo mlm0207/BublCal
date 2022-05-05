@@ -102,6 +102,7 @@
                     {# Display bubls that fall under the time slot #}
                     {% for bubl in slot.2 %}
 
+                    {% if bubl.done == False %}
                     <center>
 
                         {# Bubl button #}
@@ -179,7 +180,7 @@
                                 </div>
                             </div>
                         </div>
-                    
+                    {% endif %}
                     {% endfor %}
                 {% endfor %}
                 <br>

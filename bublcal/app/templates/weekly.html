@@ -39,6 +39,27 @@
         }
 
         /* Clickable style */
+        .bublSMDone
+        {
+            color               : black;
+            background-image    : linear-gradient(to bottom right,
+                                                rgb(207, 255, 217), 
+                                                rgb(120, 255, 131));
+
+            border              : solid 1px green;
+            border-radius       : 50%;
+            display             : flex;
+            align-items         : center;
+            justify-content     : center;
+
+            width               : 100px;
+            height              : 100px;
+
+            margin-top          : 5%;
+            margin-bottom       : 5%;
+        }
+
+        /* Clickable style */
         .bublSM
         {
             color               : black;
@@ -51,8 +72,8 @@
             align-items         : center;
             justify-content     : center;
 
-            width               : 45px;
-            height              : 45px;
+            width               : 100px;
+            height              : 100px;
 
             margin-top          : 5%;
             margin-bottom       : 5%;
@@ -81,21 +102,26 @@
     {# Title & navigation #}
     <div class="container">
         <div class="row">
-
-            {# Last week #}
-            <div class="col d-flex justify-content-center">
-                <a type="button" class="btn btn-primary" title="Last Week" href="{{prevWeekLink}}">&lt;</a>
-            </div>
-            
-            {# Title #}
-            <div class="col-5 d-flex justify-content-center">
-                <h5 class="text-center">Week of {{ day_of_week }}, the {{ day }}</h5>
-            </div>
-
-            {# Next week #}
-            <div class="col d-flex justify-content-center">
-                <a type="button" class="btn btn-primary" title="Next Week" href="{{nextWeekLink}}">&gt;</a>
-            </div>
+            <table>
+                <tr>
+                    <th>
+                        <center>
+                            <a type="button" class="btn btn-primary" title="Jump to last week" href="{{prevWeekLink}}">Last Week</a>
+                        </center>
+                    </th>
+                    <th>
+                        <center>
+                            <h2>{{ month_year }}</h2>
+                            <h3>Week of {{ day_of_week }}, the {{ day }}</h3>
+                        </center>
+                    </th>
+                    <th>
+                        <center>
+                            <a type="button" class="btn btn-primary" title="Jump to last week" href="{{prevWeekLink}}">Last Week</a>
+                        </center>
+                    </th>
+                </tr>
+            </table>
         </div>
     </div>
 
@@ -117,7 +143,11 @@
                         {% for bubl in bubls %}
                             {% if bubl.date.day == date %}
                                 {# Bubl button #}
-                                <button type="button" class="btn btn-primary bublSM" data-bs-toggle="modal" data-bs-target="#bubl-{{bubl.id}}" title="At {{bubl.time}}">
+                                {% if bubl.done == True %}
+                                    <button type="button" class="btn btn-primary bublSMDone" data-bs-toggle="modal" data-bs-target="#bubl-{{bubl.id}}" title="At {{bubl.time}}">
+                                {% else %}
+                                    <button type="button" class="btn btn-primary bublSM" data-bs-toggle="modal" data-bs-target="#bubl-{{bubl.id}}" title="At {{bubl.time}}">
+                                {% endif %}
                                     {{ bubl.name }}
                                 </button>
 
