@@ -1,56 +1,59 @@
+{# profile.html #}
+{# shows a given users info and allows for changes to be made #}
+{# intended to be used by views.py/profile #}
 {% extends "base.html" %}
 {% load static %}
 
 {% block title %}Profile Info{% endblock title %}
 
 {% block content %}
-  <div class="container">
-	<br>
+	<div class="container">
+		<br>
 
-	<div>
-      <div class="personal-info">
-        <h3 class="text-center">Personal Information</h3>
-		
-		{% if correctPassword == False  %}
-			<div class="alert alert-danger" role="alert">
-				Wrong password.
-			</div>
-		{% endif %}
-		{% if infoUpdated == True %}
-			<div class="alert alert-success" role="alert">
-				Information updated.
-			</div>
-		{% endif %}
+		<div class="personal-info">
+			<h3 class="text-center">Personal Information</h3>
 
-        <form class="form" role="form" method="post">{% csrf_token %}
+			{# Display errors if any #}
+			{% if correctPassword == False  %}
+				<div class="alert alert-danger" role="alert">
+					Wrong password.
+				</div>
+			{% endif %}
 
-          <div class="fName">
-              <label for="firstname" class="form-label">First Name:</label>
-              <input name="fName"  type="text" class="form-control" placeholder="Enter first name" value="{{first_name}}" required>
-          </div>
-          <br>
+			{% if infoUpdated == True %}
+				<div class="alert alert-success" role="alert">
+					Information updated.
+				</div>
+			{% endif %}
 
-          <div class="lName">
-            <label for="lastname" class="form-label">Last Name:</label>
-            <input name="lName" type="text" class="form-control" placeholder="Enter last name" value="{{last_name}}" required>
-          </div>
-          <br>
+			{# User information #}
+			<form class="form" role="form" method="post">{% csrf_token %}
+				<div class="fName">
+					<label for="firstname" class="form-label">First Name:</label>
+					<input name="fName"  type="text" class="form-control" placeholder="Enter first name" value="{{first_name}}" required>
+				</div>
+				<br>
 
-          <div class="birthDay">
-            <label for="bday" class="form-label">Date of Birth (YYYY-MM-DD):</label>
-            <input name="birthDay" type="date" class="form-control" value="{{bday}}" required>
-          </div>
-          <br>
+				<div class="lName">
+					<label for="lastname" class="form-label">Last Name:</label>
+					<input name="lName" type="text" class="form-control" placeholder="Enter last name" value="{{last_name}}" required>
+				</div>
+				<br>
 
-          <div class="password">
-            <label for="password" class="form-label">Enter password</label>
-            <input name="password" type="password" class="form-control" placeholder="Enter password" required>
-          </div>
-          <br>
+				<div class="birthDay">
+					<label for="bday" class="form-label">Date of Birth (YYYY-MM-DD):</label>
+					<input name="birthDay" type="date" class="form-control" value="{{bday}}" required>
+				</div>
+				<br>
 
-          <button class="btn btn-primary" type="submit">Update</button>
-        </form>
-        </div>
-      </div>
-    </div>
+				<div class="password">
+					<label for="password" class="form-label">Enter password</label>
+					<input name="password" type="password" class="form-control" placeholder="Enter password" required>
+				</div>
+				<br>
+
+				<button class="btn btn-primary" type="submit">Update</button>
+			</form>
+		</div>
+	</div>
 {% endblock content %}

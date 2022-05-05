@@ -1,13 +1,16 @@
+{# monthly.html #}
+{# displays a given month #}
+{# intended to be used by views.py/monthly #}
 {% extends "base.html" %}
 {% load static %}
 
 {% block title %}Monthly View{% endblock title %}
 
+{# Page style #}
+{# for some reason the style breaks if its imported from a different file! #}
+{# very annoying >:( so we have to leave it here for now #}
+{# - cesar #}
 {% block styles %}
-    {#<link rel="stylesheet" type="text/css" href="{% static 'main/monthly.css' %}">#}
-{% endblock styles %}
-
-{% block content %}
     <style>
         /* Base background look */
         .baseBG
@@ -113,7 +116,9 @@
             height: 50px;
         }
     </style>
+{% endblock styles %}
 
+{% block content %}
     <br>
 
     <div class="container">
@@ -175,13 +180,13 @@
                         <span>{{ day.0.day }}</span>
 
                         
-                        <span style="writing-mode: tb-rl; color: darkblue; font-size:30px">
+                        <span style="writing-mode: tb-rl; color: white; font-size:30px">
                             {% for bubl in day.2 %}
                                 •
                             {% endfor %}
                         </span>
                         
-                        <span style="writing-mode: tb-rl; color: darkgreen; font-size:30px">
+                        <span style="writing-mode: tb-rl; color: lime; font-size:30px">
                             {% for bubl in day.1 %}
                                 •
                             {% endfor %}

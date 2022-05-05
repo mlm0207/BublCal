@@ -40,8 +40,8 @@
     align-items         : center;
     justify-content     : center;
 
-    width               : 45px;
-    height              : 45px;
+    width               : 100px;
+    height              : 100px;
 
     margin-top          : 5%;
     margin-bottom       : 5%;
@@ -62,61 +62,4 @@
     
     margin-top          : 10%;
     margin-bottom       : 10%;
-}
-
-/* Clickable style */
-.bubl
-{
-    color               : black;
-    background-image    : linear-gradient(to bottom right,
-                                        rgba(207, 241, 255, 1), 
-                                        rgba(120, 217, 255, 1));
-
-    border-radius       : 50%;
-    display             : flex;
-    align-items         : center;
-    justify-content     : center;
-
-    width               : 100px;
-    height              : 100px;
-
-    margin-top          : 5%;
-    margin-bottom       : 5%;
-}
-
-/* Completed style */
-.bublDone
-{
-    color               : black;
-    background-image    : linear-gradient(to bottom right,
-                                        rgb(207, 255, 239), 
-                                        rgb(120, 255, 154));
-
-    border-radius       : 50%;
-    display             : flex;
-    align-items         : center;
-    justify-content     : center;
-
-    width               : 100px;
-    height              : 100px;
-
-    margin-top          : 5%;
-    margin-bottom       : 5%;
-}
-
-.activeDay
-{
-    color: white;
-    background-color: black;
-}
-
-.otherMonth
-{
-    color: rgb(156, 156, 156);
-}
-
-.col
-{
-    width: 50px;
-    height: 50px;
 }

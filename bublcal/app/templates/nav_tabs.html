@@ -1,9 +1,17 @@
+{# nav_tabs.html #}
+{# handles the navigation tabs #}
+{# intended to be used by base.html #}
 {% load static %}
 {% url "glance-view" as daily %}
 {% url "weekly-view" as weekly %}
 {% url "monthly-view" as monthly %}
 
 <script>
+    /**************************************************************
+        This function will change the href property of the weekly 
+        and monthly tabs as they require a given month year and 
+        day respectivly.
+    **************************************************************/
     function main()
     {
         // Get the required tags
@@ -17,33 +25,33 @@
         day     = today.getDate();
 
         // Change the hyperlink
-        weeklyElement.href = `/app/weekly/${month}/${day}/${year}/`;
+        weeklyElement.href  = `/app/weekly/${month}/${day}/${year}/`;
         monthlyElement.href = `/app/monthly/${month}/${year}/`;
     }
 
     window.onload = main; // on load
 </script>
 
-<!-- Nav tabs -->
+{# Navigation Tabs #}
 <div class="container">
     <ul class="nav nav-tabs nav-justified" id="tabs" role="tablist">
         <li class="nav-item">
             <a
-                    id="daily"
-                    class="nav-link {% if request.path == daily %} active {%endif%}"
-                    href="{{daily}}">Day at a Glance</a>
+                id="daily"
+                class="nav-link {% if request.path == daily %} active {% endif %}"
+                href="{{daily}}">Day at a Glance</a>
         </li>
         <li class="nav-item">
             <a
-                    id="weekly"
-                    class="nav-link {% if 'weekly' in request.path %} active {%endif%}"
-                    href="/app/weekly/">This Week</a>
+                id="weekly"
+                class="nav-link {% if 'weekly' in request.path %} active {% endif %}"
+                href="/app/weekly/">This Week</a>
         </li>
         <li class="nav-item">
             <a
-                    id="monthly"
-                    class="nav-link {% if 'monthly' in request.path %} active {%endif%}"
-                    href="{{monthly}}">This Month</a>
+                id="monthly"
+                class="nav-link {% if 'monthly' in request.path %} active {% endif %}"
+                href="{{monthly}}">This Month</a>
         </li>
     </ul>
 </div>

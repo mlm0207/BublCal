@@ -1,13 +1,16 @@
+{# day.html #}
+{# allows users to look at a given day #}
+{# intended to be used by views.py/daily #}
 {% extends "base.html" %}
 {% load static %}
 
 {% block title %}Daily View{% endblock title %}
 
+{# Page style #}
+{# for some reason the style breaks if its imported from a different file! #}
+{# very annoying >:( so we have to leave it here for now #}
+{# - cesar #}
 {% block styles %}
-    {#<link rel="stylesheet" type="text/css" href="{% static 'main/glance.css' %}">#}
-{% endblock styles %}
-
-{% block content %}
     <style>
         /* Base background look */
         .baseBG
@@ -96,7 +99,9 @@
             margin-bottom       : 10%;
         }
     </style>
+{% endblock styles %}
 
+{% block content %}
     <br>
 
     {# Title and navigation #}

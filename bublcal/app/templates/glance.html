@@ -1,13 +1,16 @@
+{# glance.html #}
+{# shows a given users day at a glance #}
+{# intended to be used by views.py/glance #}
 {% extends "base.html" %}
 {% load static %}
 
 {% block title %}Day at a Glance{% endblock title %}
 
+{# Page style #}
+{# for some reason the style breaks if its imported from a different file! #}
+{# very annoying >:( so we have to leave it here for now #}
+{# - cesar #}
 {% block styles %}
-    {#<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">#}
-{% endblock styles %}
-
-{% block content %}
     <style>
         /* Base background look */
         .baseBG
@@ -75,10 +78,14 @@
             margin-bottom       : 10%;
         }
     </style>
+{% endblock styles %}
 
-    {# Greet the user #}
+{% block content %}
     <br>
-    <h5 class="text-center">Good {{ greeting }}, {{ firstName }}.</h3>
+    
+    {# Greet the user #}
+    <h2 class="text-center">Good {{ greeting }}, {{ firstName }}.</h2>
+    
     <br>
 
     <div class="container baseBG">
@@ -102,85 +109,89 @@
                     {# Display bubls that fall under the time slot #}
                     {% for bubl in slot.2 %}
 
-                    {% if bubl.done == False %}
-                    <center>
+                        {# Only display bubls that are not done #}
+                        {% if bubl.done == False %}
 
-                        {# Bubl button #}
-                        <button type="button" class="btn btn-primary bubl" data-bs-toggle="modal" data-bs-target="#bubl-{{bubl.id}}" title="At {{bubl.time}}">
-                            {{ bubl.name }}
-                        </button>
-                    </center>
-                        {# Bubl Info View #}
-                        <div class="modal fade" id="bubl-{{bubl.id}}" tabindex="-1">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">{{ bubl.name }}</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        At {{ bubl.time }} {{ bubl.date }} for {{ bubl.length }} minutes
-                                        <br>
-                                        {{ bubl.note }}
-                                    </div>
-                                    <div class="modal-footer">
-                                        <a class="btn btn-danger" href="/app/kill-bubl/{{bubl.id}}" role="button">Delete</a>
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bubl-{{ bubl.id }}-edit">Edit</button>
-                                        <a class="btn btn-success" href="/app/complete/{{bubl.id}}" role="button">Complete</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                            {# Bubl button #}
+                            <center>
+                                <button type="button" class="btn btn-primary bubl" data-bs-toggle="modal" data-bs-target="#bubl-{{bubl.id}}" title="At {{bubl.time}}">
+                                    {{ bubl.name }}
+                                </button>
+                            </center>
 
-                        {# Bubl edit form #}
-                        <div class="modal fade" id="bubl-{{ bubl.id }}-edit" tabindex="-1">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <form method="post" action="/app/modify/{{bubl.id}}/">{% csrf_token %}
+                            {# Bubl Info View #}
+                            <div class="modal fade" id="bubl-{{bubl.id}}" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Edit Bubl</h5>
+                                            <h5 class="modal-title" id="exampleModalLabel">{{ bubl.name }}</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                         </div>
 
-                                        <div class="modal-body justify-content-left">
-
-                                            {# Name #}
-                                            <h6>Bubl name</h6>
-                                            <div class="input-group mb-3">
-                                                <input name="name" type="text" class="form-control" placeholder="Bubl Name" value="{{bubl.name}}" required>
-                                            </div>
-
-                                            {# Note #}
-                                            <h6>Extra note</h6>
-                                            <div class="input-group mb-3">
-                                                <input name="note" type="text" class="form-control" placeholder="Extra Notes" value="{{bubl.note}}">
-                                            </div>
-                                            
-                                            {# Date & Time #}
-                                            <h6>Time and date</h6>
-                                            <div class="input-group mb-3">
-                                                <input name="time" type="time" class="form-control" value="{{bubl.time.hour|stringformat:'02d'}}:{{bubl.time.minute|stringformat:'02d'}}" required>
-                                                <input name="date" type="date" class="form-control" value="{{bubl.date.year}}-{{bubl.date.month|stringformat:'02d'}}-{{bubl.date.day|stringformat:'02d'}}" required>
-                                            </div>
-
-                                            {# Length #}
-                                            <h6>Length in minutes</h6>
-                                            <div class="input-group mb-3">
-                                                <input name="length" type="number" class="form-control" value="{{bubl.length}}" placeholder="Length (minutes)">
-                                            </div>
-                                            
+                                        <div class="modal-body">
+                                            At {{ bubl.time }} {{ bubl.date }} for {{ bubl.length }} minutes
+                                            <br>
+                                            {{ bubl.note }}
                                         </div>
 
-                                        {# Action buttons #}
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                            <a class="btn btn-danger" href="/app/kill-bubl/{{bubl.id}}" role="button">Delete</a>
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bubl-{{ bubl.id }}-edit">Edit</button>
+                                            <a class="btn btn-success" href="/app/complete/{{bubl.id}}" role="button">Complete</a>
                                         </div>
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    {% endif %}
+
+                            {# Bubl edit form #}
+                            <div class="modal fade" id="bubl-{{ bubl.id }}-edit" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <form method="post" action="/app/modify/{{bubl.id}}/">{% csrf_token %}
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Edit Bubl</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+
+                                            <div class="modal-body justify-content-left">
+
+                                                {# Name #}
+                                                <h6>Bubl name</h6>
+                                                <div class="input-group mb-3">
+                                                    <input name="name" type="text" class="form-control" placeholder="Bubl Name" value="{{bubl.name}}" required>
+                                                </div>
+
+                                                {# Note #}
+                                                <h6>Extra note</h6>
+                                                <div class="input-group mb-3">
+                                                    <input name="note" type="text" class="form-control" placeholder="Extra Notes" value="{{bubl.note}}">
+                                                </div>
+                                                
+                                                {# Date & Time #}
+                                                <h6>Time and date</h6>
+                                                <div class="input-group mb-3">
+                                                    <input name="time" type="time" class="form-control" value="{{bubl.time.hour|stringformat:'02d'}}:{{bubl.time.minute|stringformat:'02d'}}" required>
+                                                    <input name="date" type="date" class="form-control" value="{{bubl.date.year}}-{{bubl.date.month|stringformat:'02d'}}-{{bubl.date.day|stringformat:'02d'}}" required>
+                                                </div>
+
+                                                {# Length #}
+                                                <h6>Length in minutes</h6>
+                                                <div class="input-group mb-3">
+                                                    <input name="length" type="number" class="form-control" value="{{bubl.length}}" placeholder="Length (minutes)">
+                                                </div>
+                                                
+                                            </div>
+
+                                            {# Action buttons #}
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Save changes</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
                     {% endfor %}
                 {% endfor %}
                 <br>
