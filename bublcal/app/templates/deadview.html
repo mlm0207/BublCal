@@ -6,15 +6,97 @@
 
 {% block title %}View dead bubls{% endblock title %}
 
+{# Page style #}
+{# for some reason the style breaks if its imported from a different file! #}
+{# very annoying >:( so we have to leave it here for now #}
+{# - cesar #}
+{% block styles %}
+    <style>
+        /* Base background look */
+        .baseBG
+        {
+            border              : 2px solid black;
+            box-shadow          : 0 8px 16px 0 rgba(0, 0, 0, 0.3), 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+            background-color    : lightgray;
+            background-image    : linear-gradient(to bottom right,#fafad2, #b0e0e6 );
+        }
+
+        /* Column headers */
+        .left
+        {
+            border-left     : 1px solid black;
+            border-bottom   : 2px solid black;
+        }
+
+        /* Column content */
+        .right
+        {
+            border-left     : 2px solid black;
+            border-bottom   : 2px solid black;
+        }
+
+        /* Time slot underline */
+        .timeslot
+        {
+            border-bottom: 1px solid black;
+        }
+
+        /* Clickable style */
+        .bubl
+        {
+            color               : black;
+            background-image    : linear-gradient(to bottom right,
+                                                rgba(207, 241, 255, 1), 
+                                                rgba(120, 217, 255, 1));
+
+            border-radius       : 50%;
+            display             : flex;
+            align-items         : center;
+            justify-content     : center;
+
+            width               : 100px;
+            height              : 100px;
+
+            margin-top          : 5%;
+            margin-bottom       : 5%;
+        }
+
+        /* Side bubl style */
+        .sideBubl
+        {
+            background-image    : linear-gradient(to bottom right,
+                                            rgba(207, 241, 255, 1), 
+                                            rgba(120, 217, 255, 1));
+            
+            border              : 1px solid rgba(0, 0, 0, 0.411);
+            border-radius       : 50%;
+            
+            width               : 30px;
+            height              : 30px;
+            
+            margin-top          : 10%;
+            margin-bottom       : 10%;
+        }
+    </style>
+{% endblock styles %}
+
 {% block content %}
-    <div class="container-sm">
-        <h3>Recently Deleted Bubbles From Last 30 Days</h3>
+    <br>
+    <div class="container baseBG">
+        {# Title #}
+            <div class="row left">
+                <center>
+                    <h3>Recently Deleted Bubbles From Last 30 Days</h3>
+                </center>
+            </div>
+
+        {# Bubls #}
         <center>
             <div class="row">
                 {% for bubl in bubls %}
                 <div class="col">
                     <!-- Bubble -->
-                    <button type="button" class="btn btn-primary bubble" data-bs-toggle="modal"
+                    <button type="button" class="btn btn-primary bubl" data-bs-toggle="modal"
                         data-bs-target="#bubl-{{bubl.id}}" title="At {{bubl.time}}">
                         {{ bubl.name }}
                     </button>

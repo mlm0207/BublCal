@@ -156,26 +156,22 @@
                                             <div class="modal-body justify-content-left">
 
                                                 {# Name #}
-                                                <h6>Bubl name</h6>
                                                 <div class="input-group mb-3">
                                                     <input name="name" type="text" class="form-control" placeholder="Bubl Name" value="{{bubl.name}}" required>
                                                 </div>
 
                                                 {# Note #}
-                                                <h6>Extra note</h6>
                                                 <div class="input-group mb-3">
                                                     <input name="note" type="text" class="form-control" placeholder="Extra Notes" value="{{bubl.note}}">
                                                 </div>
                                                 
                                                 {# Date & Time #}
-                                                <h6>Time and date</h6>
                                                 <div class="input-group mb-3">
                                                     <input name="time" type="time" class="form-control" value="{{bubl.time.hour|stringformat:'02d'}}:{{bubl.time.minute|stringformat:'02d'}}" required>
                                                     <input name="date" type="date" class="form-control" value="{{bubl.date.year}}-{{bubl.date.month|stringformat:'02d'}}-{{bubl.date.day|stringformat:'02d'}}" required>
                                                 </div>
 
                                                 {# Length #}
-                                                <h6>Length in minutes</h6>
                                                 <div class="input-group mb-3">
                                                     <input name="length" type="number" class="form-control" value="{{bubl.length}}" placeholder="Length (minutes)">
                                                 </div>
