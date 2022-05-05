@@ -97,7 +97,11 @@ def getMonthWeeks(year, month):
 
     return weeks; # Return results
 
+#################################
+# getPreviousWeek
+# 
 # Get previous week
+#################################
 def getPreviousWeek(day):
 
     week = getWeekFromDay(day);
@@ -106,7 +110,11 @@ def getPreviousWeek(day):
 
     return getWeekFromDay(previousWeekDay);
 
+#################################
+# getNextWeek
+# 
 # Get next week
+#################################
 def getNextWeek(day):
 
     week = getWeekFromDay(day);
@@ -115,7 +123,11 @@ def getNextWeek(day):
 
     return getWeekFromDay(nextWeekDay);
 
+#################################
+# verifyLogin
+# 
 # Verify if a user is logged in
+#################################
 def verifyLogin(request):
     session = request.session;
 
@@ -127,15 +139,27 @@ def verifyLogin(request):
 
     return [False, None];
 
+#################################
+# loginUser
+# 
 # Login a user
+#################################
 def loginUser(request, email):
     request.session["email"] = email;
 
+#################################
+# logoutUser
+# 
 # Logout user
+#################################
 def logoutUser(request):
     request.session["email"] = None;
 
+#################################
+# getUserObject
+# 
 # Get a user object via email
+#################################
 def getUserObject(email):
     for user in UserData.objects.all():
         if(user.email == email):
@@ -143,12 +167,18 @@ def getUserObject(email):
 
     return None; # No object found
 
+#################################
 # Account creation fail types
+#################################
 AC_FAIL_AGE             = 0;
 AC_FAIL_EMAIL_INVALID   = 1;
 AC_FAIL_EMAIL_USED      = 2;
 
+#################################
+# createuser
+# 
 # Create a user
+#################################
 def createuser(email, password, firstName, lastName, birthday):
 
     # Calculate users age
@@ -180,14 +210,17 @@ def createuser(email, password, firstName, lastName, birthday):
 
     return [True, -1]; # Account is created
 
-def deleteUser(email):
-    print("\nWARNING: FUNCTION deleteUser NOT CREATED\nUSER: \"", email, "\" WILL  NOT DELETED!!!!\n");
-
+#################################
 # Sign-in fail types
+#################################
 SI_FAIL_EMAIL       = 0;
 SI_FAIL_PASSWORD    = 1;
 
+#################################
+# userLoginCheck
+# 
 # Check a users login details
+#################################
 def userLoginCheck(email, password):
     user = getUserObject(email);
 
@@ -199,12 +232,18 @@ def userLoginCheck(email, password):
     
     return [False, SI_FAIL_EMAIL];
 
-# Bubble create fail types
+#################################
+# createBubble error types
+#################################
 BC_FAIL_NO_USER         = 0;
 BC_FAIL_INVALID_DATE    = 1;
 BC_FAIL_INVALID_LENGTH  = 2;
 
+#################################
+# createBubble
+# 
 # Create a bubble
+#################################
 def createBubble(email, name, note, date, time, length):
     
     # Find the owner of the bubble
@@ -225,7 +264,12 @@ def createBubble(email, name, note, date, time, length):
 
     return [True, -1];
 
-# Get a list of bubbls using given user
+#################################
+# getUserBubbles
+# 
+# Get a list of bubbls using
+# given user
+#################################
 def getUserBubbles(email):
     user = getUserObject(email);
 
@@ -247,7 +291,12 @@ def getUserBubbles(email):
 
     return bubls;
 
-# Get a list of dead bubls using given user
+#################################
+# getUserDeadBubls
+# 
+# Get a list of dead bubls using 
+# given user
+#################################
 def getUserDeadBubls(email):
     user = getUserObject(email);
 
@@ -262,13 +311,21 @@ def getUserDeadBubls(email):
 
     return bubls; 
 
+#################################
+# getBubbleObject
+# 
 # Get a bubble info via DB ID
+#################################
 def getBubbleObject(id):
     for bubl in Bubl.objects.all():
         if(bubl.id == id):
             return bubl;
 
+#################################
+# restoreBubl
+# 
 # Restore a bubl via DB ID
+#################################
 def restoreBubl(request, id):
     result = verifyLogin(request);
 
@@ -294,7 +351,11 @@ def restoreBubl(request, id):
 
     return False;
 
+#################################
+# killBubble
+# 
 # Kill a bubble via DB ID
+#################################
 def killBubble(request, id):
     result = verifyLogin(request);
 
@@ -311,7 +372,11 @@ def killBubble(request, id):
 
     return False;
 
+#################################
+# deleteBubble
+# 
 # Delete a bubble via DB ID
+#################################
 def deleteBubble(request, id):
     result = verifyLogin(request);
 
@@ -328,7 +393,12 @@ def deleteBubble(request, id):
     
     return False; # item was not deleted
 
-# Check for bubl past due and move them back to schedule
+#################################
+# timeCheck
+# 
+# Check for bubl past due and 
+# move them back to schedule
+#################################
 def timeCheck(email):
     user = getUserObject(email)
     if(user == None):
