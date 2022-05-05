@@ -55,8 +55,8 @@
             align-items         : center;
             justify-content     : center;
 
-            width               : 100px;
-            height              : 100px;
+            width               : 80px;
+            height              : 80px;
 
             margin-top          : 5%;
             margin-bottom       : 5%;
@@ -75,8 +75,8 @@
             align-items         : center;
             justify-content     : center;
 
-            width               : 100px;
-            height              : 100px;
+            width               : 80px;
+            height              : 80px;
 
             margin-top          : 5%;
             margin-bottom       : 5%;
@@ -104,9 +104,10 @@
 {% block content %}
     <br>
 
-    {# Title & navigation #}
-    <div class="container">
-        <div class="row">
+    <div class="container baseBG">
+
+        {# Title & navigation #}
+        <div class="row" style="border-bottom: 2px solid black">
             <table>
                 <tr>
                     <th>
@@ -122,17 +123,13 @@
                     </th>
                     <th>
                         <center>
-                            <a type="button" class="btn btn-primary" title="Jump to last week" href="{{prevWeekLink}}">Last Week</a>
+                            <a type="button" class="btn btn-primary" title="Jump to next week" href="{{nextWeekLink}}">Next Week</a>
                         </center>
                     </th>
                 </tr>
             </table>
         </div>
-    </div>
 
-    <br>
-
-    <div class="container baseBG">
         <div class="row">
             {% for name, date in week.items %}
                 <div class="col d-flex justify-content-center fw-bold left" onclick="location.href='/app/daily/{{month}}/{{date}}/{{year}}'">{{ name }} {{ date }}</div>

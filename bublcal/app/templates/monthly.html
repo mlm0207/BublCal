@@ -120,9 +120,11 @@
 
 {% block content %}
     <br>
+    
+    <div class="container baseBG">
 
-    <div class="container">
-        <div class="row">
+        <div class="row" style="border-bottom: 2px solid black">
+            <br>
             <table>
                 <tr>
                     <th>
@@ -143,11 +145,7 @@
                 </tr>
             </table>
         </div>
-    </div>
 
-    <br>
-    
-    <div class="container baseBG">
         <div class="row">
             <div class="col d-flex justify-content-center fw-bold left">Sun</div>
             <div class="col d-flex justify-content-center fw-bold left">Mon</div>
@@ -177,23 +175,30 @@
                         {% endif %}
 
                         {# Print day w/ number of bubls #}
-                        <span>{{ day.0.day }}</span>
-
-                        
-                        <span style="writing-mode: tb-rl; color: white; font-size:30px">
-                            {% for bubl in day.2 %}
-                                •
-                            {% endfor %}
-                        </span>
-                        
-                        <span style="writing-mode: tb-rl; color: lime; font-size:30px">
-                            {% for bubl in day.1 %}
-                                •
-                            {% endfor %}
-                        </span>
-
-                        </div>
-
+                        <table>
+                            <tr>
+                                <td>
+                                    <span>{{ day.0.day }}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>
+                                        {% for bubl in day.2 %}
+                                            •
+                                        {% endfor %}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span style="color: lime">
+                                        {% for bubl in day.1 %}
+                                            •
+                                        {% endfor %}
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                     {% endfor %}
                 </div>
             {% endfor %}

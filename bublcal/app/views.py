@@ -314,7 +314,11 @@ def weekly(request, month, day, year):
     bublcal_lib.timeCheck(user);
 
     # Grab the users bubls
-    bubls = bublcal_lib.getUserBubbles(user);
+    bubls = [];
+
+    for bubl in bublcal_lib.getUserBubbles(user):
+        if(bubl.date.month == month and bubl.date.year == year):
+            bubls.append(bubl);
 
     # Get the days and week that we are viewing
     today = datetime.datetime(year=year, month=month, day=day);
