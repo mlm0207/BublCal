@@ -13,6 +13,15 @@ Clone the repo:
 Install the requirements:
 `pip install -r requirements`
 
+## Preparing the Server
+Create the database
+- On Windows run `dbupdate.bat`
+- On Linux run `dbupdate.sh`
+
+Create a admin account
+- On Windows run `createsuperuser.bat`
+- On Linux run `createsuperuser.sh`
+
 ## Running for a Local Machine
 On Windows
 `py manage.py runserver`
@@ -20,7 +29,8 @@ On Windows
 On Linux
 `python manage.py runserver`
 
-## Running for a Server
+## Running for a Public Server
+Do the following:
 - Open `bublcal/bublcal/settings.py`
 - Set `DEBUG` to `False`
 - Add `localhost` and your public IP to `ALLOWED_HOSTS`
@@ -28,7 +38,6 @@ On Linux
 - On Windows run `py manage.py collectstatic`
 - On Linux run `python manage.py collectstatic`
 
-Run the following command with a desired port
-
-- On Windows `py manage.py runserver 0.0.0.0:8000`
-- On Linux `python manage.py runserver 0.0.0.0:8000`
+Run:
+- On Windows `run_public.bat`
+- On Linux `run_public.sh`
