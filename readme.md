@@ -22,8 +22,8 @@ On Linux
 
 ## Running for a Server
 - Open `bublcal/bublcal/settings.py`
-- Set `DEBUG` to `TRUE`
-- Add `localhost` and your local IP to `ALLOWED_HOSTS`
+- Set `DEBUG` to `False`
+- Add `localhost` and your public IP to `ALLOWED_HOSTS`
 - Uncomment `STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles");`
 - On Windows run `py manage.py collectstatic`
 - On Linux run `python manage.py collectstatic`

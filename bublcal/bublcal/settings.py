@@ -28,7 +28,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles");
+# Uncomment this for production
+# STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles");
 
 # Application definition
 
